@@ -1,0 +1,30 @@
+{
+  "name": "haskell-for-everyone-server",
+  "version": "0.1.0",
+  "description": "Server for the haskell for everyone editor",
+  "main": "server/build/Server.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon .",
+    "dev-ts": "cd server && tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RJuall/haskell-for-everyone.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RJuall/haskell-for-everyone/issues"
+  },
+  "homepage": "https://github.com/RJuall/haskell-for-everyone#readme",
+  "dependencies": {
+    "@types/express": "^4.16.1",
+    "@types/websocket": "0.0.40",
+    "express": "^4.16.4",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "typescript": "^3.3.3",
+    "websocket": "^1.0.28"
+  }
+}

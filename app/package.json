@@ -1,0 +1,41 @@
+{
+  "name": "haskell-for-everyone",
+  "version": "0.1.0",
+  "description": "An easy-to-use educational editor for learning the Haskell programming language",
+  "main": "electron/MainProcess.js",
+  "scripts": {
+    "build": "react-scripts build",
+    "dev": "electron . --dev",
+    "dist": "react-scripts build",
+    "react": "react-scripts start",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RJuall/haskell-for-everyone.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RJuall/haskell-for-everyone/issues"
+  },
+  "homepage": "./",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "events": "^3.0.0",
+    "fs": "0.0.1-security",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "reactstrap": "^7.1.0"
+  },
+  "devDependencies": {
+    "electron": "^4.0.4",
+    "react-scripts": "^2.1.5"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
