@@ -26,6 +26,10 @@ There are 2 package files in the __root__ and __app__ folders.
 
 Install dependencies for both! 
 
+##### Font Awesome
+
+Before installing the `app` dependencies an `.npmrc` file with a FontAwesome Pro API key must be placed into the __app__ folder, otherwise it will not be installed.
+
 ```bash
 # install dependencies
 npm i && cd app && npm i
