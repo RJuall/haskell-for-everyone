@@ -1,4 +1,5 @@
 import React from "react";
+import { Row, Col, Container } from "reactstrap";
 import { faAcorn } from '@fortawesome/pro-regular-svg-icons';
 import { faApple } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,12 +15,12 @@ export class App extends React.Component{
 
     render(){
         return (
-            <div class="container">
-                <div class="row">
-                    <div class="col">
+            <Container>
+                <Row>
+                    <Col lg={2}>
                     Column 1
-                    </div>
-                    <div class="col-6">
+                    </Col>
+                    <Col lg={6}>
                         <div>
                             Column 2
                             <br></br>
@@ -29,12 +30,12 @@ export class App extends React.Component{
                             <br></br>
                             This is from a different FontAwesome icon library! <FontAwesomeIcon size="lg" icon={faApple}></FontAwesomeIcon>
                         </div>
-                    </div>
-                    <div class="col">
+                    </Col>
+                    <Col lg={4}>
                     Column 3
-                    </div>
-                </div>
-            </div>
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 }
