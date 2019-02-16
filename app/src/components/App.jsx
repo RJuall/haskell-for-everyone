@@ -3,6 +3,7 @@ import { Row, Col, Container } from "reactstrap";
 import { faAcorn } from '@fortawesome/pro-regular-svg-icons';
 import { faApple } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FileList } from "./FileList";
 
 export class App extends React.Component{
     constructor(props){
@@ -18,7 +19,8 @@ export class App extends React.Component{
             <Container>
                 <Row>
                     <Col lg={2}>
-                    Column 1
+                        <div>Column 1</div>
+                        <FileList/>
                     </Col>
                     <Col lg={6}>
                         <div>
@@ -32,7 +34,7 @@ export class App extends React.Component{
                         </div>
                     </Col>
                     <Col lg={4}>
-                    Column 3
+                        Column 3
                     </Col>
                 </Row>
             </Container>
