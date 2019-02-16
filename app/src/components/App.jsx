@@ -3,7 +3,9 @@ import { Row, Col, Container } from "reactstrap";
 import { faAcorn } from '@fortawesome/pro-regular-svg-icons';
 import { faApple } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import SplitPane from 'react-split-pane';
 import { FileList } from "./FileList";
+import './app.css';
 
 export class App extends React.Component{
     constructor(props){
@@ -18,24 +20,28 @@ export class App extends React.Component{
         return (
             <Container>
                 <Row>
-                    <Col lg={2}>
-                        <div>Column 1</div>
-                        <FileList/>
-                    </Col>
-                    <Col lg={6}>
+                    <SplitPane split="vertical" minSize={50} defaultSize={300}>
+                        <Col>
+                          Col1
+                          <FileList/>
+                        </Col>
                         <div>
-                            Column 2
-                            <br></br>
-                            Hey, it works.
-                            <br></br>
-                            Can you see me? If so, you've got FontAwesome Pro! <FontAwesomeIcon size="lg" icon={faAcorn}></FontAwesomeIcon>
-                            <br></br>
-                            This is from a different FontAwesome icon library! <FontAwesomeIcon size="lg" icon={faApple}></FontAwesomeIcon>
+                            <SplitPane split="vertical" minSize={50} defaultSize={300}>
+                            <Col>
+                                Column 2
+                                <br></br>
+                                Hey, it works.
+                                <br></br>
+                                Can you see me? If so, you've got FontAwesome Pro! <FontAwesomeIcon size="lg" icon={faAcorn}></FontAwesomeIcon>
+                                <br></br>
+                                This is from a different FontAwesome icon library! <FontAwesomeIcon size="lg" icon={faApple}></FontAwesomeIcon>
+                            </Col>
+                            <Col>
+                              Col3
+                            </Col>
+                            </SplitPane>
                         </div>
-                    </Col>
-                    <Col lg={4}>
-                        Column 3
-                    </Col>
+                    </SplitPane>
                 </Row>
             </Container>
         );
