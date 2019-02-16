@@ -3,8 +3,9 @@ import { Row, Col, Container } from "reactstrap";
 import { faAcorn } from '@fortawesome/pro-regular-svg-icons';
 import { faApple } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './app.css';
 import SplitPane from 'react-split-pane';
+import { FileList } from "./FileList";
+import './app.css';
 
 export class App extends React.Component{
     constructor(props){
@@ -20,7 +21,10 @@ export class App extends React.Component{
             <Container>
                 <Row>
                     <SplitPane split="vertical" minSize={50} defaultSize={300}>
-                        <Col>Col1</Col>
+                        <Col>
+                          Col1
+                          <FileList/>
+                        </Col>
                         <div>
                             <SplitPane split="vertical" minSize={50} defaultSize={300}>
                             <Col>
@@ -32,7 +36,9 @@ export class App extends React.Component{
                                 <br></br>
                                 This is from a different FontAwesome icon library! <FontAwesomeIcon size="lg" icon={faApple}></FontAwesomeIcon>
                             </Col>
-                            <Col>Col3</Col>
+                            <Col>
+                              Col3
+                            </Col>
                             </SplitPane>
                         </div>
                     </SplitPane>

@@ -37,7 +37,7 @@
     "reactstrap": "^7.1.0"
   },
   "devDependencies": {
-    "electron": "^4.0.4",
+    "electron": "^4.0.5",
     "react-scripts": "^2.1.5"
   },
   "browserslist": [
