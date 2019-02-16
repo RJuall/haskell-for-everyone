@@ -33,6 +33,7 @@
     "fs": "0.0.1-security",
     "react": "^16.8.1",
     "react-dom": "^16.8.2",
+    "react-split": "^2.0.4",
     "reactstrap": "^7.1.0"
   },
   "devDependencies": {
