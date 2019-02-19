@@ -29,6 +29,7 @@
     "@fortawesome/pro-solid-svg-icons": "^5.7.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "bootstrap": "^4.3.1",
+    "child_process": "^1.0.2",
     "events": "^3.0.0",
     "fs": "0.0.1-security",
     "react": "^16.8.1",
