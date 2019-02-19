@@ -6,8 +6,8 @@ class FileDispatcher extends EventEmitter{
         super();
 
         // forward events 
-        IpcRequester.on("read-files", evt => this.emit("read-files", evt));
-        IpcRequester.on("write-files", evt => this.emit("write-files", evt));
+        IpcRequester.on("read-file", evt => this.emit("read-file", evt));
+        IpcRequester.on("write-file", evt => this.emit("write-file", evt));
         IpcRequester.on("get-files", evt => this.emit("get-files", evt));
     }
 
