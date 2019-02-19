@@ -49,7 +49,7 @@ export class FileList extends React.Component{
         // sample_hs (directory) should be dynamic in the future 
         return fnames.map(fname => { 
             return (
-                <span className="file-list-item" onClick={() => FileDispatcher.readFile(fname)}>
+                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(fname)}>
                     {fname}
                 </span>
             );
