@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const { JsonParser } = require("./utils/JsonParser");
 const { FileOps } = require("./handlers/FileOps");
+const { GhciOps } = require("./handlers/GhciOps");
 
 class MainProcess{
     constructor(){
@@ -58,19 +59,27 @@ class MainProcess{
     }
 
     // process the request sent via ipc socket
-    processIpcRequest(event, type, data){
+    processIpcRequest(evt, type, data){
         // call "handler" function based on request type
         switch(type){
             case "get-files":
-                FileOps.getFileNames(event, data.dir);
+                FileOps.getFileNames(evt, data);
                 break;
 
             case "read-file":
-                FileOps.readFile(event, data.fileName);
+                FileOps.readFile(evt, data);
                 break;
 
             case "write-file":
-                FileOps.writeFile(event, data.fileName, data.str);
+                FileOps.writeFile(evt, data);
+                break;
+
+            case "ghci":
+                GhciOps.executeCode(evt, data);
+                break;
+
+            case "ghci-clear":
+                GhciOps.clear(evt);
                 break;
                 
             default:

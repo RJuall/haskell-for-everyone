@@ -1,12 +1,19 @@
 const { FileUtils } = require("../utils/FileUtils");
 const { IpcResponder } = require("../utils/IpcResponder");
 
-// handles file operations (file utils + automatic responses)
+// handles file operation requests (file utils + automatic responses)
 class FileOps{
     // gets the file names in a directory
-    // @param event     event object for response  
+    // @param evt       event object for response  
     // @param dir       the directory to look in
-    static getFileNames(event, dir){
+    static getFileNames(evt, {dir=null}){
+        // must have directory
+        if(!dir){
+            let err = "No directory provided (dir is null or empty).";
+            IpcResponder.respond(evt, "get-files", {err: err.message});
+            return;
+        }
+
         // must have slash at end
         dir = dir.endsWith("/") ? dir : `${dir}/`;
 
@@ -17,44 +24,64 @@ class FileOps{
                 fileNames = fileNames.map(fname => `${dir}${fname}`);
 
                 // got file names array 
-                IpcResponder.respond(event, "get-files", {fileNames});
+                IpcResponder.respond(evt, "get-files", {fileNames});
             })
             .catch(err => {
                 // error
-                IpcResponder.respond(event, "get-files", {err: err.message});
+                IpcResponder.respond(evt, "get-files", {err: err.message});
             });
     }
 
     // reads the string contents of a file
-    // @param event     event object for response
+    // @param evt       event object for response
     // @param fileName  name of file to read 
-    static readFile(event, fileName){
+    static readFile(evt, {fileName=null}){
+        // must have file name
+        if(!fileName){
+            let err = "No file name provided (fileName is null).";
+            IpcResponder.respond(evt, "read-file", {err: err.message});
+            return;
+        }
+
         // read file promise 
         FileUtils.readFile(fileName)
             .then(str => {
                 // got file contents 
-                IpcResponder.respond(event, "read-file", {fileName, str});
+                IpcResponder.respond(evt, "read-file", {fileName, str});
             })
             .catch(err => {
                 // error
-                IpcResponder.respond(event, "read-file", {err: err.message});
+                IpcResponder.respond(evt, "read-file", {err: err.message});
             });
     }
 
     // writes the string to a file
-    // @param event     event object for response
+    // @param evt       event object for response
     // @param fileName  file name to write
     // @param str       string to write to file 
-    static writeFile(event, fileName, str){
+    static writeFile(evt, {fileName=null, str=null}){
+        // must have file name
+        if(!fileName){
+            let err = "No file name provided (fileName is null).";
+            IpcResponder.respond(evt, "write-file", {err: err.message});
+            return;
+        }
+        // must have string to write 
+        if(str === null){
+            let err = "No text provided (str is null).";
+            IpcResponder.respond(evt, "write-file", {err: err.message});
+            return;
+        }
+
         // save file promise
         FileUtils.writeFile(fileName, str)
             .then(() => {
                 // saved file 
-                IpcResponder.respond(event, "write-file");
+                IpcResponder.respond(evt, "write-file");
             })
             .catch(err => {
                 // error
-                IpcResponder.respond(event, "write-file", {err: err.message});
+                IpcResponder.respond(evt, "write-file", {err: err.message});
             });
     }
 }
