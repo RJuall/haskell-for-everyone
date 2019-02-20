@@ -2,7 +2,7 @@ const { FolderDataUtils } = require("../utils/FolderDataUtils");
 const { IpcResponder } = require("../utils/IpcResponder");
 
 // handles folder operation requests (automatically responds)
-export class FolderOps{
+class FolderOps{
     // adds a folder from the data file and responds
     // @param evt       event object for responding
     // @param path      folder path to add
@@ -63,4 +63,20 @@ export class FolderOps{
                 IpcResponder.respond(evt, "folder-reset", {err: err.message});
             });
     }
+
+    // gets the list of all stored folder paths
+    // @Param evt       event object for responding 
+    static getFolderPaths(evt){
+        FolderDataUtils.loadFolderData()
+            .then(folderPaths => {
+                // respond with the folder path array 
+                IpcResponder.respond(evt, "folder-list", {folderPaths});
+            })
+            .catch(err => {
+                // failed to load data file 
+                IpcResponder.respond(evt, "folder-list", {err: err.message});
+            });
+    }
 }
+
+module.exports = { FolderOps };

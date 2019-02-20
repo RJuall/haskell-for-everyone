@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const { JsonParser } = require("./utils/JsonParser");
 const { FileOps } = require("./handlers/FileOps");
 const { GhciOps } = require("./handlers/GhciOps");
+const { FolderOps } = require("./handlers/FolderOps");
 
 class MainProcess{
     constructor(){
@@ -80,6 +81,22 @@ class MainProcess{
 
             case "ghci-clear":
                 GhciOps.clear(evt);
+                break;
+
+            case "folder-add":
+                FolderOps.addFolder(evt, data);
+                break;
+
+            case "folder-remove":
+                FolderOps.removeFolder(evt, data);
+                break;
+
+            case "folder-reset":
+                FolderOps.resetFolders(evt);
+                break;
+
+            case "folder-list":
+                FolderOps.getFolderPaths(evt);
                 break;
                 
             default:
