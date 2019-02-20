@@ -7,6 +7,7 @@ class GhciDispatcher extends EventEmitter{
 
         // forward events 
         IpcRequester.on("ghci", evt => this.emit("ghci", evt));
+        IpcRequester.on("ghci-clear", evt => this.emit("ghci-clear", evt));
     }
 
     // requests haskell code to be executed
