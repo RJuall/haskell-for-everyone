@@ -1,4 +1,12 @@
-.file-list-item{
-    padding: 6px;
+.file-list-folder{
+    font-weight: bold;
+}
+
+.file-list-items{
     width: 100%;
+    margin-left: 15px;
+}
+
+.file-list-item{
+    cursor: pointer;
 }

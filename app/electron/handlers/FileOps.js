@@ -20,11 +20,8 @@ class FileOps{
         // get file names promise 
         FileUtils.getFileNames(dir)
             .then(fileNames => {
-                // add path 
-                fileNames = fileNames.map(fname => `${dir}${fname}`);
-
                 // got file names array 
-                IpcResponder.respond(evt, "get-files", {fileNames});
+                IpcResponder.respond(evt, "get-files", {fileNames, dir});
             })
             .catch(err => {
                 // error
