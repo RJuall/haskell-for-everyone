@@ -4,7 +4,7 @@ const { FileUtils } = require("../utils/FileUtils");
 const FOLDER_DATA_FILE = "folder_data.txt";
 
 // manages the folder data file 
-export class FolderDataUtils{
+class FolderDataUtils{
     // loads the contents of the folder data file (array of paths)
     static loadFolderData(){
         return new Promise((resolve, reject) => {
@@ -69,3 +69,5 @@ export class FolderDataUtils{
         return FileUtils.writeFile(FOLDER_DATA_FILE, "");
     }
 }
+
+module.exports = { FolderDataUtils };
