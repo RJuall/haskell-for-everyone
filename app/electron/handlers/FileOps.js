@@ -10,7 +10,7 @@ class FileOps{
         // must have directory
         if(!dir){
             let err = "No directory provided (dir is null or empty).";
-            IpcResponder.respond(evt, "get-files", {err: err.message});
+            IpcResponder.respond(evt, "get-files", {err});
             return;
         }
 
@@ -39,7 +39,7 @@ class FileOps{
         // must have file name
         if(!fileName){
             let err = "No file name provided (fileName is null).";
-            IpcResponder.respond(evt, "read-file", {err: err.message});
+            IpcResponder.respond(evt, "read-file", {err});
             return;
         }
 
@@ -63,13 +63,13 @@ class FileOps{
         // must have file name
         if(!fileName){
             let err = "No file name provided (fileName is null).";
-            IpcResponder.respond(evt, "write-file", {err: err.message});
+            IpcResponder.respond(evt, "write-file", {err});
             return;
         }
         // must have string to write 
         if(str === null){
             let err = "No text provided (str is null).";
-            IpcResponder.respond(evt, "write-file", {err: err.message});
+            IpcResponder.respond(evt, "write-file", {err});
             return;
         }
 
