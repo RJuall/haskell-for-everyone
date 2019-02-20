@@ -5,7 +5,7 @@ import { faApple } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SplitPane from 'react-split-pane';
 import { FileList } from "./FileList";
-import './app.css';
+import "./App.css";
 
 export class App extends React.Component{
     constructor(props){
@@ -22,8 +22,7 @@ export class App extends React.Component{
                 <Row>
                     <SplitPane split="vertical" minSize={50} defaultSize={300}>
                         <Col>
-                          Col1
-                          <FileList/>
+                            <FileList/>
                         </Col>
                         <div>
                             <SplitPane split="vertical" minSize={50} defaultSize={300}>
