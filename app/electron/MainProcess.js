@@ -63,15 +63,15 @@ class MainProcess{
     processIpcRequest(evt, type, data){
         // call "handler" function based on request type
         switch(type){
-            case "get-files":
+            case "files-get":
                 FileOps.getFileNames(evt, data);
                 break;
 
-            case "read-file":
+            case "file-read":
                 FileOps.readFile(evt, data);
                 break;
 
-            case "write-file":
+            case "file-write":
                 FileOps.writeFile(evt, data);
                 break;
 

@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinusCircle } from "@fortawesome/pro-light-svg-icons"
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import "./FileList.css";
@@ -39,6 +41,37 @@ export class FileList extends React.Component{
                 this.requestFileNames(folderPaths);
             }
         };
+
+        // handles a folder add response/update
+        this.onFolderAdd = evt => {
+            if(!evt.err){
+                // add folder by path
+                let path = evt.path || "";
+
+                // get files for path
+                // this triggers the adding folder to the UI 
+                this.requestFileNames([path]);
+            }
+        };
+
+        // handles a folder remove response/update
+        this.onFolderRemove = evt => {
+            if(!evt.err){
+                // get path of folder to remove
+                let path = evt.path || "";
+                // copy folders 
+                let folders = {...this.state.folders};
+
+                // remove folders from copy
+                delete folders[path];
+
+                // update state with copy 
+                this.setState({folders});
+            }
+        };
+
+        // handles a folder reset (clear) response/update
+        this.onFolderReset = evt => this.setState({folders: {}});
     }
 
     // requests the the file names array for each folder in the array
@@ -53,8 +86,18 @@ export class FileList extends React.Component{
     componentDidMount(){
         // listen for folder path updates
         FolderDispatcher.on("folder-list", this.onFolderPaths);
+
+        // listen for folder adds
+        FolderDispatcher.on("folder-add", this.onFolderAdd);
+
+        // listen for folder removals
+        FolderDispatcher.on("folder-remove", this.onFolderRemove);
+
+        // listen for folder reset
+        FileDispatcher.on("folder-reset", this.onFolderReset);
+
         // listen for file names update
-        FileDispatcher.on("get-files", this.onFileNames);
+        FileDispatcher.on("files-get", this.onFileNames);
 
         // get folder paths when component mounts  
         FolderDispatcher.getFolderPaths();
@@ -63,8 +106,18 @@ export class FileList extends React.Component{
     componentWillUnmount(){
         // stop listening for folder paths update
         FolderDispatcher.removeListener("folder-list", this.onFolderPaths);
+
+        // listen for folder adds
+        FolderDispatcher.removeListener("folder-add", this.onFolderAdd);
+
+        // listen for folder removals
+        FolderDispatcher.removeListener("folder-remove", this.onFolderRemove);
+
+        // listen for folder reset
+        FileDispatcher.removeListener("folder-reset", this.onFolderReset);
+
         // stop listening for file names update
-        FileDispatcher.removeListener("get-files", this.onFileNames);
+        FileDispatcher.removeListener("files-get", this.onFileNames);
     }
 
     // renders the folder element (folder name + file list)
@@ -87,6 +140,10 @@ export class FileList extends React.Component{
         return (
             <div className="file-list-container" key={folderPath}>
                 <div className="file-list-folder">
+                    <span onClick={() => FolderDispatcher.removeFolder(folderPath)}>
+                        <FontAwesomeIcon icon={faMinusCircle} style={{color: "red", cursor: "pointer"}}/>
+                    </span>
+                    &nbsp;
                     {folderPath}
                 </div>
                 <div className="file-list-items">
