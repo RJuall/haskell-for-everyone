@@ -1,9 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinusCircle } from "@fortawesome/pro-light-svg-icons"
+import { faMinusCircle, faPlusCircle } from "@fortawesome/pro-light-svg-icons"
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import "./FileList.css";
+import { fileURLToPath } from "url";
 
 export class FileList extends React.Component{
     constructor(props){
@@ -12,6 +13,9 @@ export class FileList extends React.Component{
         this.state = {
             folders: {}     // folders to display - {folder: [files]}
         };
+
+        // secret input[type=folder] element for selecting folders
+        this.folderRef = React.createRef();
 
         // state update when file names received 
         this.onFileNames = evt => {
@@ -120,6 +124,15 @@ export class FileList extends React.Component{
         FileDispatcher.removeListener("files-get", this.onFileNames);
     }
 
+    // handler for the when the user selects a folder 
+    onFolderSelect(evt){
+        // file[0] = folder not an actual file apparent! 
+        let path = evt.target.files[0].path.replace(/\\/g, "/");
+
+        // trigger the add folder mechanism 
+        FolderDispatcher.addFolder(path);
+    }
+
     // renders the folder element (folder name + file list)
     // @param folderPath    the folder's path
     // @param fileNames     array of file names that are inside the folder 
@@ -137,14 +150,17 @@ export class FileList extends React.Component{
             );
         }); 
 
+        // folder name is at the end (current naming convention will have no '/' at the end)
+        let folderName = folderPath.split("/").pop();
+
         return (
             <div className="file-list-container" key={folderPath}>
-                <div className="file-list-folder">
+                <div className="file-list-folder" title={folderPath}>
                     <span onClick={() => FolderDispatcher.removeFolder(folderPath)}>
                         <FontAwesomeIcon icon={faMinusCircle} style={{color: "red", cursor: "pointer"}}/>
                     </span>
                     &nbsp;
-                    {folderPath}
+                    {folderName}
                 </div>
                 <div className="file-list-items">
                     {fileElements}
@@ -170,16 +186,34 @@ export class FileList extends React.Component{
 
         return folderElements;
     }
+    
+    // renders the hidden input for selecting folders
+    renderSecretFolderInput(){
+        return (
+            <input
+                ref={this.folderRef}
+                type="file"
+                webkitdirectory=""
+                hidden={true}
+                onInput={this.onFolderSelect.bind(this)}
+            />
+        );
+    }
 
     render(){
         return (
             <div>
                 <div>
                     Files
+                    &nbsp;
+                    <span onClick={() => this.folderRef.current.click()}>
+                        <FontAwesomeIcon icon={faPlusCircle} style={{color: "green", cursor: "pointer"}}/>
+                    </span>
                 </div>
                 <div>
                     {this.renderFolders()}
                 </div>
+                {this.renderSecretFolderInput()}
             </div>
         );
     }

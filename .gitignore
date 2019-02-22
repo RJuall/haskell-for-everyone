@@ -62,3 +62,6 @@ typings/
 
 # .npmrc file to use fontawesome pro
 .npmrc
+
+# ignore marked folders 
+app/folder_data.txt

@@ -18,7 +18,7 @@ class FolderOps{
         FolderDataUtils.addFolder(path)
             .then(() => {
                 // folder added to data file 
-                IpcResponder.respond(evt, "folder-add");
+                IpcResponder.respond(evt, "folder-add", {path});
             })
             .catch(err => {
                 // failed to add folder to data file
