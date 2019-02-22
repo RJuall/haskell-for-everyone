@@ -21,11 +21,11 @@ class FileOps{
         FileUtils.getFileNames(dir)
             .then(fileNames => {
                 // got file names array 
-                IpcResponder.respond(evt, "get-files", {fileNames, dir});
+                IpcResponder.respond(evt, "files-get", {fileNames, dir});
             })
             .catch(err => {
                 // error
-                IpcResponder.respond(evt, "get-files", {err: err.message});
+                IpcResponder.respond(evt, "files-get", {err: err.message});
             });
     }
 
@@ -36,7 +36,7 @@ class FileOps{
         // must have file name
         if(!fileName){
             let err = "No file name provided (fileName is null).";
-            IpcResponder.respond(evt, "read-file", {err});
+            IpcResponder.respond(evt, "file-read", {err});
             return;
         }
 
@@ -44,11 +44,11 @@ class FileOps{
         FileUtils.readFile(fileName)
             .then(str => {
                 // got file contents 
-                IpcResponder.respond(evt, "read-file", {fileName, str});
+                IpcResponder.respond(evt, "file-read", {fileName, str});
             })
             .catch(err => {
                 // error
-                IpcResponder.respond(evt, "read-file", {err: err.message});
+                IpcResponder.respond(evt, "file-read", {err: err.message});
             });
     }
 
@@ -60,13 +60,13 @@ class FileOps{
         // must have file name
         if(!fileName){
             let err = "No file name provided (fileName is null).";
-            IpcResponder.respond(evt, "write-file", {err});
+            IpcResponder.respond(evt, "file-write", {err});
             return;
         }
         // must have string to write 
         if(str === null){
             let err = "No text provided (str is null).";
-            IpcResponder.respond(evt, "write-file", {err});
+            IpcResponder.respond(evt, "file-write", {err});
             return;
         }
 
@@ -74,11 +74,11 @@ class FileOps{
         FileUtils.writeFile(fileName, str)
             .then(() => {
                 // saved file 
-                IpcResponder.respond(evt, "write-file");
+                IpcResponder.respond(evt, "file-write");
             })
             .catch(err => {
                 // error
-                IpcResponder.respond(evt, "write-file", {err: err.message});
+                IpcResponder.respond(evt, "file-write", {err: err.message});
             });
     }
 }
