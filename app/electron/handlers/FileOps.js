@@ -14,8 +14,8 @@ class FileOps{
             return;
         }
 
-        // must have slash at end
-        dir = dir.endsWith("/") ? dir : `${dir}/`;
+        // must NOT have slash at end
+        dir = dir.endsWith("/") ? dir.substring(0, dir.length - 1) : dir;
 
         // get file names promise 
         FileUtils.getFileNames(dir)
