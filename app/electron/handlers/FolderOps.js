@@ -41,7 +41,7 @@ class FolderOps{
         FolderDataUtils.removeFolder(path)
             .then(() => {
                 // folder removed from data file 
-                IpcResponder.respond(evt, "folder-remove");
+                IpcResponder.respond(evt, "folder-remove", {path});
             })
             .catch(err => {
                 // failed to remove folder from data file 
