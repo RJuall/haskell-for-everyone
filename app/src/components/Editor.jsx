@@ -1,6 +1,7 @@
 import React from 'react';
+import ReactAceEditor from './AceEditor'
 
-class Editor extends Component {
+export class Editor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -14,5 +15,3 @@ class Editor extends Component {
         )
     }
 }
-
-export default Editor;

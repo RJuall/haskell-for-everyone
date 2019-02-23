@@ -33,6 +33,7 @@
     "events": "^3.0.0",
     "fs": "0.0.1-security",
     "react": "^16.8.1",
+    "react-ace": "^6.4.0",
     "react-dom": "^16.8.2",
     "react-split-pane": "^0.1.85",
     "reactstrap": "^7.1.0"
