@@ -29,11 +29,7 @@ export class App extends React.Component{
                         <div>
                             <SplitPane split="vertical" minSize={200} defaultSize={700}>
                             <Col>
-                                Column 2
-                                <br></br>
                                 <Editor/>
-                                <br></br>
-                                This is from a different FontAwesome icon library! <FontAwesomeIcon size="lg" icon={faApple}></FontAwesomeIcon>
                             </Col>
                             <Col>
                               GHCi
