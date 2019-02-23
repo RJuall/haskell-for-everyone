@@ -1,0 +1,21 @@
+.dlLink{
+    color: blue;
+    cursor: pointer;
+}
+
+.link{
+    color: black;
+    cursor: pointer;
+}
+
+.border {
+    border-right: 1px solid black;
+}
+
+.OS{
+    font-size: 32px;
+}
+
+.underline{
+    text-decoration: underline;
+}
