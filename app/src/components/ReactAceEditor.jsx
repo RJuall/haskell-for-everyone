@@ -22,6 +22,9 @@ class ReactAceEditor extends React.Component {
                     theme="dracula"
                     onChange={onChange}
                     name="ace-editor"
+                    width="100%"
+                    height="100vh"
+                    wrapEnabled="true"
                     editorProps={{$blockScrolling: true}}
                 ></AceEditor>
             </div>
