@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactAceEditor from './AceEditor'
+import ReactAceEditor from './ReactAceEditor'
 
 export class Editor extends React.Component {
     constructor(props) {
