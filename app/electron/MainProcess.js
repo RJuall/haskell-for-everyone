@@ -83,6 +83,10 @@ class MainProcess{
                 GhciOps.clear(evt);
                 break;
 
+            case "ghci-init":
+                GhciOps.init(evt);
+                break;
+
             case "folder-add":
                 FolderOps.addFolder(evt, data);
                 break;
