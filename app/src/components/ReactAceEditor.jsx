@@ -5,13 +5,14 @@ import AceEditor from 'react-ace';
 import 'brace/mode/haskell';
 import 'brace/theme/dracula';
 
-export class ReactAceEditor extends React.Component {
+function   
+onChange(newVal) {
+    console.log('change', newVal);
+}
+
+class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
-    }
-    
-    onChange(newVal) {
-        console.log('change', newVal);
     }
 
     render() {
@@ -29,4 +30,4 @@ export class ReactAceEditor extends React.Component {
     }
 }
 
-
+export default ReactAceEditor;

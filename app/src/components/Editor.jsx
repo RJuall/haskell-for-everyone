@@ -11,6 +11,7 @@ export class Editor extends React.Component {
         return(
             <>
             <h1>EDITOR</h1>
+            <ReactAceEditor/>
             </>
         )
     }
