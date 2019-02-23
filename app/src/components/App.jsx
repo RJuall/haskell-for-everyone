@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SplitPane from 'react-split-pane';
 import { FileList } from "./FileList";
 import { GhciConsole } from "./GhciConsole";
+import { Editor } from './Editor';
 import "./App.css";
 
 export class App extends React.Component{
@@ -30,9 +31,7 @@ export class App extends React.Component{
                             <Col>
                                 Column 2
                                 <br></br>
-                                Hey, it works.
-                                <br></br>
-                                Can you see me? If so, you've got FontAwesome Pro! <FontAwesomeIcon size="lg" icon={faAcorn}></FontAwesomeIcon>
+                                <Editor/>
                                 <br></br>
                                 This is from a different FontAwesome icon library! <FontAwesomeIcon size="lg" icon={faApple}></FontAwesomeIcon>
                             </Col>
