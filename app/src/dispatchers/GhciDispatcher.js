@@ -20,6 +20,11 @@ class GhciDispatcher extends EventEmitter{
     clear(){
         IpcRequester.send("ghci-clear");
     }
+
+    // informs of initialization, reads initial buffer 
+    init(){
+        IpcRequester.send("ghci-init");
+    }
 }
 
 // export singleton 

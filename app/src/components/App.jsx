@@ -5,6 +5,7 @@ import { faApple } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SplitPane from 'react-split-pane';
 import { FileList } from "./FileList";
+import { GhciConsole } from "./GhciConsole";
 import "./App.css";
 
 export class App extends React.Component{
@@ -36,7 +37,8 @@ export class App extends React.Component{
                                 This is from a different FontAwesome icon library! <FontAwesomeIcon size="lg" icon={faApple}></FontAwesomeIcon>
                             </Col>
                             <Col>
-                              Col3
+                              GHCi
+                              <GhciConsole/>
                             </Col>
                             </SplitPane>
                         </div>
