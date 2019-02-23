@@ -22,12 +22,12 @@ export class App extends React.Component{
         return (
             <Container>
                 <Row>
-                    <SplitPane split="vertical" minSize={50} defaultSize={300}>
+                    <SplitPane split="vertical" minSize={100} defaultSize={150}>
                         <Col>
                             <FileList/>
                         </Col>
                         <div>
-                            <SplitPane split="vertical" minSize={50} defaultSize={300}>
+                            <SplitPane split="vertical" minSize={200} defaultSize={700}>
                             <Col>
                                 Column 2
                                 <br></br>

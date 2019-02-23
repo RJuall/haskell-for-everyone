@@ -5,8 +5,7 @@ import AceEditor from 'react-ace';
 import 'brace/mode/haskell';
 import 'brace/theme/dracula';
 
-function   
-onChange(newVal) {
+function onChange(newVal) {
     console.log('change', newVal);
 }
 
