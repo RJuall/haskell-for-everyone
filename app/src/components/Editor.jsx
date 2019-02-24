@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactAceEditor from './ReactAceEditor'
+import EditorIconBar from './EditorIconBar';
 
 export class Editor extends React.Component {
     constructor(props) {
@@ -10,6 +11,7 @@ export class Editor extends React.Component {
     render() {
         return(
             <>
+            <EditorIconBar/>
             <ReactAceEditor/>
             </>
         )
