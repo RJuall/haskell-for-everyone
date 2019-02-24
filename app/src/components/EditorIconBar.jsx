@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave } from '@fortawesome/pro-regular-svg-icons';
+import { faSave, faPlay, faMinus, faPlus, faTextHeight } from '@fortawesome/pro-regular-svg-icons';
 
 import './EditorIconBar.css';
 
@@ -13,9 +13,12 @@ class EditorIconBar extends React.Component {
     render() {
         return(
             <div class="icon-bar">
+                <button><FontAwesomeIcon size="2x" icon={faPlay}/></button>
                 <button><FontAwesomeIcon size="2x" icon={faSave}/></button>
                 <button></button>
-                <button></button>
+                <button><FontAwesomeIcon size="2x" icon={faMinus}/></button>
+                <button><FontAwesomeIcon size="2x" icon={faTextHeight}/></button>
+                <button><FontAwesomeIcon size="2x" icon={faPlus}/></button>
             </div>
         );
     }

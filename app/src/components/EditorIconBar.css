@@ -1,6 +1,9 @@
 .icon-bar {
     height: 60px;
     background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .icon-bar button {
@@ -9,7 +12,9 @@
     background-color: transparent;
     border: none;
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
+}
+
+.icon-bar button:hover {
+    background-color: #eeeeee;
 }
