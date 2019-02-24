@@ -27,7 +27,7 @@ export class App extends React.Component{
                             <FileList/>
                         </Col>
                         <div>
-                            <SplitPane split="vertical" minSize={200} defaultSize={700}>
+                            <SplitPane split="vertical" minSize={200} defaultSize={1100}>
                             <Col>
                                 <Editor/>
                             </Col>

@@ -1,3 +1,5 @@
+// A large Haskell program to use for testing purposes
+
 export const testHask =
 `-----------------------------------------------------------------------------
 -- |

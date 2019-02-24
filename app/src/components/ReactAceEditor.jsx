@@ -9,18 +9,27 @@ import 'brace/theme/solarized_light'
 
 import {testHask} from './Tokenise';
 
-function onChange(newVal) {
-    console.log();
-}
-
 class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            name: "ace-editor",
+            mode: "haskell",
+            theme: "dracula",
+            onChange: (val, evt) => {},
+            width: "100%",
+            height: "100vh",
+            fontSize: "20px",
+            value: '',
+            defaultValue: testHask,
+            editorProps: {$blockScrolling: true},
+            wrapEnabled: false,
+        };
     }
 
     componentDidMount() {
         FileDispatcher.on(FILE_READ, evt => {
-            //evt.str to ed.val
+            this.state.value = evt.str;
         });
         console.log(testHask);
     }    
@@ -29,15 +38,16 @@ class ReactAceEditor extends React.Component {
         return(
             <div>
                 <AceEditor
-                    mode="haskell"
-                    theme="solarized_light"
-                    onChange={onChange}
-                    name="ace-editor"
-                    width="100%"
-                    height="100vh"
-                    fontSize="22px"
-                    editorProps={{$blockScrolling: true}}
-                    defaultValue={testHask}
+                    mode={this.state.mode}
+                    theme={this.state.theme}
+                    onChange={this.state.onChange}
+                    name={this.state.name}
+                    width={this.state.width}
+                    height={this.state.height}
+                    fontSize={this.state.fontSize}
+                    editorProps={this.state.editorProps}
+                    defaultValue={this.state.defaultValue}
+                    wrapEnabled={this.state.wrapEnabled}
                 ></AceEditor>
             </div>
         )
