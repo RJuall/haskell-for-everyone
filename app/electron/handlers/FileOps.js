@@ -81,6 +81,41 @@ class FileOps{
                 IpcResponder.respond(evt, "file-write", {err: err.message});
             });
     }
+
+    // creates a new file empty file
+    // @param evt       event object for response
+    // @param fileName  file name to create
+    // @param dir       directory to write file in
+    // @param str       initial file contents (optional)
+    static createFile(evt, {fileName=null, dir=null, str=""}){
+        // must have file name
+        if(!fileName){
+            let err = "No file name provided (fileName is null).";
+            IpcResponder.respond(evt, "file-create", {err});
+            return;
+        }
+        // must have directory
+        if(!dir){
+            let err = "No directory provided (dir is null).";
+            IpcResponder.respond(evt, "file-create", {err});
+            return;
+        }
+
+        // figure out path 
+        let directory = dir.endsWith("/") ? dir.substring(0, dir.length - 1) : dir;
+        let path = `${directory}/${fileName}`;
+
+        // create the file 
+        FileUtils.createFile(path, str)
+            .then(() => {
+                // file created
+                IpcResponder.respond(evt, "file-create", {dir, fileName});
+            })
+            .catch(err => {
+                // error
+                IpcResponder.respond(evt, "file-create", {err: err.message});
+            });
+    }
 }
 
 module.exports = { FileOps };

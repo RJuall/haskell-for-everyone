@@ -75,6 +75,10 @@ class MainProcess{
                 FileOps.writeFile(evt, data);
                 break;
 
+            case "file-create":
+                FileOps.createFile(evt, data);
+                break;
+
             case "ghci":
                 GhciOps.executeCode(evt, data);
                 break;

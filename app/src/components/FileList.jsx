@@ -1,10 +1,11 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/pro-light-svg-icons"
+import { ModalCreateFile } from "./ModalCreateFile";
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
+import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import "./FileList.css";
-import { fileURLToPath } from "url";
 
 export class FileList extends React.Component{
     constructor(props){
@@ -33,6 +34,13 @@ export class FileList extends React.Component{
                 this.setState({folders});
             }
         }
+
+        // handle file create by updating folder
+        this.onFileCreate = evt => {
+            if(!evt.err){
+                this.requestFileNames([evt.dir]);
+            }
+        };
 
         // request files in folder when a folder is received
         this.onFolderPaths = evt => {
@@ -99,6 +107,9 @@ export class FileList extends React.Component{
 
         // listen for folder reset
         FileDispatcher.on("folder-reset", this.onFolderReset);
+        
+        // listen for file creation
+        FileDispatcher.on("file-create", this.onFileCreate);
 
         // listen for file names update
         FileDispatcher.on("files-get", this.onFileNames);
@@ -111,14 +122,17 @@ export class FileList extends React.Component{
         // stop listening for folder paths update
         FolderDispatcher.removeListener("folder-list", this.onFolderPaths);
 
-        // listen for folder adds
+        // stop listening for folder adds
         FolderDispatcher.removeListener("folder-add", this.onFolderAdd);
 
-        // listen for folder removals
+        // stop listening for folder removals
         FolderDispatcher.removeListener("folder-remove", this.onFolderRemove);
 
-        // listen for folder reset
+        // stop listening for folder reset
         FileDispatcher.removeListener("folder-reset", this.onFolderReset);
+
+        // stop listening for file creation
+        FileDispatcher.removeListener("file-create", this.onFileCreate);
 
         // stop listening for file names update
         FileDispatcher.removeListener("files-get", this.onFileNames);
@@ -143,7 +157,7 @@ export class FileList extends React.Component{
         // return an array of elements 
         let fileElements = fnames.map(fname => {
             return (
-                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(folderPath + fname)}>
+                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${folderPath}\\${fname}`)}>
                     {fname}
                     <br/>
                 </span>
@@ -161,6 +175,10 @@ export class FileList extends React.Component{
                     </span>
                     &nbsp;
                     {folderName}
+                    &nbsp;
+                    <span onClick={() => ModalDispatcher.createFileModal(folderPath)}>
+                        <FontAwesomeIcon icon={faPlusCircle} style={{color: "green", cursor: "pointer"}}/>
+                    </span>
                 </div>
                 <div className="file-list-items">
                     {fileElements}
@@ -214,6 +232,7 @@ export class FileList extends React.Component{
                     {this.renderFolders()}
                 </div>
                 {this.renderSecretFolderInput()}
+                <ModalCreateFile/>
             </div>
         );
     }
