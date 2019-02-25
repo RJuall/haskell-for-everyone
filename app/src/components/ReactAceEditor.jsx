@@ -1,5 +1,6 @@
 import React from 'react';
 import AceEditor from 'react-ace';
+import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 
 import 'brace/mode/haskell';
@@ -23,18 +24,14 @@ class ReactAceEditor extends React.Component {
             width: "100%",
             height: "100vh",
             fontSize: "20px",
-            value: '',
             defaultValue: testHask,
             editorProps: {$blockScrolling: true},
             wrapEnabled: false
         };
-
-        // handle file read events 
-        this.onFileRead = this.handleFileRead.bind(this);
     }
 
     // handler when a file is read
-    handleFileRead(evt) {
+    handleFileRead = (evt) => {
         if(evt.fileName !== this.currFileName){
             // save current file logic 
         }
@@ -46,12 +43,29 @@ class ReactAceEditor extends React.Component {
         this.setState({value: evt.str});
     }
 
+    fontSizePlus = () => {
+        this.setState({
+            fontSize: (parseInt(this.state.fontSize) + 2).toString() + 'px'
+        });
+     }
+
+    fontSizeMinus = () => {
+        this.setState({
+            fontSize: (parseInt(this.state.fontSize) - 2).toString() + 'px'
+        })
+    }
+
     componentDidMount() {
-        FileDispatcher.on(FILE_READ, this.onFileRead);
+        FileDispatcher.on(FILE_READ, this.handleFileRead);
+        EditorDispatcher.on("font-size-plus", this.fontSizePlus);
+        EditorDispatcher.on("font-size-minus", this.fontSizeMinus);
+        this.setState({value: this.state.defaultValue});
     }    
 
     componentWillUnmount() {
-        FileDispatcher.removeListener(FILE_READ, this.onFileRead);
+        FileDispatcher.removeListener(FILE_READ, this.handleFileRead);
+        EditorDispatcher.removeListener("font-size-plus", this.fontSizePlus);
+        EditorDispatcher.removeListener("font-size-minus", this.fontSizeMinus);
     }
 
     render() {
