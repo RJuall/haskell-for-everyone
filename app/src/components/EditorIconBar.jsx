@@ -17,8 +17,8 @@ class EditorIconBar extends React.Component {
                 <button><FontAwesomeIcon size="2x" icon={faPlay}/></button>
                 <button><FontAwesomeIcon size="2x" icon={faSave}/></button>
                 <button></button>
-                <button><FontAwesomeIcon onClick={() => EditorDispatcher.fontSizeMinus()}size="2x" icon={faMinus}/></button>
-                <button><FontAwesomeIcon onClick={() => EditorDispatcher.fontSizePlus()} size="2x" icon={faPlus}/></button>
+                <button onClick={() => EditorDispatcher.fontSizeMinus()}><FontAwesomeIcon size="2x" icon={faMinus}/></button>
+                <button onClick={() => EditorDispatcher.fontSizePlus()}><FontAwesomeIcon size="2x" icon={faPlus}/></button>
             </div>
         );
     }
