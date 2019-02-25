@@ -66,3 +66,6 @@ typings/
 # ignore marked folders 
 app/folder_data.txt
 app/folder_data.json
+
+# ignore test haskell files
+*_test.hs
