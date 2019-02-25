@@ -1,7 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/pro-light-svg-icons"
-import { ModalCreateFile } from "./ModalCreateFile";
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
@@ -232,7 +231,6 @@ export class FileList extends React.Component{
                     {this.renderFolders()}
                 </div>
                 {this.renderSecretFolderInput()}
-                <ModalCreateFile/>
             </div>
         );
     }
