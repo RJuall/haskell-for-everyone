@@ -1,4 +1,4 @@
-const { FolderDataUtils } = require("../utils/FolderDataUtils");
+const { FolderData } = require("../utils/FolderData");
 const { IpcResponder } = require("../utils/IpcResponder");
 
 // handles folder operation requests (automatically responds)
@@ -15,7 +15,7 @@ class FolderOps{
         }
 
         // asynchronously add the folder
-        FolderDataUtils.addFolder(path)
+        FolderData.addFolder(path)
             .then(() => {
                 // folder added to data file 
                 IpcResponder.respond(evt, "folder-add", {path});
@@ -38,7 +38,7 @@ class FolderOps{
         }
 
         // asychronously remove the folder
-        FolderDataUtils.removeFolder(path)
+        FolderData.removeFolder(path)
             .then(() => {
                 // folder removed from data file 
                 IpcResponder.respond(evt, "folder-remove", {path});
@@ -53,7 +53,7 @@ class FolderOps{
     // @param evt       event object for responding
     static resetFolders(evt){
         // asychronously reset the folder data file
-        FolderDataUtils.resetFolderData()
+        FolderData.resetFolders()
             .then(() => {
                 // successfully reset the folder data file 
                 IpcResponder.respond(evt, "folder-reset");
@@ -67,15 +67,8 @@ class FolderOps{
     // gets the list of all stored folder paths
     // @Param evt       event object for responding 
     static getFolderPaths(evt){
-        FolderDataUtils.loadFolderData()
-            .then(folderPaths => {
-                // respond with the folder path array 
-                IpcResponder.respond(evt, "folder-list", {folderPaths});
-            })
-            .catch(err => {
-                // failed to load data file 
-                IpcResponder.respond(evt, "folder-list", {err: err.message});
-            });
+        let folderPaths = FolderData.folderPaths;
+        IpcResponder.respond(evt, "folder-list", {folderPaths});
     }
 }
 

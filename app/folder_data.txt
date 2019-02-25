@@ -1,1 +1,0 @@
-,/home/rjuall/DREW/SPRING19/Capstone/haskell-for-everyone/app,/home/rjuall/DREW/SPRING19/Capstone/haskell-for-everyone/app/sample_hs
