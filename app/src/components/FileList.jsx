@@ -16,73 +16,6 @@ export class FileList extends React.Component{
 
         // secret input[type=folder] element for selecting folders
         this.folderRef = React.createRef();
-
-        // state update when file names received 
-        this.onFileNames = evt => {
-            if(!evt.err){
-                // copy current state folders
-                let folders = {...this.state.folders};
-
-                // extract file names array and folder (dir) from event
-                let {fileNames=[], dir=""} = evt;
-
-                // update the folder data in the updated folders object
-                folders[dir] = fileNames;
-
-                // update the state 
-                this.setState({folders});
-            }
-        }
-
-        // handle file create by updating folder
-        this.onFileCreate = evt => {
-            if(!evt.err){
-                this.requestFileNames([evt.dir]);
-            }
-        };
-
-        // request files in folder when a folder is received
-        this.onFolderPaths = evt => {
-            if(!evt.err){
-                // extract folder paths array from event
-                let folderPaths = evt.folderPaths || [];
-
-                // request the files in each folder
-                // (which eventually re-renders)
-                this.requestFileNames(folderPaths);
-            }
-        };
-
-        // handles a folder add response/update
-        this.onFolderAdd = evt => {
-            if(!evt.err){
-                // add folder by path
-                let path = evt.path || "";
-
-                // get files for path
-                // this triggers the adding folder to the UI 
-                this.requestFileNames([path]);
-            }
-        };
-
-        // handles a folder remove response/update
-        this.onFolderRemove = evt => {
-            if(!evt.err){
-                // get path of folder to remove
-                let path = evt.path || "";
-                // copy folders 
-                let folders = {...this.state.folders};
-
-                // remove folders from copy
-                delete folders[path];
-
-                // update state with copy 
-                this.setState({folders});
-            }
-        };
-
-        // handles a folder reset (clear) response/update
-        this.onFolderReset = () => this.setState({folders: {}});
     }
 
     // requests the the file names array for each folder in the array
@@ -94,24 +27,93 @@ export class FileList extends React.Component{
         });
     }
 
+    // state update when file names received 
+    handleFileNames = evt => {
+        if(!evt.err){
+            // copy current state folders
+            let folders = {...this.state.folders};
+
+            // extract file names array and folder (dir) from event
+            let {fileNames=[], dir=""} = evt;
+
+            // update the folder data in the updated folders object
+            folders[dir] = fileNames;
+
+            // update the state 
+            this.setState({folders});
+        }
+    }
+
+    // handle file create by updating folder
+    handleFileCreate = evt => {
+        if(!evt.err){
+            this.requestFileNames([evt.dir]);
+        }
+    }
+
+    // request files in folder when a folder is received
+    handleFolderPaths = evt => {
+        if(!evt.err){
+            // extract folder paths array from event
+            let folderPaths = evt.folderPaths || [];
+
+            // request the files in each folder
+            // (which eventually re-renders)
+            this.requestFileNames(folderPaths);
+        }
+    }
+
+    // handles a folder add response/update
+    handleFolderAdd = evt => {
+        if(!evt.err){
+            // add folder by path
+            let path = evt.path || "";
+
+            // get files for path
+            // this triggers the adding folder to the UI 
+            this.requestFileNames([path]);
+        }
+    };
+
+    // handles a folder remove response/update
+    handleFolderRemove = evt => {
+        if(!evt.err){
+            // get path of folder to remove
+            let path = evt.path || "";
+            // copy folders 
+            let folders = {...this.state.folders};
+
+            // remove folders from copy
+            delete folders[path];
+
+            // update state with copy 
+            this.setState({folders});
+        }
+    }
+
+    // handles a folder reset (clear) response/update
+    handleFolderReset = () => {
+        this.setState({folders: {}});
+    }
+
     componentDidMount(){
         // listen for folder path updates
-        FolderDispatcher.on("folder-list", this.onFolderPaths);
+        FolderDispatcher.on("folder-list", this.handleFolderPaths);
 
         // listen for folder adds
-        FolderDispatcher.on("folder-add", this.onFolderAdd);
+        FolderDispatcher.on("folder-add", this.handleFolderAdd);
 
         // listen for folder removals
-        FolderDispatcher.on("folder-remove", this.onFolderRemove);
+        FolderDispatcher.on("folder-remove", this.handleFolderRemove);
 
         // listen for folder reset
-        FileDispatcher.on("folder-reset", this.onFolderReset);
+        FileDispatcher.on("folder-reset", this.handleFolderReset);
         
         // listen for file creation
-        FileDispatcher.on("file-create", this.onFileCreate);
+        FileDispatcher.on("file-create", this.handleFileCreate);
 
         // listen for file names update
-        FileDispatcher.on("files-get", this.onFileNames);
+        FileDispatcher.on("files-get", this.handleFileNames);
 
         // get folder paths when component mounts  
         FolderDispatcher.getFolderPaths();
@@ -119,22 +121,22 @@ export class FileList extends React.Component{
 
     componentWillUnmount(){
         // stop listening for folder paths update
-        FolderDispatcher.removeListener("folder-list", this.onFolderPaths);
+        FolderDispatcher.removeListener("folder-list", this.handleFolderPaths);
 
         // stop listening for folder adds
-        FolderDispatcher.removeListener("folder-add", this.onFolderAdd);
+        FolderDispatcher.removeListener("folder-add", this.handleFolderAdd);
 
         // stop listening for folder removals
-        FolderDispatcher.removeListener("folder-remove", this.onFolderRemove);
+        FolderDispatcher.removeListener("folder-remove", this.handleFolderRemove);
 
         // stop listening for folder reset
-        FileDispatcher.removeListener("folder-reset", this.onFolderReset);
+        FileDispatcher.removeListener("folder-reset", this.handleFolderReset);
 
         // stop listening for file creation
-        FileDispatcher.removeListener("file-create", this.onFileCreate);
+        FileDispatcher.removeListener("file-create", this.handleFileCreate);
 
         // stop listening for file names update
-        FileDispatcher.removeListener("files-get", this.onFileNames);
+        FileDispatcher.removeListener("files-get", this.handleFileNames);
     }
 
     // handler for the when the user selects a folder 

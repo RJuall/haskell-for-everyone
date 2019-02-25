@@ -14,18 +14,18 @@ export class ModalCreateFile extends React.Component{
 
         this.dirInput = null;       // directory input element
         this.fnameInput = null;     // file name input element
-
-        // handle modal start event
-        // show the modal and optionally have forced directory 
-        this.onCreateFile = evt => {
-            let dir = evt.dir || "";
-            this.setState({isOpen: true, dir});
-        };
     }
 
     toggle(){
         this.setState({isOpen: !this.state.isOpen});
     }
+
+    // handle modal start event
+    // show the modal and optionally have forced directory 
+    handleFileCreate = evt => {
+        let dir = evt.dir || "";
+        this.setState({isOpen: true, dir});
+    };
 
     onSubmit(evt){
         // prevent app refresh
@@ -48,12 +48,12 @@ export class ModalCreateFile extends React.Component{
 
     componentDidMount(){
         // listen for create file modal signals
-        ModalDispatcher.on("create-file", this.onCreateFile);
+        ModalDispatcher.on("create-file", this.handleFileCreate);
     }
 
     componentWillUnmount(){
         // stop listening for create file modal signals
-        ModalDispatcher.removeListener("create-file", this.onCreateFile);
+        ModalDispatcher.removeListener("create-file", this.handleFileCreate);
     }
 
     render(){
