@@ -28,10 +28,10 @@ class FolderData{
     // @param path      folder path to add
     addFolder(path){
         // append new path (if its unique)
-        let paths = this._folderPaths.includes(path) ? this.folderPaths : [...this.folderPaths, path];
+        let paths = this.folderPaths.includes(path) ? this.folderPaths : [...this.folderPaths, path];
 
         // update object
-        this.folderPaths = paths;
+        this._folderPaths = paths;
 
         // update the file
         return this.update();
@@ -44,7 +44,7 @@ class FolderData{
         let updatedPaths = this._folderPaths.filter(currPath => currPath !== path);
 
         // update object
-        this.folderPaths = updatedPaths;
+        this._folderPaths = updatedPaths;
 
         // update file 
         return this.update();
