@@ -16,6 +16,10 @@ An easy-to-use educational editor for learning the Haskell programming language
 | /server/src | Server source | TypeScript source code |
 | /web | Web | Website files 
 
+## Testing
+
+While testing, any files created with the naming structure `*_test.hs` in the repository will be ignored by git.
+
 ## Setup & Installation 
 
 #### Install Node.js (runtime + package manager)
