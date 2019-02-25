@@ -82,7 +82,7 @@ export class FileList extends React.Component{
         };
 
         // handles a folder reset (clear) response/update
-        this.onFolderReset = evt => this.setState({folders: {}});
+        this.onFolderReset = () => this.setState({folders: {}});
     }
 
     // requests the the file names array for each folder in the array
@@ -156,7 +156,7 @@ export class FileList extends React.Component{
         // return an array of elements 
         let fileElements = fnames.map(fname => {
             return (
-                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${folderPath}\\${fname}`)}>
+                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${folderPath}/${fname}`)}>
                     {fname}
                     <br/>
                 </span>
