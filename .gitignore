@@ -65,3 +65,4 @@ typings/
 
 # ignore marked folders 
 app/folder_data.txt
+app/folder_data.json
