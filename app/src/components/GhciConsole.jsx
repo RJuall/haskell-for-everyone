@@ -10,31 +10,31 @@ export class GhciConsole extends React.Component{
         this.inputRef = React.createRef();
         // output <textarea> element ref
         this.consoleRef = React.createRef();
+    }
 
-        // handle ghci data
-        this.onGhci = evt => {
-            // output element
-            let elem = this.consoleRef.current;
-            // text update 
-            let text = evt.err || evt.str || "";
+    // handle ghci data
+    handleGhci = evt => {
+        // output element
+        let elem = this.consoleRef.current;
+        // text update 
+        let text = evt.err || evt.str || "";
 
-            // append text to output 
-            if(!elem.value.length){
-                // set text if empty 
-                this.consoleRef.current.value = text;
-            }
-            else{
-                // append text on bottom 
-                elem.value += "\n" + text;
-                // scroll to bottom
-                elem.scrollTop = elem.scrollHeight;
-            }
-        };
+        // append text to output 
+        if(!elem.value.length){
+            // set text if empty 
+            this.consoleRef.current.value = text;
+        }
+        else{
+            // append text on bottom 
+            elem.value += "\n" + text;
+            // scroll to bottom
+            elem.scrollTop = elem.scrollHeight;
+        }
     }
 
     componentDidMount(){
         // listen for ghci text
-        GhciDispatcher.on("ghci", this.onGhci);
+        GhciDispatcher.on("ghci", this.handleGhci);
 
         GhciDispatcher.init();
 
@@ -44,7 +44,7 @@ export class GhciConsole extends React.Component{
 
     componentWillUnmount(){
         // stop listening for ghci text
-        GhciDispatcher.removeListener("ghci", this.onGhci);
+        GhciDispatcher.removeListener("ghci", this.handleGhci);
     }
 
     onKeyUp(evt){
