@@ -13,7 +13,7 @@ class FolderData{
         this.load()
             .then(json => {
                 // file loaded - set fields base on file 
-                this.folderPaths = json.folderPaths || [];
+                this._folderPaths = json.folderPaths || [];
             })
             .catch(err => {
                 // failed to load 
@@ -28,7 +28,7 @@ class FolderData{
     // @param path      folder path to add
     addFolder(path){
         // append new path (if its unique)
-        let paths = this.folderPaths.includes(path) ? this.folderPaths : [...this.folderPaths, path];
+        let paths = this._folderPaths.includes(path) ? this.folderPaths : [...this.folderPaths, path];
 
         // update object
         this.folderPaths = paths;
@@ -41,7 +41,7 @@ class FolderData{
     // @param path      folder path to remove
     removeFolder(path){
         // remove the path from the array
-        let updatedPaths = this.folderPaths.filter(currPath => currPath !== path);
+        let updatedPaths = this._folderPaths.filter(currPath => currPath !== path);
 
         // update object
         this.folderPaths = updatedPaths;
@@ -53,7 +53,7 @@ class FolderData{
     // resets the folder field and file 
     resetFolders(){
         // clear folder paths 
-        this.folderPaths = [];
+        this._folderPaths = [];
 
         // update file
         return this.update();
@@ -77,10 +77,13 @@ class FolderData{
     // updates the underlying json file and field respresentation
     update(){
         return new Promise((resolve, reject) => {
+            // json to stringify
+            let json = {folderPaths: this.folderPaths};
+            
             // pretty json stringify
             let str;
             try{
-                str = JSON.stringify(this, null, 4);
+                str = JSON.stringify(json, null, 4);
             }
             catch(err){
                 reject(err);
