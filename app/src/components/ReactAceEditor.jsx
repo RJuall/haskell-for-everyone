@@ -12,6 +12,9 @@ import {testHask} from './Tokenise';
 class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
+        
+        this.currFileName = null;
+
         this.state = {
             name: "ace-editor",
             mode: "haskell",
@@ -23,16 +26,33 @@ class ReactAceEditor extends React.Component {
             value: '',
             defaultValue: testHask,
             editorProps: {$blockScrolling: true},
-            wrapEnabled: false,
+            wrapEnabled: false
         };
+
+        // handle file read events 
+        this.onFileRead = this.handleFileRead.bind(this);
+    }
+
+    // handler when a file is read
+    handleFileRead(evt) {
+        if(evt.fileName !== this.currFileName){
+            // save current file logic 
+        }
+
+        // update current file name
+        this.currFileName = evt.fileName;
+        
+        // load in the file's contents 
+        this.setState({value: evt.str});
     }
 
     componentDidMount() {
-        FileDispatcher.on(FILE_READ, evt => {
-            this.state.value = evt.str;
-        });
-        console.log(testHask);
+        FileDispatcher.on(FILE_READ, this.onFileRead);
     }    
+
+    componentWillUnmount() {
+        FileDispatcher.removeListener(FILE_READ, this.onFileRead);
+    }
 
     render() {
         return(
@@ -48,6 +68,7 @@ class ReactAceEditor extends React.Component {
                     editorProps={this.state.editorProps}
                     defaultValue={this.state.defaultValue}
                     wrapEnabled={this.state.wrapEnabled}
+                    value={this.state.value}
                 ></AceEditor>
             </div>
         )
