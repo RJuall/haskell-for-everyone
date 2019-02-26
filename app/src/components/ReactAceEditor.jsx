@@ -26,6 +26,7 @@ class ReactAceEditor extends React.Component {
             fontSize: "20px",
             defaultValue: testHask,
             editorProps: {$blockScrolling: true},
+            setOptions: {fontFamily: "Operator Mono, Fira Code, Lucida Console, Courier, monospace"},
             wrapEnabled: false
         };
     }
@@ -83,6 +84,7 @@ class ReactAceEditor extends React.Component {
                     defaultValue={this.state.defaultValue}
                     wrapEnabled={this.state.wrapEnabled}
                     value={this.state.value}
+                    setOptions={this.state.setOptions}
                 ></AceEditor>
             </div>
         )

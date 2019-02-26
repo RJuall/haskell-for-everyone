@@ -2,10 +2,10 @@ import { EventEmitter } from "events";
 import IpcRequester from "../utils/IpcRequester";
 
 // "enumerated" event types for files 
-export const FILE_READ =    "file-read",
-            FILE_WRITE =    "file-write",
-            FILE_CREATE =   "file-create",
-            FILES_GET =     "files-get";
+export const FILE_READ =     "file-read",
+             FILE_WRITE =    "file-write",
+             FILE_CREATE =   "file-create",
+             FILES_GET =     "files-get";
 
 class FileDispatcher extends EventEmitter{
     constructor(){
