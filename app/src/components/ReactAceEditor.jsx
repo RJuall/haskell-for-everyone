@@ -26,6 +26,10 @@ class ReactAceEditor extends React.Component {
             fontSize: "20px",
             defaultValue: testHask,
             editorProps: {$blockScrolling: true},
+            setOptions: {
+                fontFamily: "Operator Mono, Fira Code, Lucida Console, Courier, monospace",
+                enableBasicAutocompletion: true
+            },
             wrapEnabled: false
         };
     }
@@ -57,15 +61,15 @@ class ReactAceEditor extends React.Component {
 
     componentDidMount() {
         FileDispatcher.on(FILE_READ, this.handleFileRead);
-        EditorDispatcher.on("font-size-plus", this.fontSizePlus);
-        EditorDispatcher.on("font-size-minus", this.fontSizeMinus);
+        EditorDispatcher.on("ce-font-size-plus", this.fontSizePlus);
+        EditorDispatcher.on("ce-font-size-minus", this.fontSizeMinus);
         this.setState({value: this.state.defaultValue});
     }    
 
     componentWillUnmount() {
         FileDispatcher.removeListener(FILE_READ, this.handleFileRead);
-        EditorDispatcher.removeListener("font-size-plus", this.fontSizePlus);
-        EditorDispatcher.removeListener("font-size-minus", this.fontSizeMinus);
+        EditorDispatcher.removeListener("ce-font-size-plus", this.fontSizePlus);
+        EditorDispatcher.removeListener("ce-font-size-minus", this.fontSizeMinus);
     }
 
     render() {
@@ -83,6 +87,7 @@ class ReactAceEditor extends React.Component {
                     defaultValue={this.state.defaultValue}
                     wrapEnabled={this.state.wrapEnabled}
                     value={this.state.value}
+                    setOptions={this.state.setOptions}
                 ></AceEditor>
             </div>
         )
