@@ -26,7 +26,10 @@ class ReactAceEditor extends React.Component {
             fontSize: "20px",
             defaultValue: testHask,
             editorProps: {$blockScrolling: true},
-            setOptions: {fontFamily: "Operator Mono, Fira Code, Lucida Console, Courier, monospace"},
+            setOptions: {
+                fontFamily: "Operator Mono, Fira Code, Lucida Console, Courier, monospace",
+                enableBasicAutocompletion: true
+            },
             wrapEnabled: false
         };
     }
