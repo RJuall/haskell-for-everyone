@@ -3,11 +3,23 @@ import { EventEmitter } from 'events';
 class EditorDispatcher extends EventEmitter {
 
     fontSizePlus() {
-        this.emit("font-size-plus");
+        this.emit("ce-font-size-plus");
     }
 
     fontSizeMinus() {
-        this.emit("font-size-minus");
+        this.emit("ce-font-size-minus");
+    }
+
+    fontSizeSet() {
+        this.emit("ce-font-size-set");
+    }
+
+    fontFamilySet() {
+        this.emit("ce-font-family-set");
+    }
+
+    themeSet() {
+        this.themeSet("ce-theme-set");
     }
 }
 
