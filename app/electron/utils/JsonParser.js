@@ -24,13 +24,14 @@ class JsonParser{
     // functional json stringify
     // @param object    json object to stringify
     // @param callback  callback function (err:Error, str:String):void
-    static stringify(object, callback){
+    // @param pretty    boolean for pretty json output 
+    static stringify(object, callback, pretty=false){
         // prepare to store string 
         let str;
 
         // attempt to serialize json to string 
         try{
-            str = JSON.stringify(object);
+            str = pretty ? JSON.stringify(object, null, 4) : JSON.stringify(object);
         }
         catch(err){
             // parse error - callback
@@ -40,6 +41,13 @@ class JsonParser{
 
         // got string - callback
         callback(null, str);
+    }
+
+    // function json stringify with pretty output (4 space tabs)
+    // @param object    json object to stringify
+    // @param callback  callback function
+    static stringifyPretty(object, callback){
+        return this.stringify(object, callback, true);
     }
 }
 

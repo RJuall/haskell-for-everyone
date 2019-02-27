@@ -67,5 +67,8 @@ typings/
 app/folder_data.txt
 app/folder_data.json
 
+# ignore settings file
+app/settings.json
+
 # ignore test haskell files
 *_test.hs

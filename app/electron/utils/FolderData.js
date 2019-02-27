@@ -8,12 +8,14 @@ class FolderData{
     constructor(){
         // all folders
         this._folderPaths = [];
+        this._lastFile = null;
 
         // load folders 
         this.load()
             .then(json => {
                 // file loaded - set fields base on file 
                 this._folderPaths = json.folderPaths || [];
+                this._lastFile = json.lastFile || null;
             })
             .catch(err => {
                 // failed to load 
@@ -81,25 +83,35 @@ class FolderData{
             let json = {folderPaths: this.folderPaths};
             
             // pretty json stringify
-            let str;
-            try{
-                str = JSON.stringify(json, null, 4);
-            }
-            catch(err){
-                reject(err);
-                return;
-            }
-
-            // update the file
-            FileUtils.writeFile(FOLDER_DATA_FILE, str)
-                .then(() => resolve("Updated."))
-                .catch(err => reject(err));
+            JsonParser.stringifyPretty(json, (err, str) => {
+                if(!err){
+                    // update the file
+                    FileUtils.writeFile(FOLDER_DATA_FILE, str)
+                        .then(() => resolve("Updated."))
+                        .catch(err => reject(err));
+                }
+                else reject(err);
+            });
         });
+    }
+
+    // setter for last file
+    // @param fname     last file used name 
+    set lastFile(fname){
+        // set the name
+        this._lastFile = fname;
+        // update file 
+        this.update();
     }
 
     // getter for folder paths
     get folderPaths(){
         return this._folderPaths;
+    }
+
+    // getter for last file 
+    get lastFile(){
+        return this._lastFile;
     }
 }
 

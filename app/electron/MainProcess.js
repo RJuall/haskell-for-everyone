@@ -3,6 +3,7 @@ const { JsonParser } = require("./utils/JsonParser");
 const { FileOps } = require("./handlers/FileOps");
 const { GhciOps } = require("./handlers/GhciOps");
 const { FolderOps } = require("./handlers/FolderOps");
+const { SettingsOps } = require("./handlers/SettingsOps");
 
 class MainProcess{
     constructor(){
@@ -105,6 +106,14 @@ class MainProcess{
 
             case "folder-list":
                 FolderOps.getFolderPaths(evt);
+                break;
+
+            case "settings-update":
+                SettingsOps.updateSettings(evt, data);
+                break;
+
+            case "settings-get":
+                SettingsOps.getSettings(evt);
                 break;
                 
             default:
