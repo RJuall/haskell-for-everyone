@@ -7,6 +7,7 @@ import 'brace/mode/haskell';
 import 'brace/theme/dracula';
 import 'brace/theme/eclipse';
 import 'brace/theme/solarized_light'
+import 'brace/ext/language_tools';
 
 import {testHask} from './Tokenise';
 
@@ -29,7 +30,9 @@ class ReactAceEditor extends React.Component {
             editorProps: {$blockScrolling: true},
             setOptions: {
                 fontFamily: "Operator Mono, Fira Code, Lucida Console, Courier, monospace",
-                enableBasicAutocompletion: true
+                enableBasicAutocompletion: true,
+                enableLiveAutocompletion: true,
+                enableSnippets: true
             },
             wrapEnabled: false
         };
