@@ -16,14 +16,12 @@ class ReactAceEditor extends React.Component {
         
         // current file in the editor
         this.currFileName = null;
-        // current code in the editor 
-        this.currCode = null;
 
         this.state = {
             name: "ace-editor",
             mode: "haskell",
             theme: "dracula",
-            onChange: (val, evt) => { this.currCode = val },
+            onChange: (val, evt) => { this.state.value = val},
             width: "100%",
             height: "100vh",
             fontSize: "20px",
@@ -53,7 +51,7 @@ class ReactAceEditor extends React.Component {
     // handler for when the file save button is clicked
     handleSaveFile = () => {
         // issue a request to write current code to current file 
-        FileDispatcher.writeFile(this.currFileName, this.currCode);
+        FileDispatcher.writeFile(this.currFileName, this.state.value);
     }
 
     fontSizePlus = () => {
