@@ -2,6 +2,7 @@ import React from 'react';
 import AceEditor from 'react-ace';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
+import IpcRequester from "../utils/IpcRequester";
 
 import 'brace/mode/haskell';
 import 'brace/theme/dracula';
@@ -70,6 +71,10 @@ class ReactAceEditor extends React.Component {
     }
 
     componentDidMount() {
+        // request settings file
+        IpcRequester.send("settings-get");
+
+        // listen for events
         FileDispatcher.on(FILE_READ, this.handleFileRead);
         EditorDispatcher.on("editor-save-file", this.handleSaveFile);
         EditorDispatcher.on("ce-font-size-plus", this.fontSizePlus);
