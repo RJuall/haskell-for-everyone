@@ -14,11 +14,19 @@ class EditorIconBar extends React.Component {
     render() {
         return(
             <div className="icon-bar">
-                <button><FontAwesomeIcon size="2x" icon={faPlay}/></button>
-                <button><FontAwesomeIcon size="2x" icon={faSave}/></button>
+                <button onClick={() => EditorDispatcher.saveCurrentFile()}>
+                    <FontAwesomeIcon size="2x" icon={faPlay}/>
+                </button>
+                <button>
+                    <FontAwesomeIcon size="2x" icon={faSave}/>
+                </button>
                 <button></button>
-                <button onClick={() => EditorDispatcher.fontSizeMinus()}><FontAwesomeIcon size="2x" icon={faMinus}/></button>
-                <button onClick={() => EditorDispatcher.fontSizePlus()}><FontAwesomeIcon size="2x" icon={faPlus}/></button>
+                <button onClick={() => EditorDispatcher.fontSizeMinus()}>
+                    <FontAwesomeIcon size="2x" icon={faMinus}/>
+                </button>
+                <button onClick={() => EditorDispatcher.fontSizePlus()}>
+                    <FontAwesomeIcon size="2x" icon={faPlus}/>
+                </button>
             </div>
         );
     }

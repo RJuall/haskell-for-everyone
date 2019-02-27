@@ -26,6 +26,11 @@ class EditorDispatcher extends EventEmitter {
     getCurrentSettings() {
         this.emit("ce-current-settings-get");
     }
+
+    // signals that the current file should be saved 
+    saveCurrentFile() {
+        this.emit("editor-save-file");
+    }
 }
 
 export default new EditorDispatcher();
