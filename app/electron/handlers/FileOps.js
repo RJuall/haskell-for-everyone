@@ -74,7 +74,7 @@ class FileOps{
         FileUtils.writeFile(fileName, str)
             .then(() => {
                 // saved file 
-                IpcResponder.respond(evt, "file-write");
+                IpcResponder.respond(evt, "file-write", {fileName});
             })
             .catch(err => {
                 // error

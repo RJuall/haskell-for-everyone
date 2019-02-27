@@ -14,13 +14,16 @@ class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
         
+        // current file in the editor
         this.currFileName = null;
+        // current code in the editor 
+        this.currCode = null;
 
         this.state = {
             name: "ace-editor",
             mode: "haskell",
             theme: "dracula",
-            onChange: (val, evt) => {},
+            onChange: (val, evt) => { this.currCode = val },
             width: "100%",
             height: "100vh",
             fontSize: "20px",
@@ -47,6 +50,12 @@ class ReactAceEditor extends React.Component {
         this.setState({value: evt.str});
     }
 
+    // handler for when the file save button is clicked
+    handleSaveFile = () => {
+        // issue a request to write current code to current file 
+        FileDispatcher.writeFile(this.currFileName, this.currCode);
+    }
+
     fontSizePlus = () => {
         this.setState({
             fontSize: (parseInt(this.state.fontSize) + 2).toString() + 'px'
@@ -61,6 +70,7 @@ class ReactAceEditor extends React.Component {
 
     componentDidMount() {
         FileDispatcher.on(FILE_READ, this.handleFileRead);
+        EditorDispatcher.on("editor-save-file", this.handleSaveFile);
         EditorDispatcher.on("ce-font-size-plus", this.fontSizePlus);
         EditorDispatcher.on("ce-font-size-minus", this.fontSizeMinus);
         this.setState({value: this.state.defaultValue});
@@ -68,6 +78,7 @@ class ReactAceEditor extends React.Component {
 
     componentWillUnmount() {
         FileDispatcher.removeListener(FILE_READ, this.handleFileRead);
+        EditorDispatcher.removeListener("editor-save-file", this.handleSaveFile);
         EditorDispatcher.removeListener("ce-font-size-plus", this.fontSizePlus);
         EditorDispatcher.removeListener("ce-font-size-minus", this.fontSizeMinus);
     }
