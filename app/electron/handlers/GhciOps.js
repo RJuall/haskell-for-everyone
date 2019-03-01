@@ -1,11 +1,12 @@
+const { webContents } = require("electron");
 const { spawn } = require("child_process");
 const { IpcResponder } = require("../utils/IpcResponder");
 
 // wrapper class for forked GHCI child process 
 class GhciWrapper{
     constructor(){
-        // GHCI child process
-        this.ghci = spawn("ghci");
+        // ghci child process (setup later)
+        this.ghci = null;
 
         // buffer to hold ghci data that arrives before first request
         // (need request object to respond)
@@ -13,6 +14,32 @@ class GhciWrapper{
 
         // last request event (used to respond)
         this.responseEvt = null;
+
+        // GHCI child process
+        this.setupGhciChildProcess(err => {
+            // error setting up ghci child process
+            // (most likely haskell platform is not installed)
+            // inform renderer process that ghci is not going to work 
+            webContents.getAllWebContents().forEach(evt => {
+                IpcResponder.respond(evt, "ghci-error", {err: err.message});
+            });
+        });
+    }
+
+    // setups ghci child with error callback
+    // @param callback  callback function for error 
+    setupGhciChildProcess(callback){
+        // attempt to create ghci child process
+        let ghciProcess;
+        try{
+            ghciProcess = spawn("ghci");
+        }
+        catch(err){
+            callback(err);
+            return;
+        }
+
+        this.ghci = ghciProcess;
 
         // handle ghci output 
         this.ghci.stdout.on("data", buf => {
@@ -73,6 +100,11 @@ class GhciWrapper{
             callback(str);
         }
     }
+
+    // getter for if ghci can be used 
+    get isAvailable(){
+        return this.ghci !== null;
+    }
 }
 
 // GHCI process (essentially a private static field)
@@ -84,6 +116,12 @@ class GhciOps{
     // @param evt   event object for responding
     // @param str   haskell code to execute
     static executeCode(evt, {str=null}){
+        // ghci must be working 
+        if(!GHCI.isAvailable){
+            IpcResponder.respondNoGhci(evt);
+            return;
+        }
+
         // must have haskell code to execute 
         if(!str){
             let err = "No code provided (str is null or empty.)";
@@ -101,14 +139,25 @@ class GhciOps{
     // clears the GHCI REPL 
     // @param evt   event object for responding
     static clear(evt){
-        GHCI.clear();
+        // ghci must be working 
+        if(!GHCI.isAvailable){
+            IpcResponder.respondNoGhci(evt);
+            return;
+        }
 
+        GHCI.clear();
         IpcResponder.respond(evt, "ghci-clear");
     }
 
     // gets the initial buffer data
     // @param evt   event object for responding 
     static init(evt){
+        // ghci must be working 
+        if(!GHCI.isAvailable){
+            IpcResponder.respondNoGhci(evt);
+            return;
+        }
+
         // get buffer text
         GHCI.init(str => {
             // send the text ("ghci version...")
