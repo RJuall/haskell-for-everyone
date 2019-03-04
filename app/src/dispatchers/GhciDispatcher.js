@@ -2,9 +2,9 @@ import { EventEmitter } from "events";
 import IpcRequester from "../utils/IpcRequester";
 
 // "enumerated" event types 
-const GHCI = "ghci",
-    GHCI_CLEAR = "ghci-clear",
-    GHCI_INIT = "ghci-init";
+export const GHCI = "ghci",
+    GHCI_CLEAR =    "ghci-clear",
+    GHCI_INIT =     "ghci-init";
 
 class GhciDispatcher extends EventEmitter{
     constructor(){

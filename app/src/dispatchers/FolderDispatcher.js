@@ -2,10 +2,10 @@ import { EventEmitter } from "events";
 import IpcRequester from "../utils/IpcRequester";
 
 // "enumerated" event types 
-const FOLDER_ADD =  "folder-add",
-    FOLDER_REMOVE = "folder-remove",
-    FOLDER_RESET =  "folder-reset",
-    FOLDER_LIST =   "folder-list";
+export const FOLDER_ADD =   "folder-add",
+    FOLDER_REMOVE =         "folder-remove",
+    FOLDER_RESET =          "folder-reset",
+    FOLDER_LIST =           "folder-list";
 
 class FolderDispatcher extends EventEmitter{
     constructor(){
