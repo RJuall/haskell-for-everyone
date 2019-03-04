@@ -12,6 +12,7 @@ export class ModalCreateFile extends React.Component{
         this.state = {
             isOpen: false,          // visible?
             dir:    null,           // forced filename
+            dirSel: null,           // selected folder (used when picking)
             title:  null            // title (default= Create File)
         };
 
@@ -88,18 +89,44 @@ export class ModalCreateFile extends React.Component{
                     disabled={(this.state.dir && this.state.dir.length)}
                     required
                 />
-            )
+            );
         }
 
-        // dynamic directory 
+        // dynamic directory with something selected
+        else if(this.state.dirSel){
+            return (
+                <>
+                <br/>
+                    <Input value={this.state.dirSel} disabled={true}/>
+                <br/>
+                <Button type="button" onClick={() => this.dirInput.click()}>Change</Button>
+                <Input
+                    innerRef={elem => this.dirInput = elem}
+                    onChange={() => this.setState({dirSel: this.dirInput.files[0].path})}
+                    type="file"
+                    webkitdirectory={LOCAL_FOLDER}
+                    required
+                    hidden={true}
+                />
+                </>
+            );
+        }
+
+        // dynamic directory with nothing selected
         return (
+            <>
+            <br/>
+            <Button type="button" onClick={() => this.dirInput.click()}>Select</Button>
             <Input
                 innerRef={elem => this.dirInput = elem}
+                onChange={() => this.setState({dirSel: this.dirInput.files[0].path})}
                 type="file"
-                webkitdirectory="./app_hs"
+                webkitdirectory={LOCAL_FOLDER}
                 required
+                hidden={true}
             />
-        )
+            </>
+        );
     }
 
     render(){
