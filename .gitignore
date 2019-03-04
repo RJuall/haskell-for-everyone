@@ -72,3 +72,6 @@ app/settings.json
 
 # ignore test haskell files
 *_test.hs
+
+# ignore default local directory
+app_hs
