@@ -1,5 +1,6 @@
 const { FileUtils } = require("../utils/FileUtils");
 const { IpcResponder } = require("../utils/IpcResponder");
+const { FolderData } = require("../utils/FolderData");
 
 // handles file operation requests (file utils + automatic responses)
 class FileOps{
@@ -104,12 +105,13 @@ class FileOps{
         // figure out path 
         let directory = dir.endsWith("/") ? dir.substring(0, dir.length - 1) : dir;
         let path = `${directory}/${fileName}`;
+        let knownFolder = FolderData.folderPaths.includes(directory);
 
         // create the file 
         FileUtils.createFile(path, str)
             .then(() => {
                 // file created
-                IpcResponder.respond(evt, "file-create", {dir, fileName});
+                IpcResponder.respond(evt, "file-create", {dir, fileName, knownFolder});
             })
             .catch(err => {
                 // error

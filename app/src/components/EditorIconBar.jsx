@@ -1,8 +1,8 @@
 import React from 'react';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faPlay, faMinus, faPlus, faTextHeight } from '@fortawesome/pro-regular-svg-icons';
-
+import { faSave, faPlay, faMinus, faPlus, faTextHeight, faArrowAltSquareLeft, faPaperPlane } from '@fortawesome/pro-regular-svg-icons';
+import ModalDispatcher from '../dispatchers/ModalDispatcher';
 import './EditorIconBar.css';
 
 class EditorIconBar extends React.Component {
@@ -14,17 +14,23 @@ class EditorIconBar extends React.Component {
     render() {
         return(
             <div className="icon-bar">
-                <button onClick={() => EditorDispatcher.saveCurrentFile()}>
-                    <FontAwesomeIcon size="2x" icon={faPlay}/>
+                <button title="New file">
+                    <FontAwesomeIcon size="2x" icon={faPaperPlane}/>
                 </button>
                 <button>
+                    <FontAwesomeIcon size="2x" icon={faPlay}/>
+                </button>
+                <button title="Save" onClick={() => EditorDispatcher.saveCurrentFile()}>
                     <FontAwesomeIcon size="2x" icon={faSave}/>
                 </button>
+                <button title="Save as" onClick={() => ModalDispatcher.saveFileAsModal()}>
+                    <FontAwesomeIcon size="2x" icon={faArrowAltSquareLeft}/>
+                </button>
                 <button></button>
-                <button onClick={() => EditorDispatcher.fontSizeMinus()}>
+                <button title="Decrease font size" onClick={() => EditorDispatcher.fontSizeMinus()}>
                     <FontAwesomeIcon size="2x" icon={faMinus}/>
                 </button>
-                <button onClick={() => EditorDispatcher.fontSizePlus()}>
+                <button title="Increase font size" onClick={() => EditorDispatcher.fontSizePlus()}>
                     <FontAwesomeIcon size="2x" icon={faPlus}/>
                 </button>
             </div>

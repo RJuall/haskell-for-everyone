@@ -47,7 +47,14 @@ export class FileList extends React.Component{
     // handle file create by updating folder
     handleFileCreate = evt => {
         if(!evt.err){
-            this.requestFileNames([evt.dir]);
+            if(evt.knownFolder){
+                // update current list
+                this.requestFileNames([evt.dir]);
+            }
+            else{
+                // add list (which updates also)
+                FolderDispatcher.addFolder(evt.dir);
+            }
         }
     }
 
