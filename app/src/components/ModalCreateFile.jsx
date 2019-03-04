@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Button} from "reactstrap";
-import ModalDispatcher from "../dispatchers/ModalDispatcher";
+import ModalDispatcher, { CREATE_FILE_MODAL, SAVE_FILE_AS_MODAL} from "../dispatchers/ModalDispatcher";
 import FileDispatcher from "../dispatchers/FileDispatcher";
 
 export class ModalCreateFile extends React.Component{
@@ -48,12 +48,15 @@ export class ModalCreateFile extends React.Component{
 
     componentDidMount(){
         // listen for create file modal signals
-        ModalDispatcher.on("create-file", this.handleFileCreate);
+        ModalDispatcher.on(CREATE_FILE_MODAL, this.handleFileCreate);
     }
 
     componentWillUnmount(){
         // stop listening for create file modal signals
-        ModalDispatcher.removeListener("create-file", this.handleFileCreate);
+        ModalDispatcher.removeListener(CREATE_FILE_MODAL, this.handleFileCreate);
+
+        // stop listening for create file modal signals
+        ModalDispatcher.removeListener(SAVE_FILE_AS_MODAL, this.handleFileSaveAs);
     }
 
     render(){

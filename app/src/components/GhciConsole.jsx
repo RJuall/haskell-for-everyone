@@ -1,5 +1,5 @@
 import React from "react";
-import GhciDispatcher from "../dispatchers/GhciDispatcher";
+import GhciDispatcher, { GHCI } from "../dispatchers/GhciDispatcher";
 import "./GhciConsole.css";
 
 export class GhciConsole extends React.Component{
@@ -34,7 +34,7 @@ export class GhciConsole extends React.Component{
 
     componentDidMount(){
         // listen for ghci text
-        GhciDispatcher.on("ghci", this.handleGhci);
+        GhciDispatcher.on(GHCI, this.handleGhci);
 
         GhciDispatcher.init();
 
@@ -44,7 +44,7 @@ export class GhciConsole extends React.Component{
 
     componentWillUnmount(){
         // stop listening for ghci text
-        GhciDispatcher.removeListener("ghci", this.handleGhci);
+        GhciDispatcher.removeListener(GHCI, this.handleGhci);
     }
 
     onKeyUp(evt){
