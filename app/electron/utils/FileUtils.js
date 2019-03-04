@@ -36,7 +36,6 @@ class FileUtils{
             this.fileExists(path).then(exists => {
                 if(!exists){
                     // does not exist - write the file 
-                    console.log('cf', `--${str}--`)
                     this.writeFile(path, str)
                         .then(() => resolve("File created."))
                         .catch(err => reject(err));

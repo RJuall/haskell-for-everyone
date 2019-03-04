@@ -31,6 +31,13 @@ class EditorDispatcher extends EventEmitter {
     saveCurrentFile() {
         this.emit("editor-save-file");
     }
+
+    // signals a save as should be trigged with the current editor code
+    // @param fileName  name of new file
+    // @param dir       new file directroy 
+    saveAs(fileName, dir){
+        this.emit("save-as", {fileName, dir});
+    }
 }
 
 export default new EditorDispatcher();

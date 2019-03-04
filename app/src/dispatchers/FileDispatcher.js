@@ -34,8 +34,9 @@ class FileDispatcher extends EventEmitter{
     // creates a new file in a directory (responds by event emitting)
     // @param fileName      name of the file to create (dir NOT included)
     // @param dir           file directory 
-    createFile(fileName, dir){
-        IpcRequester.send(FILE_CREATE, {fileName, dir});
+    // @param str           initial file text 
+    createFile(fileName, dir, str=""){
+        IpcRequester.send(FILE_CREATE, {fileName, dir, str});
     }
 
     // requests the names of all files in a directory (responds by event emitting)
