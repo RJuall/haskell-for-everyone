@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Button} from "reactstrap";
 import ModalDispatcher, { CREATE_FILE_MODAL, SAVE_FILE_AS_MODAL } from "../dispatchers/ModalDispatcher";
 import FileDispatcher from "../dispatchers/FileDispatcher";
+import EditorDispatcher from "../dispatchers/EditorDispatcher";
 
 export const LOCAL_FOLDER = "app_hs";
 
@@ -45,21 +46,25 @@ export class ModalCreateFile extends React.Component{
         let fname = this.fnameInput.value,
             dir = this.dirInput.value;
 
-        // creating a file in a custom location
-        // use the path of the selection location 
-        if(this.dirInput.type === "file"){
-            dir = this.dirInput.files[0].path.replace(/(\\)/g, "/");
-        }
-
         // get file name with correct extension
         // user could accidentally type .hs
         let fileName = fname.endsWith(".hs") ? fname : `${fname}.hs`;
 
-        // signal fire creation
-        FileDispatcher.createFile(fileName, dir);
+        // creating a file in a custom location
+        if(this.dirInput.type === "file"){
+             // use the path of the selection location 
+            dir = this.dirInput.files[0].path.replace(/(\\)/g, "/");
 
-        // close modal
-        this.setState({isOpen: false});
+            // create file with edtior's text
+            EditorDispatcher.saveAs(fileName, dir);
+        }
+        else{
+            // signal new file creation
+            FileDispatcher.createFile(fileName, dir);
+        }
+
+        // close and reset modal
+        this.setState({isOpen: false, title: null, dirSel: null});
     }
 
     componentDidMount(){
@@ -78,8 +83,21 @@ export class ModalCreateFile extends React.Component{
         ModalDispatcher.removeListener(SAVE_FILE_AS_MODAL, this.handleFileSaveAs);
     }
 
+    renderDirFolderInput(){
+        return (
+            <Input
+                innerRef={elem => this.dirInput = elem}
+                onChange={() => this.setState({dirSel: this.dirInput.files[0].path})}
+                type="file"
+                webkitdirectory={LOCAL_FOLDER}
+                required
+                hidden={true}
+            />
+        );
+    }
+
     renderDirInput(){
-        // fixed directory 
+        // fixed directory (dir = forced directory)
         if(this.state.dir){
             return (
                 <Input
@@ -92,22 +110,18 @@ export class ModalCreateFile extends React.Component{
             );
         }
 
-        // dynamic directory with something selected
+        // dynamic directory with something selected (dirSel = selected directory by user)
         else if(this.state.dirSel){
             return (
-                <>
+                <>  
                 <br/>
-                    <Input value={this.state.dirSel} disabled={true}/>
+                <div>
+                    <Input value={this.state.dirSel} disabled={true} name={null}/>
+                </div>
                 <br/>
-                <Button type="button" onClick={() => this.dirInput.click()}>Change</Button>
-                <Input
-                    innerRef={elem => this.dirInput = elem}
-                    onChange={() => this.setState({dirSel: this.dirInput.files[0].path})}
-                    type="file"
-                    webkitdirectory={LOCAL_FOLDER}
-                    required
-                    hidden={true}
-                />
+                <div>
+                    <Button type="button" onClick={() => this.dirInput.click()}>Change</Button>
+                </div>
                 </>
             );
         }
@@ -117,14 +131,6 @@ export class ModalCreateFile extends React.Component{
             <>
             <br/>
             <Button type="button" onClick={() => this.dirInput.click()}>Select</Button>
-            <Input
-                innerRef={elem => this.dirInput = elem}
-                onChange={() => this.setState({dirSel: this.dirInput.files[0].path})}
-                type="file"
-                webkitdirectory={LOCAL_FOLDER}
-                required
-                hidden={true}
-            />
             </>
         );
     }
@@ -140,12 +146,14 @@ export class ModalCreateFile extends React.Component{
                         <FormGroup>
                             <Label>Directory</Label>
                             {this.renderDirInput()}
+                            {this.renderDirFolderInput()}
                         </FormGroup>
                         <FormGroup>
                             <Label>File Name</Label>
                             <InputGroup>
                                 <Input
                                     innerRef={elem => this.fnameInput = elem}
+                                    disabled={!this.state.dir && !this.state.dirSel}
                                     required
                                 />
                                 <InputGroupAddon addonType="append">

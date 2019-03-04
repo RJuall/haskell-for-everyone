@@ -23,7 +23,7 @@ class ReactAceEditor extends React.Component {
             name: "ace-editor",
             mode: "haskell",
             theme: "dracula",
-            onChange: (val, evt) => { this.state.value = val},
+            onChange: (val, evt) => {this.state.value = val},
             width: "100%",
             height: "100vh",
             fontSize: "20px",
@@ -58,6 +58,11 @@ class ReactAceEditor extends React.Component {
         FileDispatcher.writeFile(this.currFileName, this.state.value);
     }
 
+    // handler for teh when file save-as button is clicked
+    handleSaveFileAs = evt => {
+        FileDispatcher.createFile(evt.fileName, evt.dir, this.state.value);
+    }
+
     fontSizePlus = () => {
         this.setState({
             fontSize: (parseInt(this.state.fontSize) + 2).toString() + 'px'
@@ -79,6 +84,8 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.on("editor-save-file", this.handleSaveFile);
         EditorDispatcher.on("ce-font-size-plus", this.fontSizePlus);
         EditorDispatcher.on("ce-font-size-minus", this.fontSizeMinus);
+        EditorDispatcher.on("save-as", this.handleSaveFileAs);
+
         this.setState({value: this.state.defaultValue});
     }    
 
@@ -87,6 +94,7 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.removeListener("editor-save-file", this.handleSaveFile);
         EditorDispatcher.removeListener("ce-font-size-plus", this.fontSizePlus);
         EditorDispatcher.removeListener("ce-font-size-minus", this.fontSizeMinus);
+        EditorDispatcher.removeListener("save-as", this.handleSaveFileAs);
     }
 
     render() {
