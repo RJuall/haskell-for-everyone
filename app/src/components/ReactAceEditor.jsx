@@ -17,7 +17,7 @@ class ReactAceEditor extends React.Component {
         super(props);
         
         // current file in the editor
-        this.currFileName = null;
+        this.currFilePath = null;
 
         this.state = {
             name: "ace-editor",
@@ -41,12 +41,12 @@ class ReactAceEditor extends React.Component {
 
     // handler when a file is read
     handleFileRead = (evt) => {
-        if(evt.fileName !== this.currFileName){
+        if(evt.path !== this.currFilePath){
             // save current file logic 
         }
 
         // update current file name
-        this.currFileName = evt.fileName;
+        this.currFilePath = evt.path;
         
         // load in the file's contents 
         this.setState({value: evt.str});
@@ -55,12 +55,12 @@ class ReactAceEditor extends React.Component {
     // handler for when the file save button is clicked
     handleSaveFile = () => {
         // issue a request to write current code to current file 
-        FileDispatcher.writeFile(this.currFileName, this.state.value);
+        FileDispatcher.writeFile(this.currFilePath, this.state.value);
     }
 
     // handler for teh when file save-as button is clicked
     handleSaveFileAs = evt => {
-        FileDispatcher.createFile(evt.fileName, evt.dir, this.state.value);
+        FileDispatcher.createFile(evt.path, this.state.value);
     }
 
     fontSizePlus = () => {
