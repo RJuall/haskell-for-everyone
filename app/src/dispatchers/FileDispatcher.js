@@ -19,24 +19,23 @@ class FileDispatcher extends EventEmitter{
     }
 
     // requests a file to be read (responds by event emitting)
-    // @param fileName      name of the file to read (dir included)
-    readFile(fileName){
-        IpcRequester.send(FILE_READ, {fileName});
+    // @param path          name of the file to read (dir included)
+    readFile(path){
+        IpcRequester.send(FILE_READ, {path});
     }
 
     // requests a file to be written (responds by event emitting)
-    // @param fileName      name of the file to write (dir included)
+    // @param path          name of the file to write (dir included)
     // @param str           string to write 
-    writeFile(fileName, str){
-        IpcRequester.send(FILE_WRITE, {fileName, str});
+    writeFile(path, str=""){
+        IpcRequester.send(FILE_WRITE, {path, str});
     }
 
     // creates a new file in a directory (responds by event emitting)
-    // @param fileName      name of the file to create (dir NOT included)
-    // @param dir           file directory 
+    // @param path          name of the file to write (dir included)
     // @param str           initial file text 
-    createFile(fileName, dir, str=""){
-        IpcRequester.send(FILE_CREATE, {fileName, dir, str});
+    createFile(path, str=""){
+        IpcRequester.send(FILE_CREATE, {path, str});
     }
 
     // requests the names of all files in a directory (responds by event emitting)

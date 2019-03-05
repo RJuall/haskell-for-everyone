@@ -32,20 +32,20 @@ class FileOps{
 
     // reads the string contents of a file
     // @param evt       event object for response
-    // @param fileName  name of file to read 
-    static readFile(evt, {fileName=null}){
+    // @param path      name of file to read 
+    static readFile(evt, {path=null}){
         // must have file name
-        if(!fileName){
-            let err = "No file name provided (fileName is null).";
+        if(!path){
+            let err = "No file name provided (path is null).";
             IpcResponder.respond(evt, "file-read", {err});
             return;
         }
 
         // read file promise 
-        FileUtils.readFile(fileName)
+        FileUtils.readFile(path)
             .then(str => {
                 // got file contents 
-                IpcResponder.respond(evt, "file-read", {fileName, str});
+                IpcResponder.respond(evt, "file-read", {path, str});
             })
             .catch(err => {
                 // error
@@ -55,12 +55,12 @@ class FileOps{
 
     // writes the string to a file
     // @param evt       event object for response
-    // @param fileName  file name to write
+    // @param path      file path to write
     // @param str       string to write to file 
-    static writeFile(evt, {fileName=null, str=null}){
+    static writeFile(evt, {path=null, str=null}){
         // must have file name
-        if(!fileName){
-            let err = "No file name provided (fileName is null).";
+        if(!path){
+            let err = "No file name provided (path is null).";
             IpcResponder.respond(evt, "file-write", {err});
             return;
         }
@@ -72,10 +72,10 @@ class FileOps{
         }
 
         // save file promise
-        FileUtils.writeFile(fileName, str)
+        FileUtils.writeFile(path, str)
             .then(() => {
                 // saved file 
-                IpcResponder.respond(evt, "file-write", {fileName});
+                IpcResponder.respond(evt, "file-write", {path});
             })
             .catch(err => {
                 // error
@@ -85,27 +85,20 @@ class FileOps{
 
     // creates a new file empty file
     // @param evt       event object for response
-    // @param fileName  file name to create
-    // @param dir       directory to write file in
+    // @param path      file path to create
     // @param str       initial file contents (optional)
-    static createFile(evt, {fileName=null, dir=null, str=""}){
-        // must have file name
-        if(!fileName){
-            let err = "No file name provided (fileName is null).";
-            IpcResponder.respond(evt, "file-create", {err});
-            return;
-        }
-        // must have directory
-        if(!dir){
-            let err = "No directory provided (dir is null).";
+    static createFile(evt, {path=null, str=""}){
+        // must have file path
+        if(!path){
+            let err = "No file name provided (path is null).";
             IpcResponder.respond(evt, "file-create", {err});
             return;
         }
 
-        // figure out path 
-        let directory = dir.endsWith("/") ? dir.substring(0, dir.length - 1) : dir;
-        let path = `${directory}/${fileName}`;
-        let knownFolder = FolderData.folderPaths.includes(directory);
+        // figure file path data from file string 
+        let fileName = path.split("/").pop();
+        let dir = path.split(`/${fileName}`)[0];
+        let knownFolder = FolderData.folderPaths.includes(path);
 
         // create the file 
         FileUtils.createFile(path, str)

@@ -5,6 +5,7 @@ import { FileList } from "./FileList";
 import { GhciConsole } from "./GhciConsole";
 import { Editor } from './Editor';
 import { ModalCreateFile } from "./ModalCreateFile";
+import { ModalSaveFileAs } from "./ModalSaveFileAs";
 import "./App.css";
 
 export class App extends React.Component{
@@ -40,6 +41,7 @@ export class App extends React.Component{
                     </Row>
                 </Container>
                 <ModalCreateFile/>
+                <ModalSaveFileAs/>
             </>
         );
     }
