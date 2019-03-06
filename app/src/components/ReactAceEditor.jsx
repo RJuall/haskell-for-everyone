@@ -11,6 +11,7 @@ import 'brace/theme/solarized_light'
 import 'brace/ext/language_tools';
 
 import {testHask} from './Tokenise';
+import GhciDispatcher from '../dispatchers/GhciDispatcher';
 
 class ReactAceEditor extends React.Component {
     constructor(props) {
@@ -58,9 +59,14 @@ class ReactAceEditor extends React.Component {
         FileDispatcher.writeFile(this.currFilePath, this.state.value);
     }
 
-    // handler for teh when file save-as button is clicked
+    // handler for when the file save-as button is clicked
     handleSaveFileAs = evt => {
         FileDispatcher.createFile(evt.path, this.state.value);
+    }
+
+    // handler for when the current code should be executed 
+    handleRunCode = () => {
+        GhciDispatcher.executeCode(this.state.value);
     }
 
     fontSizePlus = () => {
@@ -85,6 +91,7 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.on("ce-font-size-plus", this.fontSizePlus);
         EditorDispatcher.on("ce-font-size-minus", this.fontSizeMinus);
         EditorDispatcher.on("save-as", this.handleSaveFileAs);
+        EditorDispatcher.on("run-code", this.handleRunCode);
 
         this.setState({value: this.state.defaultValue});
     }    
@@ -95,6 +102,7 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.removeListener("ce-font-size-plus", this.fontSizePlus);
         EditorDispatcher.removeListener("ce-font-size-minus", this.fontSizeMinus);
         EditorDispatcher.removeListener("save-as", this.handleSaveFileAs);
+        EditorDispatcher.removeListener("run-code", this.handleRunCode);
     }
 
     render() {
