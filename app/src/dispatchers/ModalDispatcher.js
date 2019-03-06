@@ -2,7 +2,8 @@ import { EventEmitter } from "events";
 
 // "enumerated" event types 
 export const CREATE_FILE_MODAL =    "create-file-modal",
-    SAVE_FILE_AS_MODAL =            "save-file-as-modal";
+    SAVE_FILE_AS_MODAL =            "save-file-as-modal",
+    ALERT_MODAL =                    "alert-modal";
 
 class ModalDispatcher extends EventEmitter{
     // signals the create file modal
@@ -14,6 +15,14 @@ class ModalDispatcher extends EventEmitter{
     // signals the save file modal
     saveFileAsModal(){
         this.emit(SAVE_FILE_AS_MODAL);
+    }
+
+    // signals an alert popup modal
+    // @param header    modal header
+    // @param body      modal body
+    // @param footer    modal footer
+    alertModal(header=null, body=null, footer=null){
+        this.emit(ALERT_MODAL, {header, body, footer});
     }
 }
 

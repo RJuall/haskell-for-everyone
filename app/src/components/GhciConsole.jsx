@@ -1,5 +1,6 @@
 import React from "react";
-import GhciDispatcher, { GHCI } from "../dispatchers/GhciDispatcher";
+import GhciDispatcher, { GHCI, GHCI_ERROR, GHCI_CLEAR } from "../dispatchers/GhciDispatcher";
+import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import "./GhciConsole.css";
 
 export class GhciConsole extends React.Component{
@@ -32,19 +33,39 @@ export class GhciConsole extends React.Component{
         }
     }
 
+    // handles ghci error (most likely missing haskell platform)
+    handleGhciError = evt => {
+        // alert user of error 
+        let body = evt.err || "(Error occurred, but not error message provided";
+        ModalDispatcher.alertModal("GHCi Error", body);
+    }
+
+    // handles ghci clearing 
+    handleGhciClear = evt => {
+       // output element
+       let elem = this.consoleRef.current;
+       // clear
+       elem.value = "";
+    }
+
     componentDidMount(){
         // listen for ghci text
         GhciDispatcher.on(GHCI, this.handleGhci);
+        // listen for ghci clear
+        GhciDispatcher.on(GHCI_CLEAR, this.handleGhciClear);
+        // listen for ghci error
+        GhciDispatcher.on(GHCI_ERROR, this.handleGhciError);
 
         GhciDispatcher.init();
-
-        // default input (for testing)
-        //this.inputRef.current.value = "x = [1,2,3,4,5]; z = filter (>3) x; show z";
     }
 
     componentWillUnmount(){
         // stop listening for ghci text
         GhciDispatcher.removeListener(GHCI, this.handleGhci);
+        // stop listening for ghci clear
+        GhciDispatcher.removeListener(GHCI_CLEAR, this.handleGhciClear);
+        // stop listening for ghci error
+        GhciDispatcher.removeListener(GHCI_ERROR, this.handleGhciError);
     }
 
     onKeyUp(evt){
