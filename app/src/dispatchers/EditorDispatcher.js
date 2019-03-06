@@ -37,6 +37,11 @@ class EditorDispatcher extends EventEmitter {
     saveAs(path){
         this.emit("save-as", {path});
     }
+
+    // signals the current code should be executed 
+    runCode(){
+        this.emit("run-code");
+    }
 }
 
 export default new EditorDispatcher();

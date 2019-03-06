@@ -108,7 +108,7 @@ class GhciWrapper{
 }
 
 // GHCI process (essentially a private static field)
-const GHCI = new GhciWrapper();
+const GHCI_PROCESS = new GhciWrapper();
 
 // handles GHCI operation requests (automatically responds)
 class GhciOps{
@@ -117,7 +117,7 @@ class GhciOps{
     // @param str   haskell code to execute
     static executeCode(evt, {str=null}){
         // ghci must be working 
-        if(!GHCI.isAvailable){
+        if(!GHCI_PROCESS.isAvailable){
             IpcResponder.respondNoGhci(evt);
             return;
         }
@@ -132,8 +132,8 @@ class GhciOps{
         // execute the code
         // do not respond (using evt) because response is async
         // (handled with the wrapper's auto stdout listeners)
-        GHCI.responseEvt = evt;
-        GHCI.send(str);
+        GHCI_PROCESS.responseEvt = evt;
+        GHCI_PROCESS.send(str);
     }
 
     // clears the GHCI REPL 

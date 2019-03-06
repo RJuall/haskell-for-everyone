@@ -17,7 +17,7 @@ class EditorIconBar extends React.Component {
                 <button title="New file">
                     <FontAwesomeIcon size="2x" icon={faPaperPlane}/>
                 </button>
-                <button>
+                <button title="Run" onClick={() => EditorDispatcher.runCode()}>
                     <FontAwesomeIcon size="2x" icon={faPlay}/>
                 </button>
                 <button title="Save" onClick={() => EditorDispatcher.saveCurrentFile()}>
