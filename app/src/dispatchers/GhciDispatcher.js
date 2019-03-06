@@ -4,15 +4,18 @@ import IpcRequester from "../utils/IpcRequester";
 // "enumerated" event types 
 export const GHCI = "ghci",
     GHCI_CLEAR =    "ghci-clear",
-    GHCI_INIT =     "ghci-init";
+    GHCI_INIT =     "ghci-init",
+    GHCI_ERROR =    "ghci-error";
 
 class GhciDispatcher extends EventEmitter{
     constructor(){
         super();
 
         // forward events 
-        IpcRequester.on(GHCI, evt => this.emit("ghci", evt));
-        IpcRequester.on(GHCI_CLEAR, evt => this.emit("ghci-clear", evt));
+        IpcRequester.on(GHCI, evt => this.emit(GHCI, evt));
+        IpcRequester.on(GHCI_CLEAR, evt => this.emit(GHCI_CLEAR, evt));
+        IpcRequester.on(GHCI_INIT, evt => this.emit(GHCI_INIT, evt));
+        IpcRequester.on(GHCI_ERROR, evt => this.emit(GHCI_ERROR, evt));
     }
 
     // requests haskell code to be executed

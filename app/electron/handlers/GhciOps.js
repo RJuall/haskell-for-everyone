@@ -140,12 +140,12 @@ class GhciOps{
     // @param evt   event object for responding
     static clear(evt){
         // ghci must be working 
-        if(!GHCI.isAvailable){
+        if(!GHCI_PROCESS.isAvailable){
             IpcResponder.respondNoGhci(evt);
             return;
         }
 
-        GHCI.clear();
+        GHCI_PROCESS.clear();
         IpcResponder.respond(evt, "ghci-clear");
     }
 
@@ -153,13 +153,13 @@ class GhciOps{
     // @param evt   event object for responding 
     static init(evt){
         // ghci must be working 
-        if(!GHCI.isAvailable){
+        if(!GHCI_PROCESS.isAvailable){
             IpcResponder.respondNoGhci(evt);
             return;
         }
 
         // get buffer text
-        GHCI.init(str => {
+        GHCI_PROCESS.init(str => {
             // send the text ("ghci version...")
             IpcResponder.respond(evt, "ghci", {str});
         });

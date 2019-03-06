@@ -42,6 +42,7 @@ export class FileList extends React.Component{
             // update the state 
             this.setState({folders});
         }
+        else ModalDispatcher.alertModal("Folder Files Error", evt.err);
     }
 
     // handle file create by updating folder
@@ -56,6 +57,7 @@ export class FileList extends React.Component{
                 FolderDispatcher.addFolder(evt.dir);
             }
         }
+        else ModalDispatcher.alertModal("File Create Error", evt.err);
     }
 
     // request files in folder when a folder is received
@@ -80,6 +82,7 @@ export class FileList extends React.Component{
             // this triggers the adding folder to the UI 
             this.requestFileNames([path]);
         }
+        else ModalDispatcher.alertModal("Folder Add Error", evt.err);
     };
 
     // handles a folder remove response/update
@@ -96,6 +99,7 @@ export class FileList extends React.Component{
             // update state with copy 
             this.setState({folders});
         }
+        else ModalDispatcher.alertModal("Folder Remove Error", evt.err);
     }
 
     // handles a folder reset (clear) response/update
