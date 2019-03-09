@@ -1,8 +1,11 @@
 import React from 'react';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faPlay, faMinus, faPlus, faTextHeight, faArrowAltSquareLeft, faPaperPlane } from '@fortawesome/pro-regular-svg-icons';
+import { faSave, faPlay, faMinus, faPlus, faArrowAltSquareLeft, faPaperPlane } from '@fortawesome/pro-regular-svg-icons';
+import { FontChooser } from './FontChooser';
+
 import ModalDispatcher from '../dispatchers/ModalDispatcher';
+
 import './EditorIconBar.css';
 
 class EditorIconBar extends React.Component {
@@ -33,6 +36,7 @@ class EditorIconBar extends React.Component {
                 <button title="Increase font size" onClick={() => EditorDispatcher.fontSizePlus()}>
                     <FontAwesomeIcon size="2x" icon={faPlus}/>
                 </button>
+                <FontChooser/>
             </div>
         );
     }

@@ -31,7 +31,7 @@ class ReactAceEditor extends React.Component {
             defaultValue: testHask,
             editorProps: {$blockScrolling: true},
             setOptions: {
-                fontFamily: "Operator Mono, Fira Code, Lucida Console, Courier, monospace",
+                fontFamily: "Inconsolata, monospace",
                 enableBasicAutocompletion: true,
                 enableLiveAutocompletion: true,
                 enableSnippets: true
@@ -81,6 +81,14 @@ class ReactAceEditor extends React.Component {
         })
     }
 
+    handleFontChange = evt => {
+        this.setState({
+            setOptions: {
+                fontFamily: evt.font
+            }
+        });
+    }
+
     componentDidMount() {
         // request settings file
         IpcRequester.send("settings-get");
@@ -92,6 +100,7 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.on("ce-font-size-minus", this.fontSizeMinus);
         EditorDispatcher.on("save-as", this.handleSaveFileAs);
         EditorDispatcher.on("run-code", this.handleRunCode);
+        EditorDispatcher.on("ce-font-family-set", this.handleFontChange);
 
         this.setState({value: this.state.defaultValue});
     }    
@@ -103,6 +112,8 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.removeListener("ce-font-size-minus", this.fontSizeMinus);
         EditorDispatcher.removeListener("save-as", this.handleSaveFileAs);
         EditorDispatcher.removeListener("run-code", this.handleRunCode);
+        EditorDispatcher.removeListener("ce-font-family-set", this.handleFontChange);
+
     }
 
     render() {
