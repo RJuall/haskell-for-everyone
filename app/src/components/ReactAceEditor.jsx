@@ -87,7 +87,6 @@ class ReactAceEditor extends React.Component {
                 fontFamily: evt.font
             }
         });
-        console.log(evt.font);
     }
 
     componentDidMount() {
