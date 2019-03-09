@@ -76,9 +76,12 @@ class ReactAceEditor extends React.Component {
         FileDispatcher.createFile(evt.path, this.state.value);
     }
 
-    // handler for when the current code should be executed 
+    // handler for when the current code should be executed
+    // will not execute if mode is not set to haskell 
     handleRunCode = () => {
-        GhciDispatcher.executeCode(this.state.value);
+        if (this.state.mode === 'haskell') {
+            GhciDispatcher.executeCode(this.state.value);
+        }
     }
 
     fontSizePlus = () => {
