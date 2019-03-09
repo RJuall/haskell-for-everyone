@@ -37,7 +37,7 @@ class SettingsData{
                 .then(str => {
                     // parse json
                     JsonParser.parse(str, (err, json) => {
-                        console.log(`file=`, str);
+                        //console.log(`file=`, str);
                         err ? reject(err) : resolve(json);
                     });
                 })
