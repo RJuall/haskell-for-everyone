@@ -4,14 +4,19 @@ import EditorDispatcher from '../dispatchers/EditorDispatcher';
 export class FontChooser extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
-    }
+        this.state = {value: 'Inconsolata'};
+
+        this.fontChange = event => {
+            this.setState({value: event.target.value});
+            EditorDispatcher.fontFamilySet(this.state.value);
+        }
+    }    
 
     render() {
         return(
             <div className="font-chooser">
-                <select name="font-choice">
-                    <option value="Inconsolata" selected>Inconsolata</option>
+                <select name="font-choice" value={this.state.value} onChange={this.fontChange}>
+                    <option value="Inconsolata">Inconsolata</option>
                     <option value="Roboto Mono">Roboto Mono</option>
                     <option value="Source Code Pro">Source Code Pro</option>
                     <option value="VT323">VT323</option>
