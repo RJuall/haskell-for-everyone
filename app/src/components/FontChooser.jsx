@@ -14,7 +14,7 @@ export class FontChooser extends React.Component {
 
     render() {
         return(
-            <div className="font-chooser">
+            <div className="icon-bar-chooser">
                 <select name="font-choice" value={this.state.value} onChange={this.fontChange}>
                     <option value="Inconsolata">Inconsolata</option>
                     <option value="Roboto Mono">Roboto Mono</option>
