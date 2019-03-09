@@ -8,7 +8,7 @@ export class FontChooser extends React.Component {
 
         this.fontChange = event => {
             this.setState({value: event.target.value});
-            EditorDispatcher.fontFamilySet(this.state.value);
+            EditorDispatcher.fontFamilySet(event.target.value);
         }
     }    
 
