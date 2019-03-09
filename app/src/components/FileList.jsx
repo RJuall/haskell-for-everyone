@@ -163,8 +163,8 @@ export class FileList extends React.Component{
     // @param folderPath    the folder's path
     // @param fileNames     array of file names that are inside the folder 
     renderFolder(folderPath, fileNames){
-        // array of all file names ending with '.hs'
-        let fnames = fileNames.filter(fname => fname.includes(".hs"));
+        // array of all file names ending with '.hs' or '.md'
+        let fnames = fileNames.filter(fname => fname.includes(".hs") || fname.includes(".md"));
 
         // return an array of elements 
         let fileElements = fnames.map(fname => {
