@@ -7,6 +7,7 @@ import GhciDispatcher from '../dispatchers/GhciDispatcher';
 
 import 'brace/mode/haskell';
 import 'brace/mode/markdown';
+import 'brace/mode/plain_text';
 
 import 'brace/theme/dracula';
 import 'brace/theme/solarized_light';
@@ -60,6 +61,9 @@ class ReactAceEditor extends React.Component {
 
         // update current file name
         this.currFilePath = evt.path;
+
+        // set the editor mode
+        this.setEditorMode(evt.path);
         
         // load in the file's contents 
         this.setState({value: evt.str});
@@ -108,6 +112,25 @@ class ReactAceEditor extends React.Component {
         this.setState({
             theme: evt.theme
         })
+    }
+
+    setEditorMode = file => {
+        if      (file.endsWith('.hs') 
+                 || file.endsWith('.lhs'))
+            this.setState({mode: 'haskell'});
+        else if (file.endsWith('.md')
+                 || file.endsWith('.mkd')
+                 || file.endsWith('.mdown')
+                 || file.endsWith('.markdown')
+                 || file.endsWith('.mkdn')
+                 || file.endsWith('.mdwn')
+                 || file.endsWith('.mdtxt')
+                 || file.endsWith('.mdtext')
+                 || file.endsWith('.text')
+                 || file.endsWith('.Rmd'))
+            this.setState({mode: 'markdown'});
+        else
+            this.setState({mode: 'plain_text'});
     }
 
     componentDidMount() {
