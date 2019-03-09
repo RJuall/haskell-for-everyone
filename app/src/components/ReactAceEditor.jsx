@@ -9,7 +9,6 @@ import 'brace/mode/haskell';
 import 'brace/mode/markdown';
 
 import 'brace/theme/dracula';
-import 'brace/theme/eclipse';
 import 'brace/theme/solarized_light';
 import 'brace/theme/solarized_dark';
 import 'brace/theme/terminal';
@@ -20,6 +19,7 @@ import 'brace/theme/tomorrow';
 import 'brace/theme/github';
 import 'brace/theme/monokai';
 import 'brace/theme/xcode';
+import 'brace/theme/twilight';
 
 import 'brace/ext/language_tools';
 
