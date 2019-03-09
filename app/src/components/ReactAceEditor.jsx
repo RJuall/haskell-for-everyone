@@ -3,6 +3,7 @@ import AceEditor from 'react-ace';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import IpcRequester from "../utils/IpcRequester";
+import GhciDispatcher from '../dispatchers/GhciDispatcher';
 
 import 'brace/mode/haskell';
 import 'brace/mode/markdown';
@@ -22,8 +23,7 @@ import 'brace/theme/xcode';
 
 import 'brace/ext/language_tools';
 
-import {testHask} from './Tokenise';
-import GhciDispatcher from '../dispatchers/GhciDispatcher';
+import { testHask } from './Tokenise';
 
 class ReactAceEditor extends React.Component {
     constructor(props) {

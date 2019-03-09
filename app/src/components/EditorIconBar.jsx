@@ -3,6 +3,7 @@ import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faPlay, faMinus, faPlus, faArrowAltSquareLeft, faPaperPlane } from '@fortawesome/pro-regular-svg-icons';
 import { FontChooser } from './FontChooser';
+import { ThemeChooser } from './ThemeChooser';
 
 import ModalDispatcher from '../dispatchers/ModalDispatcher';
 
@@ -37,6 +38,7 @@ class EditorIconBar extends React.Component {
                     <FontAwesomeIcon size="2x" icon={faPlus}/>
                 </button>
                 <FontChooser/>
+                <ThemeChooser/>
             </div>
         );
     }

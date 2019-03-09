@@ -14,10 +14,11 @@ export class ThemeChooser extends React.Component {
         }
     }
 
+
     render() {
         return(
             <div className="icon-bar-chooser">
-                <select name="theme-chooser" value={this.state.value} onChange={themeChange}>
+                <select name="theme-chooser" value={this.state.value} onChange={this.themeChange}>
                     <option value="dracula">Dracula</option>
                     <option value="github">Github</option>
                     <option value="tomorrow">Tomorrow</option>
