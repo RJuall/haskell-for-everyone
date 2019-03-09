@@ -37,7 +37,7 @@ export class ModalCreateFile extends React.Component{
 
         // get file name with correct extension
         // user could accidentally type .hs
-        let fileName = fname.endsWith(".hs") ? fname : `${fname}.hs`;
+        let fileName = (fname.endsWith(".hs") || fname.endsWith(".md")) ? fname : `${fname}.hs`;
 
         // setup path
         let path = `${dir}/${fileName}`;
