@@ -5,9 +5,21 @@ import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import IpcRequester from "../utils/IpcRequester";
 
 import 'brace/mode/haskell';
+import 'brace/mode/markdown';
+
 import 'brace/theme/dracula';
 import 'brace/theme/eclipse';
-import 'brace/theme/solarized_light'
+import 'brace/theme/solarized_light';
+import 'brace/theme/solarized_dark';
+import 'brace/theme/terminal';
+import 'brace/theme/eclipse';
+import 'brace/theme/kuroir';
+import 'brace/theme/textmate';
+import 'brace/theme/tomorrow';
+import 'brace/theme/github';
+import 'brace/theme/monokai';
+import 'brace/theme/xcode';
+
 import 'brace/ext/language_tools';
 
 import {testHask} from './Tokenise';
@@ -89,6 +101,12 @@ class ReactAceEditor extends React.Component {
         });
     }
 
+    handleThemeChange = evt => {
+        this.setState({
+            theme: evt.theme
+        })
+    }
+
     componentDidMount() {
         // request settings file
         IpcRequester.send("settings-get");
@@ -101,6 +119,7 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.on("save-as", this.handleSaveFileAs);
         EditorDispatcher.on("run-code", this.handleRunCode);
         EditorDispatcher.on("ce-font-family-set", this.handleFontChange);
+        EditorDispatcher.on("ce-theme-set", this.handleThemeChange);
 
         this.setState({value: this.state.defaultValue});
     }    
@@ -113,7 +132,7 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.removeListener("save-as", this.handleSaveFileAs);
         EditorDispatcher.removeListener("run-code", this.handleRunCode);
         EditorDispatcher.removeListener("ce-font-family-set", this.handleFontChange);
-
+        EditorDispatcher.removeListener("ce-theme-set", this.handleThemeChange);
     }
 
     render() {
