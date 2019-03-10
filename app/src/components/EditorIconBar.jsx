@@ -12,7 +12,21 @@ import './EditorIconBar.css';
 class EditorIconBar extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            fontSize: '20px'
+        };
+        this.fontIncrease = () => {
+            EditorDispatcher.fontSizePlus();
+            this.setState({
+                fontSize: (parseInt(this.state.fontSize) + 2).toString() + 'px'
+            })
+        }
+        this.fontDecrease = () => {
+            EditorDispatcher.fontSizeMinus();
+            this.setState({
+                fontSize: (parseInt(this.state.fontSize) - 2).toString() + 'px'
+            })
+        }
     }
 
     render() {
@@ -31,10 +45,11 @@ class EditorIconBar extends React.Component {
                     <FontAwesomeIcon size="2x" icon={faArrowAltSquareLeft}/>
                 </button>
                 <button></button>
-                <button title="Decrease font size" onClick={() => EditorDispatcher.fontSizeMinus()}>
+                <button title="Decrease font size" onClick={this.fontDecrease}>
                     <FontAwesomeIcon size="2x" icon={faMinus}/>
                 </button>
-                <button title="Increase font size" onClick={() => EditorDispatcher.fontSizePlus()}>
+                <button title="Font Size">{this.state.fontSize}</button>
+                <button title="Increase font size" onClick={this.fontIncrease}>
                     <FontAwesomeIcon size="2x" icon={faPlus}/>
                 </button>
                 <FontChooser/>
