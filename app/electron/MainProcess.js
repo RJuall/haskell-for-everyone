@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const { JsonParser } = require("./utils/JsonParser");
 const { FileOps } = require("./handlers/FileOps");
 const { GhciOps } = require("./handlers/GhciOps");
@@ -22,7 +22,8 @@ class MainProcess{
         this.window = new BrowserWindow({
             title:  "Haskell For Everyone",
             width:  1280,
-            height: 720
+            height: 720,
+            show: false
         });
 
         // dev mode? 
@@ -37,6 +38,67 @@ class MainProcess{
 
         // when window closed
         this.window.on("closed", () => this.window = null);
+
+        // show window when ready
+        this.window.on("ready-to-show", () => {
+            this.window.show();
+            this.window.focus();
+        });
+    }
+
+    // creates the electron application menu
+    // has simple edit and quit commands
+    createMenu(){
+        // create menu object from template
+        let appMenu = Menu.buildFromTemplate([
+            {
+                label: "Haskell For Everyone",
+                submenu: [{
+                    label: "Quit",
+                    accelerator: "CmdOrCtrl+Q",
+                    click: () => app.quit()
+                }]
+            },
+            {
+                label: "Edit",
+                submenu: [
+                    {
+                        label:          "Undo",
+                        accelerator:    "CmdOrCtrl+Z",
+                        selector:       "undo:"
+                    },
+                    {
+                        label:          "Redo",
+                        accelerator:    "Shift+CmdOrCtrl+Z",
+                        selector:       "redo:"
+                    },
+                    {type: "separator"},
+                    {
+                        label:          "Cut",
+                        accelerator:    "CmdOrCtrl+X",
+                        selector:       "cut:"
+                    },
+                    {
+                        label:          "Copy",
+                        accelerator:    "CmdOrCtrl+C",
+                        selector:       "copy:"
+                    },
+                    {
+                        label:          "Paste",
+                        accelerator:    "CmdOrCtrl+V",
+                        selector:       "paste:"
+                    },
+                    {
+                        label:          "Select All",
+                        accelerator:    "CmdOrCtrl+A",
+                        selector:       "selectAll:"
+                    }
+                ]
+            }
+        ]);
+    
+        // set the menu 
+        Menu.setApplicationMenu(appMenu);
     }
 
     // handles ipc socket request (json string)
@@ -139,6 +201,11 @@ if(require.main === module){
             app.quit();
         }
     });
+
+    // create menu for mac
+    if(process.platform === "darwin"){s
+        main.createMenu();
+    }
 }
 
 module.exports = { MainProcess };
