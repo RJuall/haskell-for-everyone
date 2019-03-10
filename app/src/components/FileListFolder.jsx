@@ -1,13 +1,15 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/pro-light-svg-icons"
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
+import FileDispatcher from "../dispatchers/FileDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import { FILE_EXTENSIONS } from "./ModalCreateFile";
 
 export class FileListFolder extends React.Component{
-    renderFileItem(){
+    renderFileItem(fname){
         return (
-            <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${folderPath}/${fname}`)}>
+            <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
                 {fname}
                 <br/>
             </span>
@@ -15,17 +17,20 @@ export class FileListFolder extends React.Component{
     }
 
     render(){
-         // array of all file names ending with valid extensions
-         let fnames = fileNames.filter(fname => fname in FILE_EXTENSIONS);
+        // prop values
+        let {folderPath, fileNames} = this.props;
 
-         // return an array of elements 
-         let fileElements = fnames.map(fname => this.renderFileItem(fname));
+        // array of all file names ending with valid extensions
+        let fnames = fileNames.filter(fname => "." + fname.split(".").pop() in FILE_EXTENSIONS);
+
+        // return an array of elements 
+        let fileElements = fnames.map(fname => this.renderFileItem(fname));
 
         // folder name is at the end (current naming convention will have no '/' at the end)
         let folderName = folderPath.split("/").pop();
 
         return (
-            <div className="file-list-container" key={folderPath}>
+            <div className="file-list-folder-container" key={folderPath}>
                 <div className="file-list-folder" title={folderPath}>
                     <span onClick={() => FolderDispatcher.removeFolder(folderPath)}>
                         <FontAwesomeIcon icon={faMinusCircle} style={{color: "red", cursor: "pointer"}}/>
