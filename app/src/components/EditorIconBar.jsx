@@ -40,7 +40,10 @@ class EditorIconBar extends React.Component {
         }
 
         this.handleFileLoad = evt => {
-            console.log(evt.pathClean);
+            let filename = evt.path.split('/').pop();
+            this.setState({
+                filename: filename
+            });
         }
     }
 
