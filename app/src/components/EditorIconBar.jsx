@@ -60,6 +60,7 @@ class EditorIconBar extends React.Component {
     render() {
         return(
             <div className="icon-bar">
+                <div className="filename">{this.state.filename}</div>
                 <button title="New file">
                     <FontAwesomeIcon size="2x" icon={faPaperPlane}/>
                 </button>
