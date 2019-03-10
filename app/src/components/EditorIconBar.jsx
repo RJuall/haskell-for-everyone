@@ -13,14 +13,17 @@ class EditorIconBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            fontSize: '20px'
+            fontSize: '20px',
+            mode: 'Haskell'
         };
+
         this.fontIncrease = () => {
             EditorDispatcher.fontSizePlus();
             this.setState({
                 fontSize: (parseInt(this.state.fontSize) + 2).toString() + 'px'
             })
         }
+
         this.fontDecrease = () => {
             EditorDispatcher.fontSizeMinus();
             this.setState({
@@ -54,6 +57,7 @@ class EditorIconBar extends React.Component {
                 </button>
                 <FontChooser/>
                 <ThemeChooser/>
+                <button title="Programming Syntax Mode">{this.state.mode}</button>
             </div>
         );
     }
