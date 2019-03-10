@@ -13,20 +13,37 @@ class EditorIconBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            fontSize: '20px'
+            fontSize: '20px',
+            mode: '.hs'
         };
+
         this.fontIncrease = () => {
             EditorDispatcher.fontSizePlus();
             this.setState({
                 fontSize: (parseInt(this.state.fontSize) + 2).toString() + 'px'
             })
         }
+
         this.fontDecrease = () => {
             EditorDispatcher.fontSizeMinus();
             this.setState({
                 fontSize: (parseInt(this.state.fontSize) - 2).toString() + 'px'
             })
         }
+
+        this.handleModeChange = evt => {
+            this.setState({
+                mode: evt.mode
+            })
+        }
+    }
+
+    componentDidMount() {
+        EditorDispatcher.on("mode-change", this.handleModeChange);
+    }
+
+    componentWillUnmount() {
+        EditorDispatcher.removeListener("mode-change", this.handleModeChange);
     }
 
     render() {
@@ -54,6 +71,7 @@ class EditorIconBar extends React.Component {
                 </button>
                 <FontChooser/>
                 <ThemeChooser/>
+                <button title="Programming Syntax Mode">{this.state.mode}</button>
             </div>
         );
     }

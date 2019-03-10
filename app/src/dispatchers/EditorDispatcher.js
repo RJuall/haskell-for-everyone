@@ -42,6 +42,11 @@ class EditorDispatcher extends EventEmitter {
     runCode(){
         this.emit("run-code");
     }
+
+    // signals that the syntax highlighting mode has changed
+    modeChange(mode) {
+        this.emit("mode-change", {mode});
+    }
 }
 
 export default new EditorDispatcher();

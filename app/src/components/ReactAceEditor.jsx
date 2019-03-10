@@ -115,9 +115,12 @@ class ReactAceEditor extends React.Component {
     }
 
     setEditorMode = file => {
+        let mode;
         if      (file.endsWith('.hs') 
-                 || file.endsWith('.lhs'))
+                 || file.endsWith('.lhs')) {
             this.setState({mode: 'haskell'});
+            mode = '.hs';
+                 }
         else if (file.endsWith('.md')
                  || file.endsWith('.mkd')
                  || file.endsWith('.mdown')
@@ -127,10 +130,15 @@ class ReactAceEditor extends React.Component {
                  || file.endsWith('.mdtxt')
                  || file.endsWith('.mdtext')
                  || file.endsWith('.text')
-                 || file.endsWith('.Rmd'))
+                 || file.endsWith('.Rmd')) {
             this.setState({mode: 'markdown'});
-        else
+            mode = '.md';
+        }
+        else {
             this.setState({mode: 'plain_text'});
+            mode = '.txt';
+        }
+        EditorDispatcher.modeChange(mode);
     }
 
     componentDidMount() {
