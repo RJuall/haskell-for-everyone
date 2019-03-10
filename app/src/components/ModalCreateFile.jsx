@@ -107,7 +107,7 @@ export class ModalCreateFile extends React.Component{
                                 />
                                 <InputGroupAddon addonType="append">
                                     <Input innerRef={elem => this.extInput = elem} type="select">
-                                        {Object.keys(FILE_EXTENSIONS).map(ext => <option>{ext}</option>)}
+                                        {Object.keys(FILE_EXTENSIONS).map(ext => <option key={ext}>{ext}</option>)}
                                     </Input>
                                 </InputGroupAddon>
                             </InputGroup>
