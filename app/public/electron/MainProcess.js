@@ -28,7 +28,7 @@ class MainProcess{
 
         // dev mode? 
         let devMode = process.argv.includes("--dev");
-        let url = devMode ? "http://localhost:3000" : `file://${__dirname}/../build/index.html`;
+        let url = devMode ? "http://localhost:3000" : `file://${__dirname}/../index.html`;
         
         // store dev mode 
         this.devMode = devMode;
@@ -207,7 +207,7 @@ if(require.main === module){
     });
 
     // create menu for mac
-    if(process.platform === "darwin"){s
+    if(process.platform === "darwin"){
         main.createMenu();
     }
 }

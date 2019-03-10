@@ -75,3 +75,7 @@ app/settings.json
 
 # ignore default local directory
 app_hs
+
+# don't save builds in repository
+app/build
+app/dist

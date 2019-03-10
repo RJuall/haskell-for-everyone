@@ -2,11 +2,13 @@
   "name": "haskell-for-everyone",
   "version": "0.1.0",
   "description": "An easy-to-use educational editor for learning the Haskell programming language",
-  "main": "electron/MainProcess.js",
+  "author": "test",
+  "license": "MIT",
+  "email": "test@test",
+  "main": "public/electron.js",
   "scripts": {
-    "build": "react-scripts build",
     "dev": "electron . --dev",
-    "dist": "react-scripts build",
+    "dist": "react-scripts build && build",
     "react": "react-scripts start",
     "start": "electron ."
   },
@@ -14,12 +16,35 @@
     "type": "git",
     "url": "git+https://github.com/RJuall/haskell-for-everyone.git"
   },
-  "author": "",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/RJuall/haskell-for-everyone/issues"
   },
   "homepage": "./",
+  "build": {
+    "win": {
+      "target": "NSIS"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-brands-svg-icons": "^5.7.2",
@@ -40,6 +65,7 @@
   },
   "devDependencies": {
     "electron": "^4.0.5",
+    "electron-builder": "^20.38.5",
     "electron-react-devtools": "^0.5.3",
     "react-scripts": "^2.1.5"
   },
