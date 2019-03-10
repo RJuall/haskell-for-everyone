@@ -2,6 +2,7 @@ import * as express from "express";
 import * as http from "http";
 import * as https from "https";
 import * as websocket from "websocket";
+import { VersionHandler } from "./handlers/VersionHandler";
 
 export class Server{
     private _app:express.Application; 
@@ -32,6 +33,10 @@ export class Server{
     private createRoutes():void{
         // serve index page at root  
         this._app.get("/", (req, res) => res.sendFile("index.html"));
+
+        // api for version
+        this._app.options("/api/version*", VersionHandler.options);
+        this._app.get("/api/version/get", VersionHandler.get);
     }
 
     // starts the server
