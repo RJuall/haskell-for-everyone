@@ -14,7 +14,7 @@ class EditorIconBar extends React.Component {
         super(props);
         this.state = {
             fontSize: '20px',
-            mode: 'Haskell'
+            mode: '.hs'
         };
 
         this.fontIncrease = () => {

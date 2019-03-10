@@ -44,7 +44,7 @@ class EditorDispatcher extends EventEmitter {
     }
 
     // signals that the syntax highlighting mode has changed
-    modeChange() {
+    modeChange(mode) {
         this.emit("mode-change", {mode});
     }
 }
