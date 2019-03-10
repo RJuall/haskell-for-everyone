@@ -84,7 +84,7 @@ class ReactAceEditor extends React.Component {
     // will not execute if mode is not set to haskell 
     handleRunCode = () => {
         if (this.state.mode === 'haskell') {
-            GhciDispatcher.executeCode(this.state.value);
+            GhciDispatcher.executeFile(this.currFilePath);
         }
     }
 
