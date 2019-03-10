@@ -30,6 +30,20 @@ class EditorIconBar extends React.Component {
                 fontSize: (parseInt(this.state.fontSize) - 2).toString() + 'px'
             })
         }
+
+        this.handleModeChange = evt => {
+            this.setState({
+                mode: evt.mode
+            })
+        }
+    }
+
+    componentDidMount() {
+        EditorDispatcher.on("mode-change", this.handleModeChange);
+    }
+
+    componentWillUnmount() {
+        EditorDispatcher.removeListener("mode-change", this.handleModeChange);
     }
 
     render() {
