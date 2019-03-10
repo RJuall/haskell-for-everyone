@@ -1,5 +1,6 @@
 import React from 'react';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
+import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faPlay, faMinus, faPlus, faArrowAltSquareLeft, faPaperPlane } from '@fortawesome/pro-regular-svg-icons';
 import { FontChooser } from './FontChooser';
@@ -14,7 +15,8 @@ class EditorIconBar extends React.Component {
         super(props);
         this.state = {
             fontSize: '20px',
-            mode: '.hs'
+            mode: '.hs',
+            filename: ''
         };
 
         this.fontIncrease = () => {
@@ -36,14 +38,23 @@ class EditorIconBar extends React.Component {
                 mode: evt.mode
             })
         }
+
+        this.handleFileLoad = evt => {
+            let filename = evt.path.split('/').pop();
+            this.setState({
+                filename: filename
+            });
+        }
     }
 
     componentDidMount() {
         EditorDispatcher.on("mode-change", this.handleModeChange);
+        FileDispatcher.on(FILE_READ, this.handleFileLoad);
     }
 
     componentWillUnmount() {
         EditorDispatcher.removeListener("mode-change", this.handleModeChange);
+        FileDispatcher.removeListener(FILE_READ, this.handleFileLoad);
     }
 
     render() {
