@@ -2,6 +2,7 @@ import React from "react";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/pro-light-svg-icons"
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
+import { FILE_EXTENSIONS } from "./ModalCreateFile";
 
 export class FileListFolder extends React.Component{
     renderFileItem(){
@@ -14,8 +15,8 @@ export class FileListFolder extends React.Component{
     }
 
     render(){
-         // array of all file names ending with '.hs' or '.md'
-         let fnames = fileNames.filter(fname => fname.includes(".hs") || fname.includes(".md"));
+         // array of all file names ending with valid extensions
+         let fnames = fileNames.filter(fname => fname in FILE_EXTENSIONS);
 
          // return an array of elements 
          let fileElements = fnames.map(fname => this.renderFileItem(fname));
