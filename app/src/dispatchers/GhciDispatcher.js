@@ -5,7 +5,8 @@ import IpcRequester from "../utils/IpcRequester";
 export const GHCI = "ghci",
     GHCI_CLEAR =    "ghci-clear",
     GHCI_INIT =     "ghci-init",
-    GHCI_ERROR =    "ghci-error";
+    GHCI_ERROR =    "ghci-error",
+    GHCI_FILE =     "ghci-file";
 
 class GhciDispatcher extends EventEmitter{
     constructor(){
@@ -19,9 +20,15 @@ class GhciDispatcher extends EventEmitter{
     }
 
     // requests haskell code to be executed
-    // @param code      hgaskell code to execute
+    // @param code      haskell code to execute
     executeCode(code){
         IpcRequester.send(GHCI, {str: code});
+    }
+
+    // requests haskell file to be executed in GHCi
+    // @param path      haskell file to execute
+    executeFile(path){
+        IpcRequester.send(GHCI_FILE, {path});
     }
 
     // requests haskell interactive REPL to clear

@@ -1,10 +1,10 @@
 const { webContents } = require("electron");
-const { spawn } = require("child_process");
+const { spawn, exec } = require("child_process");
 const { IpcResponder } = require("../utils/IpcResponder");
 
 // wrapper class for forked GHCI child process 
 class GhciWrapper{
-    constructor(){
+    constructor(path=null){
         // ghci child process (setup later)
         this.ghci = null;
 
@@ -16,7 +16,7 @@ class GhciWrapper{
         this.responseEvt = null;
 
         // GHCI child process
-        this.setupGhciChildProcess(err => {
+        this.setupGhciChildProcess(path, err => {
             // error setting up ghci child process
             // (most likely haskell platform is not installed)
             // inform renderer process that ghci is not going to work 
@@ -28,11 +28,11 @@ class GhciWrapper{
 
     // setups ghci child with error callback
     // @param callback  callback function for error 
-    setupGhciChildProcess(callback){
+    setupGhciChildProcess(path, callback){
         // attempt to create ghci child process
         let ghciProcess;
         try{
-            ghciProcess = spawn("ghci");
+            ghciProcess = path ? spawn("ghci", [path]) : spawn("ghci");
         }
         catch(err){
             callback(err);
@@ -99,6 +99,18 @@ class GhciWrapper{
             // callback the string 
             callback(str);
         }
+        else callback("");
+    }
+
+    // loads a file into the ghci process
+    load(path){
+        this.send(`:load ${path}`);
+    }
+
+    // kills the current ghci process
+    kill(){
+        this.send(":quit");
+        this.ghci.unref();
     }
 
     // getter for if ghci can be used 
@@ -108,7 +120,7 @@ class GhciWrapper{
 }
 
 // GHCI process (essentially a private static field)
-const GHCI_PROCESS = new GhciWrapper();
+let GHCI_PROCESS = new GhciWrapper();
 
 // handles GHCI operation requests (automatically responds)
 class GhciOps{
@@ -134,6 +146,30 @@ class GhciOps{
         // (handled with the wrapper's auto stdout listeners)
         GHCI_PROCESS.responseEvt = evt;
         GHCI_PROCESS.send(str);
+    }
+
+    // restarts the ghci process with a file to load
+    // @param evt   event object for responding
+    // @param str   haskell file to run 
+    static executeFile(evt, {path=null}){
+        // ghci must be working 
+        if(!GHCI_PROCESS.isAvailable){
+            IpcResponder.respondNoGhci(evt);
+            return;
+        }
+
+        // must have haskell file to execute 
+        if(!path){
+            let err = "No file path provided (path is null or empty.)";
+            IpcResponder.respond(evt, "ghci", {err: err.message});
+            return;
+        }
+
+        // load and run the file 
+        // do not respond (using evt) because response is async
+        // (handled with the wrapper's auto stdout listeners)
+        GHCI_PROCESS.responseEvt = evt;
+        GHCI_PROCESS.load(path);
     }
 
     // clears the GHCI REPL 

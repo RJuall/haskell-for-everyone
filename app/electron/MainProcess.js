@@ -146,6 +146,10 @@ class MainProcess{
                 GhciOps.executeCode(evt, data);
                 break;
 
+            case "ghci-file":
+                GhciOps.executeFile(evt, data);
+                break;
+
             case "ghci-clear":
                 GhciOps.clear(evt);
                 break;
