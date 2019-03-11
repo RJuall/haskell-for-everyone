@@ -8,17 +8,31 @@ const FONT_SIZE_INTERVAL = 2;
 class SettingsData{
     constructor(){
         // default private fields 
-        this._fontSize = "20px";
-        this._fontFamily = "Operator Mono, Fira Code, Lucida Console, Courier, monospace";
-        this._theme = "darcula";
+        this._settings = {
+            editorSettings: {
+                fontSize: "20px",
+                fontFamily: "Inconsolata, Fira Code, monospace",
+                theme: "dracula"
+            },
+            terminalSettings: {
+                placeHolder: null
+            },
+            fileSettings: {
+                placeHolder: null
+            },
+            windowSettings: {
+                placeHolder: null
+            }
+        }
 
         // read current settings file 
         this.loadFile()
             .then(json => {
                 // load settings from file
-                this.fontSize = json.fontSize || this.fontSize;
-                this.fontFamily = json.fontFamily || this.fontFamily;
-                this.theme = json.theme || this.theme;
+                this._settings.editorSettings = Object.assign(this._settings.editorSettings, json.editorSettings)
+                this._settings.terminalSettings = Object.assign(this._settings.terminalSettings, json.terminalSettings)
+                this._settings.fileSettings = Object.assign(this._settings.fileSettings, json.fileSettings)
+                this._settings.windowSettings = Object.assign(this._settings.windowSettings, json.windowSettings)
             })
             .catch(err => {
                 // failed to load (keeps current/default options)
@@ -49,7 +63,7 @@ class SettingsData{
     // @param callback  (optional) callback for when file write resolves 
     updateFile(callback){
         // stringify the settings object
-        JsonParser.stringifyPretty(this.settings, (err, str) => {
+        JsonParser.stringifyPretty(this._settings, (err, str) => {
             if(!err){
                 // update the json file 
                 FileUtils.writeFile(SETTINGS_FILE, str).catch(err => {
@@ -74,15 +88,15 @@ class SettingsData{
     update({fontSize=null, fontFamily=null, theme=null}, callback=null){
         // update fontSize?
         if(typeof fontSize === "number" || typeof fontSize === "string")
-            this._fontSize = fontSize;
+            this._settings.editorSettings.fontSize = fontSize;
 
         // update fontFamily?
         if(typeof fontFamily === "string")
-            this._fontFamily = fontFamily;
+            this._settings.editorSettings.fontFamily = fontFamily;
 
         // update theme?
         if(typeof theme === "string")
-            this._theme = theme;
+            this._settings.editorSettings.theme = theme;
 
         // update the file 
         this.updateFile(callback);
@@ -91,20 +105,20 @@ class SettingsData{
     // increase font size by predefined interval
     // @param callback      optional callback for when update finishes
     incrementFontSize(callback){
-        this.setFontSize(this.fontSize + FONT_SIZE_INTERVAL, callback);
+        this.setFontSize(this._settings.editorSettings.fontSize + FONT_SIZE_INTERVAL, callback);
     }
 
     // decreases font size by predefined interval
     // @param callback      optional callback for when update finishes
     decrementFontSize(callback){
-        this.setFontSize(this.fontSize - FONT_SIZE_INTERVAL, callback);
+        this.setFontSize(this._settings.editorSettings.fontSize - FONT_SIZE_INTERVAL, callback);
     }
 
     // setter for the font size
     // @param fontSize      new font size (string or number)
     // @param callback      optional callback for when update finishes
     setFontSize(fontSize, callback=null){
-        this._fontSize = parseInt(fontSize) + "px";
+        this._settings.editorSettings.fontSize = parseInt(fontSize) + "px";
         this.updateFile(callback)
     }
 
@@ -112,7 +126,7 @@ class SettingsData{
     // @param fontFamily    new font family string
     // @param callback      optional callback for when update finishes
     setFontFamily(fontFamily, callback=null){
-        this._fontFamily = fontFamily;
+        this._settings.editorSettings.fontFamily = fontFamily;
         this.updateFile(callback);
     }
 
@@ -120,31 +134,32 @@ class SettingsData{
     // @param theme         new theme string
     // @param callback      optional callback for when update finishes
     setTheme(theme, callback=null){
-        this._theme = theme;
+        this._settings.editorSettings.theme = theme;
         this.updateFile(callback);
     }
 
     // getter for the font size
     get fontSize(){
-        return this._fontSize;
+        return this._settings.editorSettings.fontSize;
     }
 
     // getter for the font family
     get fontFamily(){
-        return this._fontFamily;
+        return this._settings.editorSettings.fontFamily;
     }
 
     // getter for the theme
     get theme(){
-        return this._theme;
+        return this._settings.editorSettings.theme;
     }
 
     // getting for all settings in a object
     get settings(){
         return {
-            fontSize:   this.fontSize,
-            fontFamily: this.fontFamily,
-            theme:      this.theme
+            windowSettings: {...this._settings.windowSettings},
+            fileSettings: {...this._settings.fileSettings},
+            editorSettings: {...this._settings.editorSettings},
+            terminalSettings: {...this._settings.terminalSettings}
         };
     }
 }
