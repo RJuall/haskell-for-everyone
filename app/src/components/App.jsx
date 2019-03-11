@@ -9,6 +9,7 @@ import { ModalSaveFileAs } from "./ModalSaveFileAs";
 import { ModalAlert } from "./ModalAlert";
 import { VersionAPI } from "../utils/VersionAPI";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
+import { MenuBar } from "./MenuBar";
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
@@ -40,8 +41,9 @@ export class App extends React.Component{
     render(){
         return (
             <>
-                <Container>
-                    <Row>
+                <MenuBar/>
+                <Container>  
+                    <Row> 
                         <SplitPane split="vertical" minSize={100} defaultSize={150}>
                             <Col>
                                 <FileList/>
