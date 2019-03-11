@@ -30,7 +30,7 @@ class SettingsOps{
     // @param evt       event object for responding 
     static getSettings(evt){
         // parse and send the settings as json 
-        JsonParser.parse(SettingsData.settings, (err, str) => {
+        JsonParser.stringify(SettingsData.settings, (err, str) => {
             if(!err){
                 // send settings json
                 IpcResponder.respond(evt, "settings-get", {str});
