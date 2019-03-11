@@ -8,6 +8,7 @@ import { ModalCreateFile } from "./ModalCreateFile";
 import { ModalSaveFileAs } from "./ModalSaveFileAs";
 import { ModalAlert } from "./ModalAlert";
 import { VersionAPI } from "../utils/VersionAPI";
+import { MenuBar } from "./MenuBar";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import "./App.css";
 
@@ -40,6 +41,7 @@ export class App extends React.Component{
     render(){
         return (
             <>
+                <MenuBar/>
                 <Container>
                     <Row>
                         <SplitPane split="vertical" minSize={100} defaultSize={150}>
