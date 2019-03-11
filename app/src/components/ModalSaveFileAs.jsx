@@ -2,8 +2,7 @@ import React from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Button} from "reactstrap";
 import ModalDispatcher, { SAVE_FILE_AS_MODAL } from "../dispatchers/ModalDispatcher";
 import EditorDispatcher from "../dispatchers/EditorDispatcher";
-
-export const LOCAL_FOLDER = "app_hs";
+import { FileExtension } from "../utils/FileExtension";
 
 export class ModalSaveFileAs extends React.Component{
     constructor(props){
@@ -25,7 +24,7 @@ export class ModalSaveFileAs extends React.Component{
 
     // shows the modal for file save as 
     handleFileSaveAs = () => {
-        let dir = null; //LOCAL_FOLDER;
+        let dir = null; // forced dir? 
         this.setState({isOpen: true, dir});
     }
 
@@ -39,7 +38,7 @@ export class ModalSaveFileAs extends React.Component{
 
         // get file name with correct extension
         // user could accidentally type .hs
-        let fileName = fname.endsWith(".hs") ? fname : `${fname}.hs`;
+        let fileName = FileExtension.validateFileName(fname);
         let path = `${dir}/${fileName}`;
 
         // create file with edtior's text
@@ -65,7 +64,7 @@ export class ModalSaveFileAs extends React.Component{
                 innerRef={elem => this.dirInput = elem}
                 onChange={() => this.setState({dirSel: this.dirInput.files[0].path})}
                 type="file"
-                webkitdirectory={LOCAL_FOLDER}
+                webkitdirectory=""
                 required
                 hidden={true}
             />
