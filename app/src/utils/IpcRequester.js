@@ -65,6 +65,12 @@ class IpcRequester extends EventEmitter{
             // stringify or send error - handle?
         }
     }
+
+    // sends a formatted update settings request to the main process
+    // @param update    any updated settings fields
+    updateSettings(update){
+        this.send("settings-update", {settings: update});
+    }
 }
 
 // export singleton 
