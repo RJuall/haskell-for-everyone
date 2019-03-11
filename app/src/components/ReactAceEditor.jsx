@@ -36,6 +36,9 @@ class ReactAceEditor extends React.Component {
         
         // current file in the editor
         this.currFilePath = null;
+        
+        // the settings json data
+        this.settings = null;
 
         this.state = {
             name: "ace-editor",
@@ -120,6 +123,7 @@ class ReactAceEditor extends React.Component {
         this.setState({
             theme: evt.theme
         })
+        console.log(this.settings);
     }
 
     // function that sets the mode state of the ce
@@ -153,9 +157,6 @@ class ReactAceEditor extends React.Component {
     }
 
     componentDidMount() {
-        // request settings file
-        IpcRequester.send("settings-get");
-
         // listen for events
         FileDispatcher.on(FILE_READ, this.handleFileRead);
         EditorDispatcher.on("editor-save-file", this.handleSaveFile);
@@ -165,9 +166,13 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.on("run-code", this.handleRunCode);
         EditorDispatcher.on("ce-font-family-set", this.handleFontChange);
         EditorDispatcher.on("ce-theme-set", this.handleThemeChange);
+        IpcRequester.on("settings-get", evt => this.settings = evt.settings);
 
         // makes sure that the ce value matches the default value
         this.setState({value: this.state.defaultValue});
+
+        // fetch the settings json
+        IpcRequester.getSettings();
     }    
 
     componentWillUnmount() {
