@@ -4,7 +4,7 @@ import { faMinusCircle, faPlusCircle } from "@fortawesome/pro-light-svg-icons"
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
-import { FILE_EXTENSIONS } from "./ModalCreateFile";
+import { FILE_EXTENSIONS } from "../utils/FileExtension";
 
 export class FileListFolder extends React.Component{
 

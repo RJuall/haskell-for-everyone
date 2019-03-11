@@ -41,7 +41,8 @@ export class MenuBar extends React.Component {
                                     </DropdownToggle>
                                     <DropdownMenu>
                                         <DropdownItem>New File</DropdownItem>
-                                        <DropdownItem>Open</DropdownItem>
+                                        <DropdownItem onClick={() => ModalDispatcher.selectFileModal()}>Open File</DropdownItem>
+                                        <DropdownItem onClick={() => ModalDispatcher.selectFolderModal()}>Open Folder</DropdownItem>
                                         <DropdownItem onClick={() => ModalDispatcher.saveFileAsModal()}>Save As</DropdownItem>
                                         <DropdownItem onClick={() => EditorDispatcher.saveCurrentFile()}>Save</DropdownItem>
                                         <DropdownItem>Select Workspace</DropdownItem>
