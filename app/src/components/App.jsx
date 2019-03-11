@@ -45,15 +45,15 @@ export class App extends React.Component{
                 <Container>
                     <Row>
                         <SplitPane split="vertical" minSize={100} defaultSize={150}>
-                            <Col>
+                            <Col className="sidebar-panel">
                                 <FileList/>
                             </Col>
                             <div>
                                 <SplitPane split="vertical" minSize={200} defaultSize={1100}>
-                                <Col>
+                                <Col className="editor-panel">
                                     <Editor/>
                                 </Col>
-                                <Col>
+                                <Col className="ghci-panel">
                                 GHCi
                                 <GhciConsole/>
                                 </Col>

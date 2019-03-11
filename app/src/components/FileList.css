@@ -10,3 +10,21 @@
 .file-list-item{
     cursor: pointer;
 }
+
+.file-list-container{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.sidebar-panel.col{
+    padding: 0 !important;
+    background-color: #47484B;
+    color: #bbbbbb;
+    height: 100%;
+}
+
+ul.file-list-items{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
