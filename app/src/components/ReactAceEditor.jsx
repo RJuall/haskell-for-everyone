@@ -123,7 +123,6 @@ class ReactAceEditor extends React.Component {
         this.setState({
             theme: evt.theme
         })
-        console.log(this.settings);
     }
 
     // function that sets the mode state of the ce
