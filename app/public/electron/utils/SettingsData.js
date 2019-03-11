@@ -22,7 +22,7 @@ class SettingsData{
             })
             .catch(err => {
                 // failed to load (keeps current/default options)
-                if(err.errno === -4058){
+                if(err.errno === -4058 || err.errno === -2){
                     // missing file - write defaults 
                     this.updateFile();
                 }

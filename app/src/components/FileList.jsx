@@ -1,10 +1,11 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinusCircle, faPlusCircle } from "@fortawesome/pro-light-svg-icons"
+import { faPlusCircle } from "@fortawesome/pro-light-svg-icons"
 import FileDispatcher, { FILES_GET, FILE_CREATE } from "../dispatchers/FileDispatcher";
 import FolderDispatcher, { FOLDER_LIST, FOLDER_ADD, FOLDER_REMOVE, FOLDER_RESET} from "../dispatchers/FolderDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import "./FileList.css";
+import { FileListFolder } from "./FileListFolder";
 
 export class FileList extends React.Component{
     constructor(props){
@@ -155,48 +156,8 @@ export class FileList extends React.Component{
         // file[0] = folder not an actual file apparent! 
         let path = evt.target.files[0].path.replace(/\\/g, "/");
 
-        // trigger the add folder mechanism 
+        // trigger the add folder mec1hanism 
         FolderDispatcher.addFolder(path);
-    }
-
-    // renders the folder element (folder name + file list)
-    // @param folderPath    the folder's path
-    // @param fileNames     array of file names that are inside the folder 
-    renderFolder(folderPath, fileNames){
-        // array of all file names ending with '.hs' or '.md'
-        let fnames = fileNames.filter(fname => fname.includes(".hs") || fname.includes(".md"));
-
-        // return an array of elements 
-        let fileElements = fnames.map(fname => {
-            return (
-                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${folderPath}/${fname}`)}>
-                    {fname}
-                    <br/>
-                </span>
-            );
-        }); 
-
-        // folder name is at the end (current naming convention will have no '/' at the end)
-        let folderName = folderPath.split("/").pop();
-
-        return (
-            <div className="file-list-container" key={folderPath}>
-                <div className="file-list-folder" title={folderPath}>
-                    <span onClick={() => FolderDispatcher.removeFolder(folderPath)}>
-                        <FontAwesomeIcon icon={faMinusCircle} style={{color: "red", cursor: "pointer"}}/>
-                    </span>
-                    &nbsp;
-                    {folderName}
-                    &nbsp;
-                    <span onClick={() => ModalDispatcher.createFileModal(folderPath)}>
-                        <FontAwesomeIcon icon={faPlusCircle} style={{color: "green", cursor: "pointer"}}/>
-                    </span>
-                </div>
-                <div className="file-list-items">
-                    {fileElements}
-                </div>
-            </div>
-        );
     }
 
     // renders the all the folder elements
@@ -208,10 +169,12 @@ export class FileList extends React.Component{
         let fileNames;
         for(let folderPath in this.state.folders){
             // get all file names in current folder
-            fileNames = this.state.folders[folderPath] || null;
+            fileNames = this.state.folders[folderPath] || [];
 
             // render the folder element and store it in the results array
-            folderElements.push(this.renderFolder(folderPath, fileNames));
+            folderElements.push(
+                <FileListFolder folderPath={folderPath} fileNames={fileNames}/>
+            );
         }
 
         return folderElements;
@@ -232,7 +195,7 @@ export class FileList extends React.Component{
 
     render(){
         return (
-            <div>
+            <div className="file-list-container">
                 <div>
                     Files
                     &nbsp;

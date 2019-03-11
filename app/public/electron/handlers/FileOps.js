@@ -45,7 +45,9 @@ class FileOps{
         FileUtils.readFile(path)
             .then(str => {
                 // got file contents 
-                IpcResponder.respond(evt, "file-read", {path, str});
+                // file name with forward slashes always
+                let pathClean = path.replace(/\\/g, "/"); 
+                IpcResponder.respond(evt, "file-read", {path, pathClean, str});
             })
             .catch(err => {
                 // error
