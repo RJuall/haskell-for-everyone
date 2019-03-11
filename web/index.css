@@ -19,3 +19,9 @@
 .underline{
     text-decoration: underline;
 }
+
+footer {
+    width: 100%;
+    bottom: 0;
+    position: fixed;
+}
