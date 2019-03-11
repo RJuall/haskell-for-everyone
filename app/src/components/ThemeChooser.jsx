@@ -8,6 +8,8 @@ export class ThemeChooser extends React.Component {
             value: 'dracula'
         };
 
+        // sets the theme value state and emits
+        //    a theme change event
         this.selectTheme = event => {
             this.setState({value: event.target.value});
             EditorDispatcher.themeSet(event.target.value);

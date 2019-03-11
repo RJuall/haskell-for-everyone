@@ -1,4 +1,5 @@
 // A large Haskell program to use for testing purposes
+//   put into a JS string
 
 export const testHask =
 `-----------------------------------------------------------------------------
@@ -202,7 +203,7 @@ tokenise stripEol stripComments ansi lang ((pos,str):pos_strs) =
                                           = lexcpp Any [] (w*/*l) ls xs
     lexcpp (NestComment n) w l ls (_:xs)  = lexcpp (NestComment n) (' ':w) l
                                                                         ls xs
-    lexcpp mode w l ((p,l'):ls) []        = cpp mode next w l p ls ('\n':l')
+    lexcpp mode w l ((p,l'):ls) []        = cpp mode next w l p ls ('\\n':l')
     lexcpp _    _ _ []          []        = []
 
     -- rules to lex non-Haskell, non-cpp text

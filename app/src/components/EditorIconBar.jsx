@@ -13,12 +13,15 @@ import './EditorIconBar.css';
 class EditorIconBar extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             fontSize: '20px',
             mode: '.hs',
             filename: ''
         };
 
+        // signals that the ce font size should increase
+        //    and sets the fontSize state
         this.fontIncrease = () => {
             EditorDispatcher.fontSizePlus();
             this.setState({
@@ -26,6 +29,8 @@ class EditorIconBar extends React.Component {
             })
         }
 
+        // signals that the ce font size should decrease
+        //    and sets the fontsize state
         this.fontDecrease = () => {
             EditorDispatcher.fontSizeMinus();
             this.setState({
@@ -33,12 +38,16 @@ class EditorIconBar extends React.Component {
             })
         }
 
+        // sets the mode state when the syntax
+        //    highlighting mode of the ce changes
         this.handleModeChange = evt => {
             this.setState({
                 mode: evt.mode
             })
         }
 
+        // sets the filename state when a new file
+        //    is loaded into the ce
         this.handleFileLoad = evt => {
             let filename = evt.pathClean.split('/').pop();
             this.setState({
@@ -48,11 +57,13 @@ class EditorIconBar extends React.Component {
     }
 
     componentDidMount() {
+        // sets up event listeners
         EditorDispatcher.on("mode-change", this.handleModeChange);
         FileDispatcher.on(FILE_READ, this.handleFileLoad);
     }
 
     componentWillUnmount() {
+        // removes event listeners
         EditorDispatcher.removeListener("mode-change", this.handleModeChange);
         FileDispatcher.removeListener(FILE_READ, this.handleFileLoad);
     }

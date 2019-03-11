@@ -5,10 +5,12 @@ import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import IpcRequester from "../utils/IpcRequester";
 import GhciDispatcher from '../dispatchers/GhciDispatcher';
 
+// import syntax highlighting modes
 import 'brace/mode/haskell';
 import 'brace/mode/markdown';
 import 'brace/mode/plain_text';
 
+// import ce themes
 import 'brace/theme/dracula';
 import 'brace/theme/solarized_light';
 import 'brace/theme/solarized_dark';
@@ -22,8 +24,10 @@ import 'brace/theme/monokai';
 import 'brace/theme/xcode';
 import 'brace/theme/twilight';
 
+// allows code completion
 import 'brace/ext/language_tools';
 
+// default Haskell code when program starts
 import { testHask } from './Tokenise';
 
 class ReactAceEditor extends React.Component {
@@ -88,18 +92,21 @@ class ReactAceEditor extends React.Component {
         }
     }
 
+    // handler for increasing the font size of the ce
     fontSizePlus = () => {
         this.setState({
             fontSize: (parseInt(this.state.fontSize) + 2).toString() + 'px'
         });
      }
 
+    // handler for decreasing the font size of the ce
     fontSizeMinus = () => {
         this.setState({
             fontSize: (parseInt(this.state.fontSize) - 2).toString() + 'px'
         })
     }
 
+    // handler for changing the font family of the ce
     handleFontChange = evt => {
         this.setState({
             setOptions: {
@@ -108,12 +115,16 @@ class ReactAceEditor extends React.Component {
         });
     }
 
+    // handler for changing the theme of the ce
     handleThemeChange = evt => {
         this.setState({
             theme: evt.theme
         })
     }
 
+    // function that sets the mode state of the ce
+    //    based on a file's extension
+    //    and emits a modeChange event
     setEditorMode = file => {
         let mode;
         if      (file.endsWith('.hs') 
@@ -155,10 +166,12 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.on("ce-font-family-set", this.handleFontChange);
         EditorDispatcher.on("ce-theme-set", this.handleThemeChange);
 
+        // makes sure that the ce value matches the default value
         this.setState({value: this.state.defaultValue});
     }    
 
     componentWillUnmount() {
+        // remove event listeners
         FileDispatcher.removeListener(FILE_READ, this.handleFileRead);
         EditorDispatcher.removeListener("editor-save-file", this.handleSaveFile);
         EditorDispatcher.removeListener("ce-font-size-plus", this.fontSizePlus);
