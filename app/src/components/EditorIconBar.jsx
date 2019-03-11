@@ -1,6 +1,7 @@
 import React from 'react';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
+import IpcRequester from '../utils/IpcRequester';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faPlay, faMinus, faPlus, faArrowAltSquareLeft, faPaperPlane } from '@fortawesome/pro-regular-svg-icons';
 import { FontChooser } from './FontChooser';
@@ -13,6 +14,9 @@ import './EditorIconBar.css';
 class EditorIconBar extends React.Component {
     constructor(props) {
         super(props);
+
+        // the settings json data
+        this.settings = null;
 
         this.state = {
             fontSize: '20px',
@@ -60,6 +64,10 @@ class EditorIconBar extends React.Component {
         // sets up event listeners
         EditorDispatcher.on("mode-change", this.handleModeChange);
         FileDispatcher.on(FILE_READ, this.handleFileLoad);
+        IpcRequester.on("settings-get", evt => this.settings = evt.settings);
+
+        // request settings
+        IpcRequester.getSettings();
     }
 
     componentWillUnmount() {
