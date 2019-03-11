@@ -43,7 +43,7 @@ export class App extends React.Component{
     }
 
     componentWillMount(){
-        IpcRequester.removeListener("settings-get");
+        IpcRequester.removeListener("settings-get", evt => {});
     }
 
     render(){
