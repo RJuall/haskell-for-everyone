@@ -8,6 +8,8 @@ export class FontChooser extends React.Component {
             value: 'Inconsolata'
         };
 
+        // sets the font family state and emits
+        //    a font change event
         this.fontChange = event => {
             this.setState({value: event.target.value});
             EditorDispatcher.fontFamilySet(event.target.value);
