@@ -44,15 +44,29 @@ class IpcRequester extends EventEmitter{
     // @param type  request type (such as read-file)
     // @param data  additional request data (such as fileName)
     processIpcData(evt, type, data){
-        this.emit(type, data);
+        switch(type){
+            // parse settings before broadcasting
+            case "settings-get":
+                try{
+                    let settings = JSON.parse(data.str);
+                    this.emit(type, {settings});
+                }
+                catch(err){
+                    break;
+                }
+                break;
 
-        // switch for additional actions? 
+            // trigger for any other event
+            default:
+                this.emit(type, data);
+                break;
+        }
     }
 
     // sends a formatted json request down the ipc socket
     // @param type  request type
     // @param data  additional request data  
-    send(type, data){
+    send(type, data=null){
         // attempt to create json string and send
         try{
             // json string
