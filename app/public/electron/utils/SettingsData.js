@@ -85,20 +85,20 @@ class SettingsData{
     // updates multiple settings at once 
     // @param settings{}    all settings file parameters 
     // @param callback      optional callback for when update finishes
-    update({fontSize=null, fontFamily=null, theme=null}, callback=null){
-        // update fontSize?
-        if(typeof fontSize === "number" || typeof fontSize === "string")
-            this._settings.editorSettings.fontSize = fontSize;
+    update({editorSettings=null, terminalSettings=null, fileSettings=null, windowSettings=null}, callback=null){
 
-        // update fontFamily?
-        if(typeof fontFamily === "string")
-            this._settings.editorSettings.fontFamily = fontFamily;
+        if(editorSettings)
+            Object.assign(this._settings.editorSettings, editorSettings);
 
-        // update theme?
-        if(typeof theme === "string")
-            this._settings.editorSettings.theme = theme;
+        if(terminalSettings)
+            Object.assign(this._settings.terminalSettings, terminalSettings);
 
-        // update the file 
+        if(fileSettings)
+            Object.assign(this._settings.fileSettings, fileSettings);
+
+        if(windowSettings)
+            Object.assign(this._settings.windowSettings, windowSettings);
+        
         this.updateFile(callback);
     }
 
