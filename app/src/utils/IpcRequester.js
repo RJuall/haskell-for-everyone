@@ -71,6 +71,11 @@ class IpcRequester extends EventEmitter{
     updateSettings(update){
         this.send("settings-update", {settings: update});
     }
+
+    // sends the get settings request
+    getSettings(){
+        this.send("settings-get");
+    }
 }
 
 // export singleton 
