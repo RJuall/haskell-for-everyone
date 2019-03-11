@@ -10,6 +10,8 @@ import { ModalAlert } from "./ModalAlert";
 import { VersionAPI } from "../utils/VersionAPI";
 import { MenuBar } from "./MenuBar";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
+import IpcRequester from '../utils/IpcRequester';
+
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
@@ -19,7 +21,7 @@ export class App extends React.Component{
         super(props);
 
         this.state = {
-
+            settings: null
         };
     }
 
@@ -36,6 +38,12 @@ export class App extends React.Component{
 
     componentDidMount(){
         this.checkForUpdate();
+        IpcRequester.on("settings-get", evt => this.settings = evt.settings);
+        IpcRequester.getSettings();
+    }
+
+    componentWillMount(){
+        IpcRequester.removeListener("settings-get", evt => this.settings = evt.settings);
     }
 
     render(){

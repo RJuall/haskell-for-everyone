@@ -64,10 +64,6 @@ class EditorIconBar extends React.Component {
         // sets up event listeners
         EditorDispatcher.on("mode-change", this.handleModeChange);
         FileDispatcher.on(FILE_READ, this.handleFileLoad);
-        IpcRequester.on("settings-get", evt => this.settings = evt.settings);
-
-        // request settings
-        IpcRequester.getSettings();
     }
 
     componentWillUnmount() {
