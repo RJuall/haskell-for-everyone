@@ -10,6 +10,7 @@ import { ModalAlert } from "./ModalAlert";
 import { VersionAPI } from "../utils/VersionAPI";
 import { MenuBar } from "./MenuBar";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
+import { ModalSelectFile } from "./ModalSelectFile";
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
@@ -65,6 +66,7 @@ export class App extends React.Component{
                 <ModalCreateFile/>
                 <ModalSaveFileAs/>
                 <ModalAlert/>
+                <ModalSelectFile/>
             </>
         );
     }
