@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "electron . --dev",
     "dist": "react-scripts build && build",
-    "react": "react-scripts start",
+    "react": "react-scripts start -- --no-browser",
     "start": "electron ."
   },
   "repository": {
