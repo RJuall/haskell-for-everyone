@@ -3,6 +3,7 @@ import { Input } from "reactstrap";
 import ModalDispatcher, { SELECT_FILE_MODAL, SELECT_FOLDER_MODAL } from "../dispatchers/ModalDispatcher";
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import { FileExtension } from "../utils/FileExtension";
+import FileDispatcher from "../dispatchers/FileDispatcher";
 
 export class ModalSelectFile extends React.Component{
     constructor(props){
@@ -50,10 +51,12 @@ export class ModalSelectFile extends React.Component{
         path = path.endsWith("/") ? path.substring(0, path.length-1) : path;
         
         if(this.state.fileNotFolder){
+            // remove file name (dir path)
             let split = path.split("/");
             split.pop();
 
             FolderDispatcher.addFolder(split.join("/"));
+            FileDispatcher.readFile(path);
         }
         else{
             FolderDispatcher.addFolder(path);
