@@ -27,7 +27,7 @@ export class GhciConsole extends React.Component{
         }
         else{
             // append text on bottom 
-            elem.value += "\n" + text;
+            elem.value +=  text;
             // scroll to bottom
             elem.scrollTop = elem.scrollHeight;
         }
