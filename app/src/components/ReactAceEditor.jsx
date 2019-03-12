@@ -47,7 +47,6 @@ class ReactAceEditor extends React.Component {
             name: "ace-editor",
             mode: "haskell",
             theme: "dracula",
-            onChange: (val, evt) => {this.state.value = val},
             width: "100%",
             height: "100vh",
             fontSize: "20px",
@@ -133,9 +132,11 @@ class ReactAceEditor extends React.Component {
     }
 
     // when the editor changes... (no longer sync with file)
-    onChange = evt => {
+    onChange = (val, evt) => {
         this.changedPostSave = true
         EditorDispatcher.editorChangeOcccurred();
+
+        this.state.value = val;
     }
 
     // function that sets the mode state of the ce
@@ -201,7 +202,6 @@ class ReactAceEditor extends React.Component {
                 <AceEditor
                     mode={this.state.mode}
                     theme={this.state.theme}
-                    onChange={this.state.onChange}
                     name={this.state.name}
                     width={this.state.width}
                     height={this.state.height}
