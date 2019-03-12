@@ -23,7 +23,7 @@ export class FileListFolder extends React.Component{
 
     renderFileItem(fname){
         return (
-            <div onClick={() => this.toggleActiveClass} className={this.state.active ? 'active': null}>
+            <div key={fname} onClick={() => this.toggleActiveClass} className={this.state.active ? 'active': null}>
                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
                     {fname}
                     <br/>

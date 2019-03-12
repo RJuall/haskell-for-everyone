@@ -1,8 +1,8 @@
 import React from "react";
 import { Input } from "reactstrap";
-import ModalDispatcher, { SELECT_FILE_MODAL, SELECT_FOLDER_MODAL, FILE_SELECTED, FOLDER_SELECTED } from "../dispatchers/ModalDispatcher";
+import ModalDispatcher, { SELECT_FILE_MODAL, SELECT_FOLDER_MODAL } from "../dispatchers/ModalDispatcher";
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
-import { FILE_EXTENSIONS, FileExtension } from "../utils/FileExtension";
+import { FileExtension } from "../utils/FileExtension";
 
 export class ModalSelectFile extends React.Component{
     constructor(props){
