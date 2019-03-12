@@ -4,15 +4,31 @@ import { faMinusCircle, faPlusCircle } from "@fortawesome/pro-light-svg-icons"
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
-import { FILE_EXTENSIONS } from "./ModalCreateFile";
+import { FILE_EXTENSIONS } from "../utils/FileExtension";
 
 export class FileListFolder extends React.Component{
+
+    constructor(props){
+        super(props);
+        this.toggleActiveClass= this.toggleActiveClass.bind(this);
+        this.state = {
+            active: false,
+        };
+    }
+
+    toggleActiveClass() {
+        const currentState = this.state.active;
+        this.setState({ active: !currentState });
+    };
+
     renderFileItem(fname){
         return (
-            <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
-                {fname}
-                <br/>
-            </span>
+            <div key={fname} onClick={() => this.toggleActiveClass} className={this.state.active ? 'active': null}>
+               <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
+                    {fname}
+                    <br/>
+                </span>
+            </div>
         );
     }
 

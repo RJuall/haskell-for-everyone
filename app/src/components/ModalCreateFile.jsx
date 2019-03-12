@@ -1,13 +1,8 @@
 import React from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Button} from "reactstrap";
 import ModalDispatcher, { CREATE_FILE_MODAL } from "../dispatchers/ModalDispatcher";
-import FileDispatcher from "../dispatchers/FileDispatcher";
-
-// allowed to create/view file formats  
-export const FILE_EXTENSIONS = {
-    ".hs": true,
-    ".md": true
-};
+import FileDispatcher from "../dispatchers/FileDispatcher"
+import { FileExtension, FILE_EXTENSIONS } from "../utils/FileExtension";
 
 export class ModalCreateFile extends React.Component{
     constructor(props){
@@ -25,18 +20,6 @@ export class ModalCreateFile extends React.Component{
 
     toggle(){
         this.setState({isOpen: !this.state.isOpen});
-    }
-
-    // makes sure a file name has a valid extension (such as .hs)
-    // puts '.hs' at end of file if it does not
-    // @param fname     raw file name
-    checkFileName(fname){
-        for(let ext in FILE_EXTENSIONS){
-            if(fname.endsWith(ext)){
-                return fname;
-            }
-        }
-        return `${fname}.hs`; // due to dropdown this should never happen 
     }
 
     // shows the modal for file creation
@@ -58,7 +41,7 @@ export class ModalCreateFile extends React.Component{
         // get file name with correct extension
         // user could accidentally type .hs
         // ternary prevents something like... file.hs.hs 
-        let fileName = this.checkFileName(fname.endsWith(ext) ? fname : (fname + ext));
+        let fileName = FileExtension.validateFileName(fname.endsWith(ext) ? fname : (fname + ext));
 
         // setup path
         let path = `${dir}/${fileName}`;
@@ -84,7 +67,7 @@ export class ModalCreateFile extends React.Component{
         return (
             <Modal isOpen={this.state.isOpen} toggle={this.toggle.bind(this)}>
                 <ModalHeader toggle={this.toggle.bind(this)}>
-                    {this.state.title || "Create File"}
+                    Create File
                 </ModalHeader>
                 <ModalBody>
                     <Form onSubmit={this.onSubmit.bind(this)}>

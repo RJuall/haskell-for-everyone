@@ -12,6 +12,8 @@ import { MenuBar } from "./MenuBar";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import IpcRequester from '../utils/IpcRequester';
 
+import { ModalSelectFile } from "./ModalSelectFile";
+
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
@@ -53,15 +55,15 @@ export class App extends React.Component{
                 <Container>
                     <Row>
                         <SplitPane split="vertical" minSize={100} defaultSize={150}>
-                            <Col>
+                            <Col className="sidebar-panel">
                                 <FileList/>
                             </Col>
                             <div>
                                 <SplitPane split="vertical" minSize={200} defaultSize={1100}>
-                                <Col>
-                                    <Editor/>
+                                <Col className="editor-panel">
+                                    <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
                                 </Col>
-                                <Col>
+                                <Col className="ghci-panel">
                                 GHCi
                                 <GhciConsole/>
                                 </Col>
@@ -73,6 +75,7 @@ export class App extends React.Component{
                 <ModalCreateFile/>
                 <ModalSaveFileAs/>
                 <ModalAlert/>
+                <ModalSelectFile/>
             </>
         );
     }

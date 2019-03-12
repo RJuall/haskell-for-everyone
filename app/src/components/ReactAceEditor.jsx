@@ -35,8 +35,14 @@ class ReactAceEditor extends React.Component {
         super(props);
         
         // current file in the editor
-        this.currFilePath = null;
- 
+        this.currFilePath = null; 
+
+        // changed after save?
+        this.changedPostSave = false;
+        
+        // the settings json data
+        this.settings = null;
+
         this.state = {
             name: "ace-editor",
             mode: "haskell",
@@ -77,6 +83,10 @@ class ReactAceEditor extends React.Component {
     handleSaveFile = () => {
         // issue a request to write current code to current file 
         FileDispatcher.writeFile(this.currFilePath, this.state.value);
+        
+        // mark file as same as the save
+        this.changedPostSave = false;
+        EditorDispatcher.editorChangeReset();
     }
 
     // handler for when the file save-as button is clicked
@@ -120,6 +130,12 @@ class ReactAceEditor extends React.Component {
         this.setState({
             theme: evt.theme
         })
+    }
+
+    // when the editor changes... (no longer sync with file)
+    onChange = evt => {
+        this.changedPostSave = true
+        EditorDispatcher.editorChangeOcccurred();
     }
 
     // function that sets the mode state of the ce
@@ -195,6 +211,7 @@ class ReactAceEditor extends React.Component {
                     wrapEnabled={this.state.wrapEnabled}
                     value={this.state.value}
                     setOptions={this.state.setOptions}
+                    onChange={this.onChange}
                 ></AceEditor>
             </div>
         )

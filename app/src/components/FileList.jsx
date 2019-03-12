@@ -173,7 +173,7 @@ export class FileList extends React.Component{
 
             // render the folder element and store it in the results array
             folderElements.push(
-                <FileListFolder folderPath={folderPath} fileNames={fileNames}/>
+                <FileListFolder key={folderPath} folderPath={folderPath} fileNames={fileNames}/>
             );
         }
 

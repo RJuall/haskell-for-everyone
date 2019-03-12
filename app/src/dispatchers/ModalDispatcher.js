@@ -3,7 +3,9 @@ import { EventEmitter } from "events";
 // "enumerated" event types 
 export const CREATE_FILE_MODAL =    "create-file-modal",
     SAVE_FILE_AS_MODAL =            "save-file-as-modal",
-    ALERT_MODAL =                    "alert-modal";
+    ALERT_MODAL =                   "alert-modal",
+    SELECT_FILE_MODAL =             "select-file-modal",
+    SELECT_FOLDER_MODAL =           "select-folder-modal";
 
 class ModalDispatcher extends EventEmitter{
     // signals the create file modal
@@ -23,6 +25,16 @@ class ModalDispatcher extends EventEmitter{
     // @param footer    modal footer
     alertModal(header=null, body=null, footer=null){
         this.emit(ALERT_MODAL, {header, body, footer});
+    }
+
+    // signals the select file modal should be displayed 
+    selectFileModal(){
+        this.emit(SELECT_FILE_MODAL);
+    }
+
+    // signals the select folder modal should be displayed 
+    selectFolderModal(){
+        this.emit(SELECT_FOLDER_MODAL);
     }
 }
 
