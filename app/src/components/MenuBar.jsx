@@ -30,7 +30,7 @@ export class MenuBar extends React.Component {
 
     render() {
         return(
-            <div class="nav">
+            <div className="nav">
                 <RNavbar>
                     <NavbarBrand></NavbarBrand>
                         <Collapse isOpen={this.state.showMenu} navbar>					
@@ -45,9 +45,8 @@ export class MenuBar extends React.Component {
                                         <DropdownItem onClick={() => ModalDispatcher.selectFolderModal()}>Open Folder</DropdownItem>
                                         <DropdownItem onClick={() => ModalDispatcher.saveFileAsModal()}>Save As</DropdownItem>
                                         <DropdownItem onClick={() => EditorDispatcher.saveCurrentFile()}>Save</DropdownItem>
-                                        <DropdownItem>Select Workspace</DropdownItem>
                                         <DropdownItem divider />
-                                        <DropdownItem onClick={() => EditorDispatcher.runCode()}>run</DropdownItem>
+                                        <DropdownItem onClick={() => EditorDispatcher.runCode()}>Run</DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
                                 &nbsp;&nbsp;
@@ -56,9 +55,9 @@ export class MenuBar extends React.Component {
                                         Edit 
                                     </DropdownToggle>
                                     <DropdownMenu>
-                                        <DropdownItem>Paste</DropdownItem>
-                                        <DropdownItem>Copy</DropdownItem>
-                                        <DropdownItem>Cut</DropdownItem>
+                                        <DropdownItem onClick={() => document.execCommand("paste")}>Paste</DropdownItem>
+                                        <DropdownItem onClick={() => document.execCommand("copy")}>Copy</DropdownItem>
+                                        <DropdownItem onClick={() => document.execCommand("cut")}>Cut</DropdownItem>
                                         <DropdownItem>Find</DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
