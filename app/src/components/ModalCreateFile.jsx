@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Button} from "reactstrap";
 import ModalDispatcher, { CREATE_FILE_MODAL } from "../dispatchers/ModalDispatcher";
 import FileDispatcher from "../dispatchers/FileDispatcher"
-import { FileExtension, FILE_EXTENSIONS } from "../utils/FileExtension";
+import { FileExtension } from "../utils/FileExtension";
 
 export class ModalCreateFile extends React.Component{
     constructor(props){
@@ -35,13 +35,15 @@ export class ModalCreateFile extends React.Component{
 
         // get input values
         let fname = this.fnameInput.value,  // raw file name
-            dir = this.dirInput.value,      // raw directory (likely preset)
+            dir = this.dirInput.value,      // raw directory (likely preset/fixed)
             ext = this.extInput.value;      // selected extension 
 
-        // get file name with correct extension
-        // user could accidentally type .hs
+        // user is typing an extension, try it 
         // ternary prevents something like... file.hs.hs 
-        let fileName = FileExtension.validateFileName(fname.endsWith(ext) ? fname : (fname + ext));
+        let fileName = fname.includes(".") ? fname : (fname + ext);
+
+        // valide extension (if bad extension makes it .hs)
+        fileName = FileExtension.validateFileName(fileName);
 
         // setup path
         let path = `${dir}/${fileName}`;
@@ -90,7 +92,7 @@ export class ModalCreateFile extends React.Component{
                                 />
                                 <InputGroupAddon addonType="append">
                                     <Input innerRef={elem => this.extInput = elem} type="select">
-                                        {Object.keys(FILE_EXTENSIONS).map(ext => <option key={ext}>{ext}</option>)}
+                                        {FileExtension.list().map(ext => <option key={ext}>{ext}</option>)}
                                     </Input>
                                 </InputGroupAddon>
                             </InputGroup>

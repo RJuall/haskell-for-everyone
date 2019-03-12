@@ -1,7 +1,16 @@
 // allowed to create/view file formats  
 export const FILE_EXTENSIONS = {
-    ".hs": true,
-    ".md": true
+    ".hs":          true,
+    ".md":          true,
+    ".markdown":    true,
+    ".mkd":         true,
+    ".mdown":       true,
+    ".mkdn":        true,
+    ".mdwn":        true,
+    ".mdtext":      true,
+    ".text":        true,
+    ".Rmd":         true,
+    ".txt":         true
 };
 
 // utility class for validating file names
@@ -20,12 +29,6 @@ export class FileExtension{
 
     // lists all file extension values
     static list(){
-        let exts = [];
-
-        for(let ext in FILE_EXTENSIONS){
-            exts.push(ext);
-        }
-
-        return exts;
+        return Object.keys(FILE_EXTENSIONS);
     }
 }

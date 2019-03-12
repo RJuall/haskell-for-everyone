@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Button} from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Button} from "reactstrap";
 import ModalDispatcher, { SAVE_FILE_AS_MODAL } from "../dispatchers/ModalDispatcher";
 import EditorDispatcher from "../dispatchers/EditorDispatcher";
 import { FileExtension } from "../utils/FileExtension";
@@ -16,6 +16,7 @@ export class ModalSaveFileAs extends React.Component{
 
         this.dirInput = null;       // directory input element
         this.fnameInput = null;     // file name input element
+        this.extInput = null;       // file extension select input
     }
 
     toggle(){
@@ -119,7 +120,9 @@ export class ModalSaveFileAs extends React.Component{
                                     required
                                 />
                                 <InputGroupAddon addonType="append">
-                                    <InputGroupText>.hs</InputGroupText>
+                                    <Input innerRef={elem => this.extInput = elem} type="select">
+                                        {FileExtension.list().map(ext => <option key={ext}>{ext}</option>)}
+                                    </Input>
                                 </InputGroupAddon>
                             </InputGroup>
                         </FormGroup>
