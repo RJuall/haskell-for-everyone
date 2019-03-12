@@ -35,7 +35,7 @@ class ReactAceEditor extends React.Component {
         super(props);
         
         // current file in the editor
-        this.currFilePath = null;
+        this.currFilePath = null; 
 
         // changed after save?
         this.changedPostSave = false;
@@ -178,13 +178,9 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.on("run-code", this.handleRunCode);
         EditorDispatcher.on("ce-font-family-set", this.handleFontChange);
         EditorDispatcher.on("ce-theme-set", this.handleThemeChange);
-        IpcRequester.on("settings-get", evt => this.settings = evt.settings);
 
         // makes sure that the ce value matches the default value
         this.setState({value: this.state.defaultValue});
-
-        // fetch the settings json
-        IpcRequester.getSettings();
     }    
 
     componentWillUnmount() {

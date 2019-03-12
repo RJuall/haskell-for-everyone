@@ -84,10 +84,6 @@ class EditorIconBar extends React.Component {
         EditorDispatcher.on("editor-change", this.handleEditorChange);
         EditorDispatcher.on("editor-change-reset", this.handleEditorChangeReset);
         FileDispatcher.on(FILE_READ, this.handleFileLoad);
-        IpcRequester.on("settings-get", evt => this.settings = evt.settings);
-
-        // request settings
-        IpcRequester.getSettings();
     }
 
     componentWillUnmount() {
