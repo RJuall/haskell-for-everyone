@@ -60,9 +60,29 @@ class EditorIconBar extends React.Component {
         }
     }
 
+    // mark file changed 
+    handleEditorChange = evt => {
+        if(this.state.filename && !this.state.filename.endsWith("*")){
+            let filename = `${this.state.filename}*`;
+            this.setState({filename});
+        }
+    }
+
+    // mark file not changed 
+    handleEditorChangeReset = evt => {
+        let fname = this.state.filename;
+
+        if(fname && fname.endsWith("*")){
+            let filename = fname.substring(0, fname.length - 1);
+            this.setState({filename});
+        }
+    }
+
     componentDidMount() {
         // sets up event listeners
         EditorDispatcher.on("mode-change", this.handleModeChange);
+        EditorDispatcher.on("editor-change", this.handleEditorChange);
+        EditorDispatcher.on("editor-change-reset", this.handleEditorChangeReset);
         FileDispatcher.on(FILE_READ, this.handleFileLoad);
         IpcRequester.on("settings-get", evt => this.settings = evt.settings);
 
@@ -73,6 +93,8 @@ class EditorIconBar extends React.Component {
     componentWillUnmount() {
         // removes event listeners
         EditorDispatcher.removeListener("mode-change", this.handleModeChange);
+        EditorDispatcher.removeListener("editor-change", this.handleEditorChange);
+        EditorDispatcher.removeListener("editor-change-reset", this.handleEditorChangeReset);
         FileDispatcher.removeListener(FILE_READ, this.handleFileLoad);
     }
 
