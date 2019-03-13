@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Button} from "reactstrap";
 import ModalDispatcher, { CREATE_FILE_MODAL } from "../dispatchers/ModalDispatcher";
-import FileDispatcher from "../dispatchers/FileDispatcher"
+import FileDispatcher, { FILE_CREATE } from "../dispatchers/FileDispatcher"
 import { FileExtension } from "../utils/FileExtension";
 
 export class ModalCreateFile extends React.Component{
@@ -27,6 +27,14 @@ export class ModalCreateFile extends React.Component{
     handleFileCreate = evt => {
         let dir = evt.dir || "";
         this.setState({isOpen: true, dir, title: null});
+    }
+
+    // invoked when a file is created
+    handleFileCreated = evt => {
+        // auto open the newly created file 
+        if(!evt.err){
+            FileDispatcher.readFile(`${evt.dir}/${evt.fileName}`);
+        }
     }
 
     onSubmit(evt){
@@ -58,11 +66,15 @@ export class ModalCreateFile extends React.Component{
     componentDidMount(){
         // listen for create file modal signals
         ModalDispatcher.on(CREATE_FILE_MODAL, this.handleFileCreate);
+        // listen for file creation 
+        FileDispatcher.on(FILE_CREATE, this.handleFileCreated);
     }
 
     componentWillUnmount(){
         // stop listening for create file modal signals
         ModalDispatcher.removeListener(CREATE_FILE_MODAL, this.handleFileCreate);
+        // stop listening for file creation
+        FileDispatcher.removeListener(FILE_CREATE, this.handleFileCreated);
     }
 
     render(){
