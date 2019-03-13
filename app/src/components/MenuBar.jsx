@@ -9,7 +9,6 @@ export class MenuBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showMenubar: true,
             file: false,
             edit: false,
             preference: false
@@ -33,52 +32,44 @@ export class MenuBar extends React.Component {
 
     render() {
         return(
-            <div className="nav">
-                <RNavbar>
-                    <Collapse isOpen={this.state.showMenubar} navbar>					
-                        <Nav navbar  className="ml-auto navbar-expand-lg h-25">
-                            <Dropdown nav isOpen={this.state.file} toggle={this.toggleFile.bind(this)}>
-                                <DropdownToggle nav className="menuItem"> 
-                                    File 
-                                </DropdownToggle>
-                                <DropdownMenu>
-                                    <DropdownItem onClick={() => ModalDispatcher.createFileModal()}>New File</DropdownItem>
-                                    <DropdownItem onClick={() => ModalDispatcher.selectFileModal()}>Open File</DropdownItem>
-                                    <DropdownItem onClick={() => ModalDispatcher.selectFolderModal()}>Open Folder</DropdownItem>
-                                    <DropdownItem onClick={() => ModalDispatcher.saveFileAsModal()}>Save As</DropdownItem>
-                                    <DropdownItem onClick={() => EditorDispatcher.saveCurrentFile()}>Save</DropdownItem>
-                                    <DropdownItem divider />
-                                    <DropdownItem onClick={() => EditorDispatcher.runCode()}>Run</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                            &nbsp;&nbsp;
-                            <Dropdown nav isOpen={this.state.edit} toggle={this.toggleEdit.bind(this)}>
-                                <DropdownToggle nav className="menuItem"> 
-                                    Edit 
-                                </DropdownToggle>
-                                <DropdownMenu>
-                                    <DropdownItem onClick={() => document.execCommand("paste")}>Paste</DropdownItem>
-                                    <DropdownItem onClick={() => document.execCommand("copy")}>Copy</DropdownItem>
-                                    <DropdownItem onClick={() => document.execCommand("cut")}>Cut</DropdownItem>
-                                    <DropdownItem>Find</DropdownItem>
-                                    <DropdownItem divider />
-                                    <DropdownItem onClick={() => document.execCommand("redo")}>Redo</DropdownItem>
-                                    <DropdownItem onClick={() => document.execCommand("undo")}>Undo</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                            &nbsp;&nbsp;
-                            <Dropdown nav isOpen={this.state.preference} toggle={this.togglePreferences.bind(this)}>
-                                <DropdownToggle nav className="menuItem"> 
-                                    Preferences 
-                                </DropdownToggle>
-                                <DropdownMenu>
-                                    <DropdownItem>Appearance</DropdownItem>
-                                    <DropdownItem>Editor Layout</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </Nav>
-                    </Collapse>
-                </RNavbar>
+            <div className="nav">					
+                <Dropdown nav isOpen={this.state.file} toggle={this.toggleFile.bind(this)}>
+                    <DropdownToggle nav className="menuItem"> 
+                        File 
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem onClick={() => ModalDispatcher.createFileModal()}>New File</DropdownItem>
+                        <DropdownItem onClick={() => ModalDispatcher.selectFileModal()}>Open File</DropdownItem>
+                        <DropdownItem onClick={() => ModalDispatcher.selectFolderModal()}>Open Folder</DropdownItem>
+                        <DropdownItem onClick={() => ModalDispatcher.saveFileAsModal()}>Save As</DropdownItem>
+                        <DropdownItem onClick={() => EditorDispatcher.saveCurrentFile()}>Save</DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem onClick={() => EditorDispatcher.runCode()}>Run</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+                <Dropdown nav isOpen={this.state.edit} toggle={this.toggleEdit.bind(this)}>
+                    <DropdownToggle nav className="menuItem"> 
+                        Edit 
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem onClick={() => document.execCommand("paste")}>Paste</DropdownItem>
+                        <DropdownItem onClick={() => document.execCommand("copy")}>Copy</DropdownItem>
+                        <DropdownItem onClick={() => document.execCommand("cut")}>Cut</DropdownItem>
+                        <DropdownItem>Find</DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem onClick={() => document.execCommand("redo")}>Redo</DropdownItem>
+                        <DropdownItem onClick={() => document.execCommand("undo")}>Undo</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+                <Dropdown nav isOpen={this.state.preference} toggle={this.togglePreferences.bind(this)}>
+                    <DropdownToggle nav className="menuItem"> 
+                        Preferences 
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem>Appearance</DropdownItem>
+                        <DropdownItem>Editor Layout</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
             </div>
         );
     }
