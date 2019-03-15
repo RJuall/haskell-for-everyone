@@ -165,6 +165,9 @@ class GhciOps{
             return;
         }
 
+        // fix problem where path folder had spaces
+        path = path.includes(" ") ? `"${path}"` : path;
+
         // load and run the file 
         // do not respond (using evt) because response is async
         // (handled with the wrapper's auto stdout listeners)
