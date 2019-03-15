@@ -20,7 +20,7 @@ if(require.main === module){
     });
 
     // create menu for mac
-    if(process.platform === "darwin"){
-        //main.createMenu();
+    if(process.platform === "darwin" && !process.argv.includes("--dev")){
+        main.createMenu();
     }
 }
