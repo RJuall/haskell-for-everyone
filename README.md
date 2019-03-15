@@ -45,6 +45,15 @@ npm i -g nodemon
 npm i -g electron-cli
 ```
 
+##### React-Dev-Tools in Electron
+
+
+Type this in the developer console to enable React dev tools.
+
+```javascript
+require('electron-react-devtools').install()
+```
+
 ## Electron App 
 \*\* Must be in __app/__ folder! \*\*
 
