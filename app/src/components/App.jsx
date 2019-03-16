@@ -64,7 +64,6 @@ export class App extends React.Component{
                                     <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
                                 </Col>
                                 <Col className="ghci-panel">
-                                GHCi
                                 <GhciConsole/>
                                 </Col>
                                 </SplitPane>
