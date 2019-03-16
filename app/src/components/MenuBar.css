@@ -3,9 +3,31 @@
 }
 
 .nav{
-    background-color: lightgray;
+    background: #32353D;
 }
 
 .menuItem{
-    color:black;
+    color: rgba(255,255,255,.6);
+}
+
+.menuItem:hover {
+    color: rgba(255,255,255,.9);
+}
+
+.nav .dropdown-menu {
+    background-color: #3b3b3c;
+}
+
+.nav .dropdown-item {
+    color: rgba(255,255,255,.6);
+}
+
+.nav .dropdown-item:focus, .nav .dropdown-item:hover {
+    color: rgba(255,255,255,.9);
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.nav .dropdown-divider{
+    border-top: 1px solid #3a3e42;
 }
