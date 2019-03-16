@@ -4,22 +4,17 @@
 
 .file-list-items{
     width: 100%;
-    margin-left: 15px;
 }
 
 .file-list-item{
     cursor: pointer;
-}
-
-.file-list-container{
-    padding-left: 15px;
-    padding-right: 15px;
+    display: block;
 }
 
 .sidebar-panel.col{
     padding: 0 !important;
-    background-color: #47484B;
-    color: #bbbbbb;
+    background-color: #32353D;
+    color: rgba(255,255,255,.5);
     height: 100%;
 }
 
@@ -27,4 +22,73 @@ ul.file-list-items{
     margin: 0;
     padding: 0;
     list-style-type: none;
+}
+
+.item-container{
+    padding: 10px 10px 10px 40px;
+    border-bottom: 1px solid #3a3838;
+}
+
+.item-container.active{
+    background: rgba(0,0,0,.08);
+    color: rgba(255,255,255,.9);
+}
+
+.file-list-folder{
+    padding: 10px 0 10px 0;
+}
+
+.file-list-folder{
+    color: rgba(255,255,255,.7);
+    background: rgba(0,0,0,.08);
+}
+
+.file-list-folder .folder-remove-icon svg{
+    transition: all .08s ease;
+    -webkit-transition: all .08s ease;
+    opacity: 0;
+}
+
+.file-list-folder:hover .folder-remove-icon svg{
+    opacity: 1;
+}
+
+.file-list-folder{
+    white-space: nowrap;
+}
+
+.file-list-folder .folder-name{
+    margin-left: 13px;
+}
+
+.file-list-folder .folder-remove-icon{
+    margin-left: 15px;
+}
+
+.file-list-folder .folder-add-icon {
+    margin-right: 15px;
+    float: right;
+}
+
+.item-container{
+    position: relative;
+}
+
+.item-container:hover{
+    color: rgba(255,255,255,.7);
+    background: rgba(0,0,0,.08);
+}
+
+.item-container.active:before{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    width: 8px;
+    height: 8px;
+    line-height: 45px;
+    background: #6b767d;
+    text-shadow: none;
+    border-radius: 10px;
+    opacity: 1;
 }
