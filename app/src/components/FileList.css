@@ -16,6 +16,7 @@
     background-color: #32353D;
     color: rgba(255,255,255,.5);
     height: 100%;
+    -webkit-user-select:none;
 }
 
 ul.file-list-items{
