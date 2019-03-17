@@ -1,8 +1,8 @@
 import React from 'react';
 import ModalDispatcher from '../dispatchers/ModalDispatcher';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Navbar as RNavbar, NavItem, Collapse, NavbarToggler, Nav, NavLink } from "reactstrap";
-import { NavbarBrand } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import WSClient from '../utils/WSClient';
 import './MenuBar.css';
 
 export class MenuBar extends React.Component {
@@ -11,7 +11,8 @@ export class MenuBar extends React.Component {
         this.state = {
             file: false,
             edit: false,
-            preference: false
+            preference: false,
+            rooms: false
         };
     }
 
@@ -28,6 +29,10 @@ export class MenuBar extends React.Component {
     // Toggle for preferences dropdown
     togglePreferences(){
         this.setState({preference: !this.state.preference});
+    }
+
+    toogleRooms(){
+        this.setState({rooms: !this.state.rooms});
     }
 
     render() {
@@ -68,6 +73,16 @@ export class MenuBar extends React.Component {
                     <DropdownMenu>
                         <DropdownItem>Appearance</DropdownItem>
                         <DropdownItem>Editor Layout</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+                <Dropdown nav isOpen={this.state.rooms} toggle={this.toogleRooms.bind(this)}>
+                    <DropdownToggle nav className="menuItem">
+                        Online
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem onClick={() => ModalDispatcher.createRoomModal()}>Create Room</DropdownItem>
+                        <DropdownItem onClick={() => ModalDispatcher.joinRoomModal()}>Join Room</DropdownItem>
+                        <DropdownItem onClick={() => WSClient.leaveRoom()}>Quit Room</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
             </div>
