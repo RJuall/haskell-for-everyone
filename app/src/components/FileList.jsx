@@ -197,13 +197,6 @@ export class FileList extends React.Component{
         return (
             <div className="file-list-container">
                 <div>
-                    Files
-                    &nbsp;
-                    <span onClick={() => this.folderRef.current.click()}>
-                        <FontAwesomeIcon icon={faPlusCircle} style={{color: "green", cursor: "pointer"}}/>
-                    </span>
-                </div>
-                <div>
                     {this.renderFolders()}
                 </div>
                 {this.renderSecretFolderInput()}

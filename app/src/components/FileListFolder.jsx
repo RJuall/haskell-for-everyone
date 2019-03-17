@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinusCircle, faPlusCircle } from "@fortawesome/pro-light-svg-icons"
+import { faPlus, faTimes, faCircleNotch} from "@fortawesome/pro-light-svg-icons"
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
@@ -17,16 +17,14 @@ export class FileListFolder extends React.Component{
     }
 
     toggleActiveClass() {
-        const currentState = this.state.active;
-        this.setState({ active: !currentState });
+        this.setState({ active: !this.state.active });
     };
 
     renderFileItem(fname){
         return (
-            <div key={fname} onClick={() => this.toggleActiveClass} className={this.state.active ? 'active': null}>
+            <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
                     {fname}
-                    <br/>
                 </span>
             </div>
         );
@@ -48,14 +46,14 @@ export class FileListFolder extends React.Component{
         return (
             <div className="file-list-folder-container" key={folderPath}>
                 <div className="file-list-folder" title={folderPath}>
-                    <span onClick={() => FolderDispatcher.removeFolder(folderPath)}>
-                        <FontAwesomeIcon icon={faMinusCircle} style={{color: "red", cursor: "pointer"}}/>
+                    <span className="folder-remove-icon" onClick={() => FolderDispatcher.removeFolder(folderPath)}>
+                        <FontAwesomeIcon icon={faTimes} size="lg" style={{color: "white", cursor: "pointer"}}/>
                     </span>
-                    &nbsp;
+                    <span className="folder-name">
                     {folderName}
-                    &nbsp;
-                    <span onClick={() => ModalDispatcher.createFileModal(folderPath)}>
-                        <FontAwesomeIcon icon={faPlusCircle} style={{color: "green", cursor: "pointer"}}/>
+                    </span>
+                    <span className="folder-add-icon" onClick={() => ModalDispatcher.createFileModal(folderPath)}>
+                        <FontAwesomeIcon icon={faPlus} size="lg" style={{color: "white", cursor: "pointer"}}/>
                     </span>
                 </div>
                 <div className="file-list-items">

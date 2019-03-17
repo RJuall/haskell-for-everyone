@@ -49,7 +49,7 @@ class ReactAceEditor extends React.Component {
             theme: "dracula",
             width: "100%",
             height: "100vh",
-            fontSize: "20px",
+            fontSize: "16px",
             defaultValue: testHask,
             editorProps: {$blockScrolling: true},
             setOptions: {

@@ -1,20 +1,24 @@
 .icon-bar {
-    height: 60px;
-    background-color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #32353D;
 }
 
-.icon-bar button {
-    height: 60px;
-    width: 60px;
+.icon-bar button, .icon-bar div{
     background-color: transparent;
     border: none;
-    text-decoration: none;
-    display: block;
+    color: #ffffff;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
-.icon-bar button:hover {
-    background-color: #eeeeee;
+.icon-bar .btn-run span{
+    margin-left: 5px;
+}
+
+.col{
+    padding: 0 !important;
 }

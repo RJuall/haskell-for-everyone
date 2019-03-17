@@ -98,18 +98,6 @@ class EditorIconBar extends React.Component {
         return(
             <div className="icon-bar">
                 <div className="filename">{this.state.filename}</div>
-                <button title="New file">
-                    <FontAwesomeIcon size="2x" icon={faPaperPlane}/>
-                </button>
-                <button title="Run" onClick={() => EditorDispatcher.runCode()}>
-                    <FontAwesomeIcon size="2x" icon={faPlay}/>
-                </button>
-                <button title="Save" onClick={() => EditorDispatcher.saveCurrentFile()}>
-                    <FontAwesomeIcon size="2x" icon={faSave}/>
-                </button>
-                <button title="Save as" onClick={() => ModalDispatcher.saveFileAsModal()}>
-                    <FontAwesomeIcon size="2x" icon={faArrowAltSquareLeft}/>
-                </button>
                 <button></button>
                 <button title="Decrease font size" onClick={this.fontDecrease}>
                     <FontAwesomeIcon size="2x" icon={faMinus}/>
@@ -120,7 +108,10 @@ class EditorIconBar extends React.Component {
                 </button>
                 <FontChooser/>
                 <ThemeChooser/>
-                <button title="Programming Syntax Mode">{this.state.mode}</button>
+                <button className="btn btn-danger btn-run" title="Run" onClick={() => EditorDispatcher.runCode()}>
+                    <FontAwesomeIcon icon={faPlay}/>
+                    <span>Run</span>
+                </button>
             </div>
         );
     }
