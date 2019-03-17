@@ -29,10 +29,13 @@ class GhciWrapper{
     // setups ghci child with error callback
     // @param callback  callback function for error 
     setupGhciChildProcess(path, callback){
+        // mac hates 'ghci'
+        let ghciPath = process.platform === "darwin" ? "/usr/local/bin/ghci" : "ghci";
+
         // attempt to create ghci child process
         let ghciProcess;
         try{
-            ghciProcess = path ? spawn("ghci", [path]) : spawn("ghci");
+            ghciProcess = path ? spawn(ghciPath, [path]) : spawn(ghciPath);
         }
         catch(err){
             callback(err);
