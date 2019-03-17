@@ -11,9 +11,9 @@ import { VersionAPI } from "../utils/VersionAPI";
 import { MenuBar } from "./MenuBar";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import IpcRequester from '../utils/IpcRequester';
-
+import { ModalCreateRoom } from "./ModalCreateRoom";
+import { ModalJoinRoom } from "./ModalJoinRoom";
 import { ModalSelectFile } from "./ModalSelectFile";
-
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
@@ -76,6 +76,8 @@ export class App extends React.Component{
                 <ModalSaveFileAs/>
                 <ModalAlert/>
                 <ModalSelectFile/>
+                <ModalCreateRoom/>
+                <ModalJoinRoom/>
             </>
         );
     }
