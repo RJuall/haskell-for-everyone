@@ -5,7 +5,9 @@ export const CREATE_FILE_MODAL =    "create-file-modal",
     SAVE_FILE_AS_MODAL =            "save-file-as-modal",
     ALERT_MODAL =                   "alert-modal",
     SELECT_FILE_MODAL =             "select-file-modal",
-    SELECT_FOLDER_MODAL =           "select-folder-modal";
+    SELECT_FOLDER_MODAL =           "select-folder-modal",
+    CREATE_ROOM_MODAL =             "create-room-modal",
+    JOIN_ROOM_MODAL =               "join-room-modal";
 
 class ModalDispatcher extends EventEmitter{
     // signals the create file modal
@@ -35,6 +37,16 @@ class ModalDispatcher extends EventEmitter{
     // signals the select folder modal should be displayed 
     selectFolderModal(){
         this.emit(SELECT_FOLDER_MODAL);
+    }
+
+    // signals create room modal should be displayed
+    createRoomModal(){
+        this.emit(CREATE_ROOM_MODAL);
+    }
+
+    // signals join room modal should be displayed
+    joinRoomModal(){
+        this.emit(JOIN_ROOM_MODAL);
     }
 }
 
