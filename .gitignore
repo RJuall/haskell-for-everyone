@@ -77,5 +77,5 @@ app/settings.json
 app_hs
 
 # don't save builds in repository
-app/build
-app/dist
+app/build/
+app/dist/
