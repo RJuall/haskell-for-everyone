@@ -1,7 +1,9 @@
 import React from "react";
 import GhciDispatcher, { GHCI, GHCI_ERROR, GHCI_CLEAR } from "../dispatchers/GhciDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./GhciConsole.css";
+import { faBroom } from "@fortawesome/pro-regular-svg-icons";
 
 export class GhciConsole extends React.Component{
     constructor(props){
@@ -88,6 +90,9 @@ export class GhciConsole extends React.Component{
     render(){
         return (
             <div>
+                <div className="consoleIcons">
+                    <button className="clear" onClick={() => GhciDispatcher.clear()}><FontAwesomeIcon size="2x" icon={faBroom}/></button>
+                </div>
                 <textarea
                     ref={this.consoleRef}
                     className="ghci-console"

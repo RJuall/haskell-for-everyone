@@ -15,3 +15,13 @@
 .ghci-console:focus, .ghci-input:focus{
     outline: none;
 }
+
+.clear{
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+.consoleIcons{
+    background: #32353D;
+}
