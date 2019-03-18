@@ -9,7 +9,8 @@ export class ModalJoinRoom extends React.Component{
 
         this.state = {
             isOpen:     false,      // modal visibility 
-            roomsList:  null        // list of joinable rooms 
+            roomsList:  null,       // list of joinable rooms 
+            locked:     false       // UI input lock 
         };
 
         this.userNameInput = null;  // user name <input> 
@@ -30,16 +31,17 @@ export class ModalJoinRoom extends React.Component{
 
     // handler for response to room join request 
     handleRoomJoinResponse = evt => {
-        if(this.state.isOpen){
-            if(!evt.err){
-                // room created! 
-                ModalDispatcher.alertModal("Room Joined", "You are in an online room.");
-            }
-            else{
-                // error creating room
-                ModalDispatcher.alertModal("Join Room Error", evt.err);
-            }
+        if(!evt.err){
+            // room created! 
+            ModalDispatcher.alertModal("Room Joined", "You are in an online room.");
         }
+        else{
+            // error creating room
+            ModalDispatcher.alertModal("Join Room Error", evt.err);
+        }
+
+        // unlock UI 
+        this.setState({locked: false});
     }
 
     // handler for rooms list response
@@ -65,11 +67,9 @@ export class ModalJoinRoom extends React.Component{
 
         // send request 
         if(roomName){
+            this.setState({locked: true});
             WSClient.joinRoom(roomName, userName);
         }
-
-        // close the modal
-        this.setState({isOpen: false});
     }
 
     componentDidMount(){
@@ -93,12 +93,19 @@ export class ModalJoinRoom extends React.Component{
     renderRoomsListInput(){
         let {roomsList=null} = this.state;
 
+        // rooms are loading still
         if(!roomsList){
             return <div className="text-center">Fetching rooms...</div>;
         }
 
+        // nothing found
+        if(!roomsList.length){
+            return <div className="text-center">No available rooms found.</div>
+        }
+
+        // rooms found - show selection 
         return (
-            <Input type="select" innerRef={elem => this.roomNameInput = elem}>
+            <Input type="select" innerRef={elem => this.roomNameInput = elem} disabled={this.state.locked}>
                 {roomsList}
             </Input>
         )
@@ -118,6 +125,7 @@ export class ModalJoinRoom extends React.Component{
                                 innerRef={elem => this.userNameInput = elem}
                                 type="text"
                                 maxLength={16}
+                                disabled={this.state.locked}
                                 required
                             />
                         </FormGroup>
@@ -126,13 +134,13 @@ export class ModalJoinRoom extends React.Component{
                             {this.renderRoomsListInput()}
                         </FormGroup>
                         <div>
-                            <Button>Join</Button>
+                            <Button disabled={this.state.locked}>Join</Button>
                         </div>
                     </Form>
                     <br/>
                     <div>
-                        This will create an online room with you as the owner.
-                        Room name is required to be unique. 
+                        This will connect you to an existing online room.
+                        Your name is required to be unique. 
                         Online connection is required.
                     </div>
                 </ModalBody>
