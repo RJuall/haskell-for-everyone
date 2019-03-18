@@ -8,7 +8,8 @@ export class ModalCreateRoom extends React.Component{
         super(props);
 
         this.state = {
-            isOpen: false           // modal visibility 
+            isOpen: false,           // modal visibility 
+            locked: false            // UI input lock 
         };
 
         this.roomNameInput = null;  // room name <input>
@@ -26,16 +27,17 @@ export class ModalCreateRoom extends React.Component{
 
     // handles server response for creating the room 
     handleRoomCreateResponse = evt => {
-        if(this.state.isOpen){
-            if(!evt.err){
-                // room created! 
-                ModalDispatcher.alertModal("Room Created", "You online room is now live.");
-            }
-            else{
-                // error creating room
-                ModalDispatcher.alertModal("Create Room Error", evt.err);
-            }
+        if(!evt.err){
+            // room created! 
+            ModalDispatcher.alertModal("Room Created", "You online room is now live.");
         }
+        else{
+            // error creating room
+            ModalDispatcher.alertModal("Create Room Error", evt.err);
+        }
+
+        // unlock UI 
+        this.setState({locked: false});
     }
 
     // form submission 
@@ -43,15 +45,15 @@ export class ModalCreateRoom extends React.Component{
         // prevent page refresh 
         evt.preventDefault();
 
+        // lock modal input 
+        this.setState({locked: true});
+
         // get string values from html 
         let roomName = this.roomNameInput.value,
             userName = this.userNameInput.value;
 
         // send request 
         WSClient.createRoom(roomName, userName);
-
-        // close modal 
-        this.setState({isOpen: false});
     }
 
     componentDidMount(){
@@ -82,6 +84,7 @@ export class ModalCreateRoom extends React.Component{
                                 innerRef={elem => this.roomNameInput = elem}
                                 type="text"
                                 maxLength={16}
+                                disabled={this.state.locked}
                                 required
                             />
                         </FormGroup>
@@ -91,11 +94,12 @@ export class ModalCreateRoom extends React.Component{
                                 innerRef={elem => this.userNameInput = elem}
                                 type="text"
                                 maxLength={16}
+                                disabled={this.state.locked}
                                 required
                             />
                         </FormGroup>
                         <div>
-                            <Button>Create</Button>
+                            <Button disabled={this.state.locked}>Create</Button>
                         </div>
                     </Form>
                     <br/>

@@ -129,7 +129,7 @@ export class WSClient extends EventEmitter{
         try{
             // expected schema {type: "something", data: {})
             // *!* is message delimiter (tcp sometimes send packets concatenated)
-            this.socket.send(JSON.stringify({type, data}) + MSG_DELIM);
+            this._socket.send(JSON.stringify({type, data}) + MSG_DELIM);
         }
         catch(err){
             return;
@@ -146,7 +146,7 @@ export class WSClient extends EventEmitter{
 
     // getter for is connected to server
     get isConnected(){
-        return this.socket && this.socket.readyState === 1;
+        return this._socket && this._socket.readyState === 1;
     }
 }
 
