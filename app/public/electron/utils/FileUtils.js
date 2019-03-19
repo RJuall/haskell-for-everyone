@@ -6,7 +6,6 @@ class FileUtils{
     // @param path  file path to write
     // @param str   string to write to the file 
     static writeFile(path, str){
-        console.log('fu write', str);
         return new Promise((resolve, reject) => {
             fs.writeFile(path, str, err => {
                 err ? reject(err) : resolve("Success.");

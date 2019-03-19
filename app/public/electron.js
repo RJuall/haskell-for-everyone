@@ -7,7 +7,17 @@ if(require.main === module){
     let main = new MainProcess();
 
     // when electron is initialized... create window 
-    app.on("ready", () => main.createWindow());
+    app.on("ready", () => {
+        // app is ready - setup .json files then window
+        main.initFS()
+            .catch(err => {
+                // problem with setting up .json files 
+            })
+            .finally(() => {
+                // create the app window
+                main.createWindow();
+            });
+    });
 
     // handle window re-creation
     app.on("activate", () => main.createWindow());

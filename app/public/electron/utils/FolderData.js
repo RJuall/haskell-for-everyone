@@ -1,29 +1,39 @@
+const { app } = require("electron");
 const { FileUtils } = require("../utils/FileUtils");
 const { JsonParser } = require("../utils/JsonParser");
 
 // folder data file relative path 
-const FOLDER_DATA_FILE = "folder_data.json";
+const FOLDER_DATA_FILE = `${app.getPath("userData")}/folder_data.json`;
 
 class FolderData{
     constructor(){
         // all folders
         this._folderPaths = [];
         this._lastFile = null;
+    }
 
-        // load folders 
-        this.load()
-            .then(json => {
-                // file loaded - set fields base on file 
-                this._folderPaths = json.folderPaths || [];
-                this._lastFile = json.lastFile || null;
-            })
-            .catch(err => {
-                // failed to load 
-                if(err.errno === -4058){
-                    // missing file - use defaults (empty)
-                    this.update();
-                }
-            });
+    // loads folder data from file 
+    init(){
+        return new Promise((resolve, reject) => {
+            this.loadFile()
+                .then(json => {
+                    // file loaded - set fields base on file 
+                    this._folderPaths = json.folderPaths || [];
+                    this._lastFile = json.lastFile || null;
+
+                    resolve(this);
+                })
+                .catch(err => {
+                    // failed to load 
+                    if(err.errno === -4058){
+                        // missing file - use defaults (empty)
+                        this.update()
+                            .then(() => resolve(this))
+                            .catch(err => reject(err));
+                    }
+                    else reject(err);
+                });
+        });
     }
 
     // adds a folder from the field immediately and asychronously updates the file 
@@ -62,7 +72,7 @@ class FolderData{
     }
 
     // loads the underyling json file (does not set fields!)
-    load(){
+    loadFile(){
         return new Promise((resolve, reject) => {
             // read the settings file and parse 
             FileUtils.readFile(FOLDER_DATA_FILE)
@@ -104,7 +114,7 @@ class FolderData{
         this.update();
     }
 
-    // getter for folder paths
+    // getter for folder pathsf
     get folderPaths(){
         return this._folderPaths;
     }
