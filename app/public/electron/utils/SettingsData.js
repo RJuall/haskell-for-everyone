@@ -1,7 +1,8 @@
+const { app } = require("electron");
 const { FileUtils } = require("../utils/FileUtils");
 const { JsonParser } = require("../utils/JsonParser");
 
-const SETTINGS_FILE = "settings.json";
+const SETTINGS_FILE = app.getPath("userData") + "/settings.json";
 
 const FONT_SIZE_INTERVAL = 2;
 
@@ -24,23 +25,30 @@ class SettingsData{
                 placeHolder: null
             }
         }
+    }
 
-        // read current settings file 
-        this.loadFile()
-            .then(json => {
-                // load settings from file
-                this._settings.editorSettings = Object.assign(this._settings.editorSettings, json.editorSettings)
-                this._settings.terminalSettings = Object.assign(this._settings.terminalSettings, json.terminalSettings)
-                this._settings.fileSettings = Object.assign(this._settings.fileSettings, json.fileSettings)
-                this._settings.windowSettings = Object.assign(this._settings.windowSettings, json.windowSettings)
-            })
-            .catch(err => {
-                // failed to load (keeps current/default options)
-                if(err.errno === -4058 || err.errno === -2){
-                    // missing file - write defaults 
-                    this.updateFile();
-                }
-            });
+    init(){
+        return new Promise((resolve, reject) => {
+            // read current settings file 
+            this.loadFile()
+                .then(json => {
+                    // load settings from file
+                    this._settings.editorSettings = Object.assign(this._settings.editorSettings, json.editorSettings)
+                    this._settings.terminalSettings = Object.assign(this._settings.terminalSettings, json.terminalSettings)
+                    this._settings.fileSettings = Object.assign(this._settings.fileSettings, json.fileSettings)
+                    this._settings.windowSettings = Object.assign(this._settings.windowSettings, json.windowSettings)
+               
+                    resolve(this);
+                })
+                .catch(err => {
+                    // failed to load (keeps current/default options)
+                    if(err.errno === -4058 || err.errno === -2){
+                        // missing file - write defaults 
+                        this.updateFile(err => err ? reject(err) : resolve(this));
+                    }
+                    else reject(err);
+                });
+        })
     }
 
     // loads the current settings file 

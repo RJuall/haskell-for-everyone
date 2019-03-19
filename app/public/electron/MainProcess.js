@@ -4,6 +4,8 @@ const { FileOps } = require("./handlers/FileOps");
 const { GhciOps } = require("./handlers/GhciOps");
 const { FolderOps } = require("./handlers/FolderOps");
 const { SettingsOps } = require("./handlers/SettingsOps");
+const { FolderData } = require ("./utils/FolderData");
+const { SettingsData } = require("./utils/SettingsData");
 
 class MainProcess{
     constructor(){
@@ -12,6 +14,14 @@ class MainProcess{
 
         // listen for incoming requests from the ipc socket  
         ipcMain.on("req", this.handleIpcData.bind(this));
+    }
+
+    // initialzes file-dependent data 
+    initFS(){
+        return Promise.all([
+            SettingsData.init(),
+            FolderData.init()
+        ]);
     }
 
     // creates the app window 
@@ -23,7 +33,8 @@ class MainProcess{
             title:  "Haskell For Everyone",
             width:  1280,
             height: 720,
-            show: false
+            show: false,
+            backgroundColor: "black"
         });
 
         // dev mode? 
