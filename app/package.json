@@ -21,13 +21,13 @@
   },
   "homepage": "./",
   "build": {
+    "productName": "Haskell For Everyone",
     "win": {
       "target": "NSIS"
     },
     "linux": {
       "target": [
-        "AppImage",
-        "deb"
+        "AppImage"
       ]
     },
     "dmg": {
@@ -65,10 +65,10 @@
     "reactstrap": "^7.1.0"
   },
   "devDependencies": {
-    "electron": "^4.0.5",
+    "electron": "^4.1.0",
     "electron-builder": "^20.38.5",
     "electron-react-devtools": "^0.5.3",
-    "react-scripts": "^2.1.5"
+    "react-scripts": "^2.1.8"
   },
   "browserslist": [
     ">0.2%",
