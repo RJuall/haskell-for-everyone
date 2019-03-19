@@ -33,7 +33,8 @@ class MainProcess{
             title:  "Haskell For Everyone",
             width:  1280,
             height: 720,
-            show: false
+            show: false,
+            backgroundColor: "black"
         });
 
         // dev mode? 

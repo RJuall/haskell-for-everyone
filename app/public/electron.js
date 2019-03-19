@@ -8,13 +8,15 @@ if(require.main === module){
 
     // when electron is initialized... create window 
     app.on("ready", () => {
-        // app is ready - setup .json files then window
+        // app is ready - setup data .json files then window
         main.initFS()
             .catch(err => {
-                // problem with setting up .json files 
+                // problem with setting up data files 
+                console.log("Error with data file(s)...");
+                console.log(err.message);
             })
             .finally(() => {
-                // create the app window
+                // data fiels setup - create the app window
                 main.createWindow();
             });
     });
