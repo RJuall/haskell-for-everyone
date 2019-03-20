@@ -54,3 +54,7 @@ body{
 .Resizer.disabled:hover {
   border-color: transparent;
 }
+
+.sidebar-panel{
+    overflow-y: auto;
+}
