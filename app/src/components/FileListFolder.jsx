@@ -42,33 +42,28 @@ export class FileListFolder extends React.Component{
     }
 
     renderFileItem(fname){
-        if(fname.includes(".hs")){
-            return (
-                <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
-                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
-                        <FontAwesomeIcon icon={faHSquare} size="lg" style={{color: "white"}}/> &nbsp; {fname}
-                    </span>
-                </div>
-            );
+        // extract extension 
+        let ext = fname.split(".").pop();
+        let iconType = null;
+
+        // determine icon
+        if(ext === "hs"){
+            iconType = faHSquare;
         }
-        if(fname.includes(".txt") || fname.includes(".text")){
-            return (
-                <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
-                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
-                        <FontAwesomeIcon icon={faFileAlt} size="lg" style={{color: "white"}}/> &nbsp; {fname}
-                    </span>
-                </div>
-            );
+        else if(ext === "txt" || ext === "text"){
+            iconType = faFileAlt;
         }
-        if(fname.includes(".Rmd") || fname.includes(".md") || fname.includes(".markdown") || fname.includes(".mkd") || fname.includes(".mdown") || fname.includes(".mkdn") || fname.includes(".mdwn") || fname.includes(".mdtext") ){
-            return (
-                <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
-                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
-                        <FontAwesomeIcon icon={faMarker} size="lg" style={{color: "white"}}/> &nbsp; {fname}
-                    </span>
-                </div>
-            );
+        else if(ext === "Rmd" || ext === "md" || ext == "markdown" || ext === "mkd" || ext === "mdown" || ext === "mkdn" || ext === "mdwn" || ext === "mdtext"){
+            iconType = faMarker;
         }
+
+        return (
+            <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
+            <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
+                    <FontAwesomeIcon icon={iconType} size="lg" style={{color: "white"}}/> &nbsp; {fname}
+                </span>
+            </div>
+        );
     }
 
     render(){
