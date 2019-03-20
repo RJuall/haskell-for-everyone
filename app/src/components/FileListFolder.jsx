@@ -19,10 +19,10 @@ export class FileListFolder extends React.Component{
 
     toggleActiveClass() {
         FileDispatcher.currentFolderPath = this.props.folderPath;
-        
         FileListDispatcher.deactivateAllFolders();
 
-        this.setState({ active: !this.state.active });
+        //this.setState({ active: !this.state.active });
+        this.setState({active: true});
     };
 
     // when the signal for all file folder list to deactive comes...
