@@ -46,13 +46,13 @@ export class FileListFolder extends React.Component{
         return (
             <div className="file-list-folder-container" key={folderPath}>
                 <div className="file-list-folder" title={folderPath}>
-                    <span className="folder-remove-icon" onClick={() => FolderDispatcher.removeFolder(folderPath)}>
+                    <span className="folder-remove-icon" onClick={() => FolderDispatcher.removeFolder(folderPath)} title="Remove folder">
                         <FontAwesomeIcon icon={faTimes} size="lg" style={{color: "white", cursor: "pointer"}}/>
                     </span>
                     <span className="folder-name">
                     {folderName}
                     </span>
-                    <span className="folder-add-icon" onClick={() => ModalDispatcher.createFileModal(folderPath)}>
+                    <span className="folder-add-icon" onClick={() => ModalDispatcher.createFileModal(folderPath)} title="Create new file here">
                         <FontAwesomeIcon icon={faPlus} size="lg" style={{color: "white", cursor: "pointer"}}/>
                     </span>
                 </div>

@@ -1,14 +1,10 @@
 import React from 'react';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
-import IpcRequester from '../utils/IpcRequester';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faPlay, faMinus, faPlus, faArrowAltSquareLeft, faPaperPlane } from '@fortawesome/pro-regular-svg-icons';
 import { FontChooser } from './FontChooser';
 import { ThemeChooser } from './ThemeChooser';
-
-import ModalDispatcher from '../dispatchers/ModalDispatcher';
-
 import './EditorIconBar.css';
 
 class EditorIconBar extends React.Component {
@@ -108,9 +104,13 @@ class EditorIconBar extends React.Component {
                 </button>
                 <FontChooser/>
                 <ThemeChooser/>
-                <button className="btn btn-danger btn-run" title="Run" onClick={() => EditorDispatcher.runCode()}>
+                <button className="btn btn-danger btn-run" title="Run" onClick={() => EditorDispatcher.runCode()} title="Runs and saves current file">
                     <FontAwesomeIcon icon={faPlay}/>
                     <span>Run</span>
+                </button>
+                <button className="btn btn-danger btn-run" title="Run" onClick={() => EditorDispatcher.saveCurrentFile()} title="Saves current file">
+                    <FontAwesomeIcon icon={faSave}/>
+                    <span>Save</span>
                 </button>
             </div>
         );
