@@ -1,3 +1,8 @@
+.file-list-folder-container{
+    min-width: 200px; /* prevents + button from going below */
+    cursor: pointer;
+}
+
 .file-list-folder{
     font-weight: bold;
 }
@@ -70,6 +75,11 @@ ul.file-list-items{
     margin-right: 15px;
     float: right;
 }
+
+/*
+.file-list-folder .folder-collapse-icon {
+
+}*/
 
 .item-container{
     position: relative;
