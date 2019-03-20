@@ -51,7 +51,7 @@ export class FileListFolder extends React.Component{
                 </div>
             );
         }
-        if(fname.includes(".txt")){
+        if(fname.includes(".txt") || fname.includes(".text")){
             return (
                 <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
                 <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
@@ -60,7 +60,7 @@ export class FileListFolder extends React.Component{
                 </div>
             );
         }
-        if(fname.includes(".rmd")){
+        if(fname.includes(".Rmd") || fname.includes(".md") || fname.includes(".markdown") || fname.includes(".mkd") || fname.includes(".mdown") || fname.includes(".mkdn") || fname.includes(".mdwn") || fname.includes(".mdtext") ){
             return (
                 <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
                 <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
