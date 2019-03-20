@@ -68,6 +68,7 @@ ul.file-list-items{
 
 .file-list-folder .folder-remove-icon{
     margin-left: 15px;
+    padding: 5px;
 }
 
 .file-list-folder .folder-add-icon {
