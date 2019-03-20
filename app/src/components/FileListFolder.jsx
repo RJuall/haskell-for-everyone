@@ -1,11 +1,12 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTimes, faCircleNotch} from "@fortawesome/pro-light-svg-icons"
+import { faPlus, faTimes, faCircleNotch, faMarker} from "@fortawesome/pro-light-svg-icons"
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import { FILE_EXTENSIONS } from "../utils/FileExtension";
 import FileListDispatcher, { FOLDERS_DEACTIVATE } from "../dispatchers/FileListDispatcher";
+import { faH1, faFileAlt, faHSquare } from "@fortawesome/pro-regular-svg-icons";
 
 export class FileListFolder extends React.Component{
 
@@ -41,13 +42,33 @@ export class FileListFolder extends React.Component{
     }
 
     renderFileItem(fname){
-        return (
-            <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
-               <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
-                    {fname}
-                </span>
-            </div>
-        );
+        if(fname.includes(".hs")){
+            return (
+                <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
+                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
+                        <FontAwesomeIcon icon={faHSquare} size="lg" style={{color: "white"}}/> &nbsp; {fname}
+                    </span>
+                </div>
+            );
+        }
+        if(fname.includes(".txt")){
+            return (
+                <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
+                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
+                        <FontAwesomeIcon icon={faFileAlt} size="lg" style={{color: "white"}}/> &nbsp; {fname}
+                    </span>
+                </div>
+            );
+        }
+        if(fname.includes(".rmd")){
+            return (
+                <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
+                <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
+                        <FontAwesomeIcon icon={faMarker} size="lg" style={{color: "white"}}/> &nbsp; {fname}
+                    </span>
+                </div>
+            );
+        }
     }
 
     render(){
