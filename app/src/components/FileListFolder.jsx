@@ -5,6 +5,7 @@ import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import { FILE_EXTENSIONS } from "../utils/FileExtension";
+import FileListDispatcher, { FOLDERS_DEACTIVATE } from "../dispatchers/FileListDispatcher";
 
 export class FileListFolder extends React.Component{
 
@@ -17,8 +18,27 @@ export class FileListFolder extends React.Component{
     }
 
     toggleActiveClass() {
+        FileDispatcher.currentFolderPath = this.props.folderPath;
+        
+        FileListDispatcher.deactivateAllFolders();
+
         this.setState({ active: !this.state.active });
     };
+
+    // when the signal for all file folder list to deactive comes...
+    handleDeactivate = () => {
+        this.setState({active: false});
+    }
+
+    componentDidMount(){
+        // listen for deactivation
+        FileListDispatcher.on(FOLDERS_DEACTIVATE, this.handleDeactivate);
+    }
+
+    componentWillUnmount(){
+        // stop listening for deactivation 
+        FileListDispatcher.removeListener(FOLDERS_DEACTIVATE, this.handleDeactivate);
+    }
 
     renderFileItem(fname){
         return (
