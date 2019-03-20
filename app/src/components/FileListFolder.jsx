@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTimes, faCircleNotch, faMarker} from "@fortawesome/pro-light-svg-icons"
+import { faPlus, faTimes, faCircleNotch, faMarker, faArrowUp, faArrowDown } from "@fortawesome/pro-light-svg-icons"
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
@@ -12,19 +12,24 @@ export class FileListFolder extends React.Component{
 
     constructor(props){
         super(props);
-        this.toggleActiveClass= this.toggleActiveClass.bind(this);
+        
         this.state = {
-            active: false,
+            active:     false,  // css active state
+            collapsed:  false   // collapsed? 
         };
     }
 
-    toggleActiveClass() {
+    toggleActiveClass = () => {
         FileDispatcher.currentFolderPath = this.props.folderPath;
         FileListDispatcher.deactivateAllFolders();
 
         //this.setState({ active: !this.state.active });
         this.setState({active: true});
     };
+
+    toggleCollapse = () => {
+        this.setState({collapsed: !this.state.collapsed});
+    }
 
     // when the signal for all file folder list to deactive comes...
     handleDeactivate = () => {
@@ -74,19 +79,24 @@ export class FileListFolder extends React.Component{
         let fnames = fileNames.filter(fname => "." + fname.split(".").pop() in FILE_EXTENSIONS);
 
         // return an array of elements 
-        let fileElements = fnames.map(fname => this.renderFileItem(fname));
+        let fileElements = this.state.collapsed ? null : fnames.map(fname => this.renderFileItem(fname));
 
         // folder name is at the end (current naming convention will have no '/' at the end)
         let folderName = folderPath.split("/").pop();
 
+        let collapseIcon = this.state.collapsed ? faArrowDown : faArrowUp;
+
         return (
-            <div className="file-list-folder-container" key={folderPath}>
+            <div className="file-list-folder-container" key={folderPath} onClick={this.toggleCollapse}>
                 <div className="file-list-folder" title={folderPath}>
                     <span className="folder-remove-icon" onClick={() => FolderDispatcher.removeFolder(folderPath)} title="Remove folder">
                         <FontAwesomeIcon icon={faTimes} size="lg" style={{color: "white", cursor: "pointer"}}/>
                     </span>
                     <span className="folder-name">
-                    {folderName}
+                        {folderName}
+                    </span>
+                    <span className="folder-collapse-icon" >
+                        &nbsp;&nbsp;<FontAwesomeIcon icon={collapseIcon} size="sm"/>&nbsp;
                     </span>
                     <span className="folder-add-icon" onClick={() => ModalDispatcher.createFileModal(folderPath)} title="Create new file here">
                         <FontAwesomeIcon icon={faPlus} size="lg" style={{color: "white", cursor: "pointer"}}/>
