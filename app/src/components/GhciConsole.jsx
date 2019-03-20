@@ -91,7 +91,7 @@ export class GhciConsole extends React.Component{
         return (
             <div>
                 <div className="consoleIcons">
-                    <button className="clear" onClick={() => GhciDispatcher.clear()}><FontAwesomeIcon size="2x" icon={faBroom}/></button>
+                    <button className="clear" onClick={() => GhciDispatcher.clear()}><FontAwesomeIcon size="2x" icon={faBroom} title="Clear GHCi"/></button>
                 </div>
                 <textarea
                     ref={this.consoleRef}
