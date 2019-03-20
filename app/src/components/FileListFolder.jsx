@@ -27,8 +27,11 @@ export class FileListFolder extends React.Component{
         this.setState({active: true});
     };
 
-    toggleCollapse = () => {
-        this.setState({collapsed: !this.state.collapsed});
+    toggleCollapse = evt => {
+         // don't collapse when new file is clicked 
+         if(!evt.target.parentNode || !evt.target.parentNode.getAttribute("data-no-collapse")){
+            this.setState({collapsed: !this.state.collapsed});
+        }
     }
 
     // when the signal for all file folder list to deactive comes...
@@ -65,7 +68,7 @@ export class FileListFolder extends React.Component{
         return (
             <div key={fname} onClick={this.toggleActiveClass} className={this.state.active ? 'active item-container': 'item-container'}>
             <span className="file-list-item" key={fname} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fname}`)}>
-                    <FontAwesomeIcon icon={iconType} size="lg" style={{color: "white"}}/> &nbsp; {fname}
+                    <FontAwesomeIcon icon={iconType} size="1x" style={{color: "white"}}/> &nbsp; {fname}
                 </span>
             </div>
         );
@@ -98,7 +101,7 @@ export class FileListFolder extends React.Component{
                     <span className="folder-collapse-icon">
                         &nbsp;&nbsp;<FontAwesomeIcon icon={collapseIcon} size="sm"/>&nbsp;
                     </span>
-                    <span className="folder-add-icon" onClick={() => ModalDispatcher.createFileModal(folderPath)} title="Create new file here">
+                    <span className="folder-add-icon" onClick={() => ModalDispatcher.createFileModal(folderPath)} title="Create new file here" data-no-collapse={true}>
                         <FontAwesomeIcon icon={faPlus} size="lg" style={{color: "white", cursor: "pointer"}}/>
                     </span>
                 </div>
