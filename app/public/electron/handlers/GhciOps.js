@@ -1,6 +1,7 @@
 const { webContents } = require("electron");
-const { spawn, exec } = require("child_process");
+const { spawn } = require("child_process");
 const { IpcResponder } = require("../utils/IpcResponder");
+const { FileUtils } = require("../utils/FileUtils");
 
 // wrapper class for forked GHCI child process 
 class GhciWrapper{
@@ -66,12 +67,24 @@ class GhciWrapper{
                 this.responseBuf.push(str);
             }
         });
+        this.ghci.stdout.on("error", err => {
+            // send error message if one exists 
+            if(this.responseEvt){
+                IpcResponder.respond(this.responseEvt, "ghci", {err: err.toString()});
+            }
+        });
 
         // handle ghci error 
         this.ghci.stderr.on("data", buf => {
             // send error message if one exists 
             if(this.responseEvt){
                 IpcResponder.respond(this.responseEvt, "ghci", {err: buf.toString()});
+            }
+        });
+        this.ghci.stderr.on("error", err => {
+            // send error message if one exists 
+            if(this.responseEvt){
+                IpcResponder.respond(this.responseEvt, "ghci", {err: err.toString()});
             }
         });
     }
@@ -154,7 +167,8 @@ class GhciOps{
     // restarts the ghci process with a file to load
     // @param evt   event object for responding
     // @param str   haskell file to run 
-    static executeFile(evt, {path=null}){
+    // @param save  auto save the file 
+    static executeFile(evt, {path=null, str=""}){
         // ghci must be working 
         if(!GHCI_PROCESS.isAvailable){
             IpcResponder.respondNoGhci(evt);
@@ -174,8 +188,27 @@ class GhciOps{
         // load and run the file 
         // do not respond (using evt) because response is async
         // (handled with the wrapper's auto stdout listeners)
-        GHCI_PROCESS.responseEvt = evt;
-        GHCI_PROCESS.load(path);
+        if(str){
+            // file changed
+            FileUtils.writeFile(path, str)
+                .then(() => {
+                    // file updated
+                    IpcResponder.respond(evt, "file-write", {path});
+
+                    // now run
+                    GHCI_PROCESS.responseEvt = evt;
+                    GHCI_PROCESS.load(path);
+                })
+                .catch(err => {
+                    // file write error
+                    IpcResponder.respond(evt, "file-write", {err: err.message});
+                });
+        }
+        else{
+            // file not changed
+            GHCI_PROCESS.responseEvt = evt;
+            GHCI_PROCESS.load(path);
+        }
     }
 
     // clears the GHCI REPL 

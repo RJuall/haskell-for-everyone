@@ -27,8 +27,9 @@ class GhciDispatcher extends EventEmitter{
 
     // requests haskell file to be executed in GHCi
     // @param path      haskell file to execute
-    executeFile(path){
-        IpcRequester.send(GHCI_FILE, {path});
+    // @param str       auto save new string 
+    executeFile(path, str=null){
+        IpcRequester.send(GHCI_FILE, {path, str});
     }
 
     // requests haskell interactive REPL to clear
