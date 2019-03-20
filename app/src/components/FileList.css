@@ -1,6 +1,5 @@
 .file-list-folder-container{
     min-width: 200px; /* prevents + button from going below */
-    cursor: pointer;
 }
 
 .file-list-folder{
