@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTimes, faCircleNotch, faMarker, faArrowUp, faArrowDown, faFolder } from "@fortawesome/pro-light-svg-icons"
+import { faPlus, faTimes, faCircleNotch, faMarker, faAngleRight, faAngleDown, faFolder } from "@fortawesome/pro-light-svg-icons"
 import { FileListFolderItem } from "./FileListFolderItem";
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
@@ -46,7 +46,7 @@ export class FileListFolder extends React.Component{
         // folder name is at the end (current naming convention will have no '/' at the end)
         let folderName = folderPath.split("/").pop();
 
-        let collapseIcon = this.state.collapsed ? faArrowDown : faArrowUp;
+        let collapseIcon = this.state.collapsed ? faAngleRight : faAngleDown;
 
         return (
             <div className="file-list-folder-container">
