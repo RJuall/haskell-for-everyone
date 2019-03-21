@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTimes, faCircleNotch, faMarker, faArrowUp, faArrowDown } from "@fortawesome/pro-light-svg-icons"
+import { faPlus, faTimes, faCircleNotch, faMarker, faArrowUp, faArrowDown, faFolder } from "@fortawesome/pro-light-svg-icons"
 import { FileListFolderItem } from "./FileListFolderItem";
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
@@ -55,7 +55,7 @@ export class FileListFolder extends React.Component{
                         <FontAwesomeIcon icon={faTimes} size="lg" style={{color: "white", cursor: "pointer"}}/>
                     </span>
                     <span className="folder-name">
-                        {folderName}
+                        <FontAwesomeIcon icon={faFolder} size="sm"/>&nbsp;{folderName}
                     </span>
                     <span className="folder-collapse-icon">
                         &nbsp;&nbsp;<FontAwesomeIcon icon={collapseIcon} size="sm"/>&nbsp;
