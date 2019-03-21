@@ -52,7 +52,7 @@ export class FileListFolder extends React.Component{
             <div className="file-list-folder-container">
                 <div className="file-list-folder" title={folderPath} onClick={this.toggleCollapse} style={{cursor: "pointer"}}>
                     <span className="folder-remove-icon" onClick={() => FolderDispatcher.removeFolder(folderPath)} title="Remove folder">
-                        <FontAwesomeIcon icon={faTimes} size="lg" style={{color: "white", cursor: "pointer"}}/>
+                        <FontAwesomeIcon icon={faTimes} size="lg" style={{ cursor: "pointer"}}/>
                     </span>
                     <span className="folder-name">
                         {folderName}
@@ -61,7 +61,7 @@ export class FileListFolder extends React.Component{
                         &nbsp;&nbsp;<FontAwesomeIcon icon={collapseIcon} size="sm"/>&nbsp;
                     </span>
                     <span className="folder-add-icon" onClick={() => ModalDispatcher.createFileModal(folderPath)} title="Create new file here" data-no-collapse={true}>
-                        <FontAwesomeIcon icon={faPlus} size="lg" style={{color: "white", cursor: "pointer"}}/>
+                        <FontAwesomeIcon icon={faPlus} size="lg" style={{ cursor: "pointer"}}/>
                     </span>
                 </div>
                 <div className="file-list-items">

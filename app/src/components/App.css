@@ -58,3 +58,70 @@ body{
 .sidebar-panel{
     overflow-y: auto;
 }
+
+.theme--light .nav{
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+.theme--light .menuItem{
+    color: rgba(0,0,0,.7);
+}
+
+.theme--light .menuItem:hover {
+    color: rgba(0,0,0,.9);
+}
+
+.theme--light .sidebar-panel.col {
+    background-color: #fff;
+    color: rgba(0,0,0, 0.8);
+}
+
+.theme--light .file-list-folder {
+    color: rgba(255,255,255,.9);
+}
+
+.theme--light .item-container{
+    border-bottom: 1px solid #eee;
+}
+
+.theme--light .file-list-item svg{
+    color: #000;
+}
+
+.theme--light .item-container.active {
+    color: rgba(0,0,0, 0.9);
+}
+
+.theme--light .item-container:hover {
+    color: rgba(0,0,0,.7);
+}
+
+.theme--light .file-list-folder {
+    color: rgba(0,0,0,.9);
+}
+
+.theme--light .icon-bar{
+    background-color: #e8e8e8;
+}
+
+.theme--light .icon-bar button, .icon-bar div {
+    color: rgba(0,0,0,.7);
+}
+
+.theme--light .consoleIcons{
+    background-color: #e8e8e8;
+}
+
+.theme--light .ghci-console, .ghci-input{
+    background-color: #ffffff;
+    color: #000;
+}
+
+.theme--light .ghci-input{
+    border: 1px solid #b9b6b6;
+}
+
+.theme--light.body{
+    background-color: #fff !important;
+}
