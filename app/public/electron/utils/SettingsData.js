@@ -22,7 +22,7 @@ class SettingsData{
                 placeHolder: null
             },
             windowSettings: {
-                placeHolder: null
+                windowTheme: "light"
             }
         }
     }
