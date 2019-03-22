@@ -11,7 +11,9 @@ export class MenuBar extends React.Component {
         this.state = {
             file: false,
             edit: false,
-            preference: false
+            preference: false,
+            appearance: false,
+            background: false
         };
     }
 
@@ -28,6 +30,16 @@ export class MenuBar extends React.Component {
     // Toggle for preferences dropdown
     togglePreferences(){
         this.setState({preference: !this.state.preference});
+    }
+
+    // Toggle appearence when selected
+    toggleAppearance(){
+        this.setState({appearance: !this.state.appearance})
+    }
+
+    // Toggle Dropdown for background color
+    toggleBackground(){
+        this.setState({background: !this.state.background})
     }
 
     render() {
@@ -66,7 +78,20 @@ export class MenuBar extends React.Component {
                         Preferences 
                     </DropdownToggle>
                     <DropdownMenu>
-                        <DropdownItem>Appearance</DropdownItem>
+                        <Dropdown nav isOpen={this.state.appearance} toggle={this.toggleAppearance.bind(this)}>
+                             <DropdownToggle nav className="menuItem">Appearance</DropdownToggle>
+                                <DropdownMenu>
+                                    <DropdownItem>Toggle GHCI Console</DropdownItem>
+                                    <DropdownItem>Toggle File List</DropdownItem>
+                                    <Dropdown nav isOpen={this.state.background} toggle={this.toggleBackground.bind(this)}>
+                                        <DropdownToggle nav className="menuItem">Background Theme</DropdownToggle>
+                                            <DropdownMenu>
+                                                <DropdownItem>Light</DropdownItem>
+                                                <DropdownItem>Dark</DropdownItem>
+                                            </DropdownMenu>
+                                    </Dropdown>
+                                </DropdownMenu>
+                        </Dropdown>
                         <DropdownItem>Editor Layout</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
