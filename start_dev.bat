@@ -1,5 +1,5 @@
 @echo off 
 
 cd app
-cmd /k "npm run react"
-cmd /k "npm run dev"
+start cmd /k "npm run react"
+start cmd /k "npm run dev"
