@@ -52,7 +52,7 @@ export class FileListFolderItem extends React.Component{
         else if(ext === "txt" || ext === "text"){
             iconType = faFileAlt;
         }
-        else if(ext === "Rmd" || ext === "md" || ext == "markdown" || ext === "mkd" || ext === "mdown" || ext === "mkdn" || ext === "mdwn" || ext === "mdtext"){
+        else if(ext === "Rmd" || ext === "md" || ext === "markdown" || ext === "mkd" || ext === "mdown" || ext === "mkdn" || ext === "mdwn" || ext === "mdtext"){
             iconType = faMarker;
         }
 
