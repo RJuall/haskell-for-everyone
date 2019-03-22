@@ -36,10 +36,7 @@ ul.file-list-items{
 }
 
 .file-list-folder{
-    padding: 10px 0 10px 0;
-}
-
-.file-list-folder{
+    padding: 10px 0 10px 15px;
     color: rgba(255,255,255,.7);
     background: rgba(0,0,0,.08);
 }
@@ -59,17 +56,7 @@ ul.file-list-items{
 }
 
 .file-list-folder .folder-name{
-    margin-left: 13px;
-}
-
-.file-list-folder .folder-remove-icon{
-    margin-left: 15px;
-    padding: 5px;
-}
-
-.file-list-folder .folder-add-icon {
-    margin-right: 15px;
-    float: right;
+    margin-left: 3px;
 }
 
 /*

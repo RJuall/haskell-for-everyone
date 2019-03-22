@@ -11,7 +11,11 @@ const contextMenu = window.require("electron-context-menu");
 contextMenu({
     prepend: (params, window) => [
         {
-            label: "Add Folder",
+            label: "Add New File",
+            click: () => ModalDispatcher.selectFolderModal()
+        },
+        {
+            label: "Remove Folder",
             click: () => ModalDispatcher.selectFolderModal()
         }
     ],
