@@ -4,6 +4,9 @@ import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Navbar as RNavbar, NavItem, Collapse, NavbarToggler, Nav, NavLink } from "reactstrap";
 import { NavbarBrand } from 'reactstrap';
 import './MenuBar.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight } from '@fortawesome/pro-regular-svg-icons';
+
 
 export class MenuBar extends React.Component {
     constructor(props) {
@@ -79,12 +82,12 @@ export class MenuBar extends React.Component {
                     </DropdownToggle>
                     <DropdownMenu>
                         <Dropdown nav isOpen={this.state.appearance} toggle={this.toggleAppearance.bind(this)}>
-                             <DropdownToggle nav className="menuItem">Appearance</DropdownToggle>
+                             <DropdownToggle nav className="menuItem">Appearance <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon></DropdownToggle>
                                 <DropdownMenu>
                                     <DropdownItem>Toggle GHCI Console</DropdownItem>
                                     <DropdownItem>Toggle File List</DropdownItem>
                                     <Dropdown nav isOpen={this.state.background} toggle={this.toggleBackground.bind(this)}>
-                                        <DropdownToggle nav className="menuItem">Background Theme</DropdownToggle>
+                                        <DropdownToggle nav className="menuItem">Background Theme <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon></DropdownToggle>
                                             <DropdownMenu>
                                                 <DropdownItem>Light</DropdownItem>
                                                 <DropdownItem>Dark</DropdownItem>
