@@ -26,7 +26,7 @@ ul.file-list-items{
 }
 
 .item-container{
-    padding: 10px 10px 10px 40px;
+    padding: 10px 0 10px 30px;
     border-bottom: 1px solid #3a3838;
 }
 
@@ -85,4 +85,11 @@ ul.file-list-items{
     text-shadow: none;
     border-radius: 10px;
     opacity: 1;
+}
+
+.file-list-folder-container .svg-inline--fa{
+    width: 1em !important;
+}
+.folder-name svg {
+    margin-right: 5px;
 }

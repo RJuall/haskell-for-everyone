@@ -56,10 +56,10 @@ export class FileListFolder extends React.Component{
                         <FontAwesomeIcon icon={faTimes} size="lg" style={{ cursor: "pointer"}}/>
                     </span> */}
                     <span className="folder-collapse-icon">
-                        <FontAwesomeIcon icon={collapseIcon} size="sm"/>&nbsp;
+                        <FontAwesomeIcon icon={collapseIcon} size="sm"/>
                     </span>
                     <span className="folder-name">
-                        <FontAwesomeIcon icon={folderIcon} size="sm"/>&nbsp;{folderName}
+                        <FontAwesomeIcon icon={folderIcon} size="sm"/>{folderName}
                     </span>
                     {/* <span className="folder-add-icon" onClick={() => ModalDispatcher.createFileModal(folderPath)} title="Create new file here" data-no-collapse={true}>
                         <FontAwesomeIcon icon={faPlus} size="lg" style={{ cursor: "pointer"}}/>

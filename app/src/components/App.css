@@ -56,6 +56,9 @@ body{
 }
 
 .sidebar-panel{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     overflow-y: auto;
 }
 
