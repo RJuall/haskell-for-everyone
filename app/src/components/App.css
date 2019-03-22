@@ -82,6 +82,7 @@ body{
 
 .theme--light .file-list-folder {
     color: rgba(255,255,255,.9);
+    background-color: #dcdfe1;
 }
 
 .theme--light .item-container{
@@ -94,10 +95,12 @@ body{
 
 .theme--light .item-container.active {
     color: rgba(0,0,0, 0.9);
+    background-color: #dcdfe1
 }
 
 .theme--light .item-container:hover {
     color: rgba(0,0,0,.7);
+    background-color: #dcdfe1;
 }
 
 .theme--light .file-list-folder {
