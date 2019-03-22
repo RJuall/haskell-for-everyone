@@ -183,7 +183,8 @@ class GhciOps{
         }
 
         // fix problem where path folder had spaces
-        path = path.includes(" ") ? `"${path}"` : path;
+        // (don't save with this path, just special for ghci)
+        let runPath = path.includes(" ") ? `\"${path}\"` : path;
 
         // load and run the file 
         // do not respond (using evt) because response is async
@@ -197,11 +198,11 @@ class GhciOps{
 
                     // now run
                     GHCI_PROCESS.responseEvt = evt;
-                    GHCI_PROCESS.load(path);
+                    GHCI_PROCESS.load(runPath);
                 })
                 .catch(err => {
                     // file write error
-                    IpcResponder.respond(evt, "file-write", {err: err.message});
+                    IpcResponder.respond(evt, "file-write", {err: err.message, path});
                 });
         }
         else{
