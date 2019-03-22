@@ -16,24 +16,39 @@ export class ModalSelectFile extends React.Component{
         this.filePathInput = null;  // selected file path 
     }
 
+    // forces the secret input element to be clicked
+    forceSelectDialog(){
+        if(this.filePathInput){
+            this.filePathInput.click();
+        }
+        else{
+            // if it doesn't exist - force render then click 
+            this.forceUpdate(() => {
+                this.filePathInput.click();
+            });
+        }
+    }
+
+    // select file modal triggered
+    handleSelectFile = evt => {
+        this.setState({fileNotFolder: true}, () => {
+            this.forceSelectDialog();
+        });
+    }
+
+    // select folder modal triggered
+    handleSelectFolder = evt => {
+        this.setState({fileNotFolder: false}, () => {
+            this.forceSelectDialog();
+        });
+    }
+
     componentDidMount(){
         // slisten for select file modal signals
         ModalDispatcher.on(SELECT_FILE_MODAL, this.handleSelectFile);
 
         // listen for select fiolder modal signals
         ModalDispatcher.on(SELECT_FOLDER_MODAL, this.handleSelectFolder);
-    }
-
-    handleSelectFile = evt => {
-        this.setState({fileNotFolder: true}, () => {
-            this.filePathInput.click();
-        });
-    }
-
-    handleSelectFolder = evt => {
-        this.setState({fileNotFolder: false}, () => {
-            this.filePathInput.click();
-        });        
     }
 
     componentWillUnmount(){
@@ -46,10 +61,13 @@ export class ModalSelectFile extends React.Component{
 
 
     onSelection = () => {
+        // nothing selected (cancel button clicked)
+        if(!this.filePathInput.files.length) return;
+
         // selected path
         let path = this.filePathInput.files[0].path.replace(/(\\)/g, "/");
         path = path.endsWith("/") ? path.substring(0, path.length-1) : path;
-        
+
         if(this.state.fileNotFolder){
             // remove file name (dir path)
             let split = path.split("/");
