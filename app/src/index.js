@@ -35,7 +35,7 @@ contextMenu({
                 label: "Remove Folder",
                 click: () => {
                     // find 'folderPath' attribute of element at (x, y)
-                    findElementKeyAt(params.x, params.y, "folderPath", (elem, folderPath) => {
+                    findElementKeyAt(params.x, params.y, "folder-path", (elem, folderPath) => {
                         if(folderPath){
                             FolderDispatcher.removeFolder(folderPath);
                         }

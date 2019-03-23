@@ -50,10 +50,12 @@ class EditorIconBar extends React.Component {
         // sets the filename state when a new file
         //    is loaded into the ce
         this.handleFileLoad = evt => {
-            let filename = evt.pathClean.split('/').pop();
-            this.setState({
-                filename: filename
-            });
+            if(!evt.err){
+                let filename = evt.pathClean.split('/').pop();
+                this.setState({
+                    filename: filename
+                });
+            }
         }
     }
 
