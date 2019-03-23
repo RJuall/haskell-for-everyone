@@ -80,25 +80,25 @@ export class App extends React.Component{
                         <SplitPane 
                             split="vertical" 
                             minSize={175} 
-                            defaultSize={this.state.setFileColWidth} 
-                            onDragFinished={size =>{this.setState({currentFileColWidth: size})}}
+                            size={this.state.setFileColWidth} 
+                            onDragFinished={size => {this.setState({currentFileColWidth: size})}}
                         >
-                            <Col className="sidebar-panel">
-                                <FileList/>
-                            </Col>
+                                <Col className="sidebar-panel">
+                                    <FileList/>
+                                </Col>
                             <div>
                                 <SplitPane 
                                     split="vertical" 
                                     minSize={375} 
-                                    defaultSize={this.state.setEdColWidth}
-                                    onDragFinished={size => {this.setState({currentEdColWidth: size})}}
+                                    size={this.state.setEdColWidth}
+                                    onDragFinished={size => {console.log(size); this.setState({currentEdColWidth: size})}}
                                 >
-                                <Col className="editor-panel">
-                                    <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
-                                </Col>
-                                <Col className="ghci-panel">
-                                <GhciConsole/>
-                                </Col>
+                                    <Col className="editor-panel">
+                                        <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
+                                    </Col>
+                                    <Col className="ghci-panel">
+                                    <GhciConsole/>
+                                    </Col>
                                 </SplitPane>
                             </div>
                         </SplitPane>
