@@ -28,6 +28,12 @@ export class FileListFolderItem extends React.Component{
         this.setState({active: false});
     }
 
+    // on click handler 
+    onClick = () => {
+        this.makeActive();
+        FileDispatcher.readFile(`${this.props.folderPath}/${this.props.fileName}`);
+    }
+
     componentDidMount(){
         // listen for deactivation
         FileListDispatcher.on(FILES_DEACTIVATE, this.handleDeactivate);
@@ -57,7 +63,7 @@ export class FileListFolderItem extends React.Component{
         }
 
         return (
-            <div onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fileName}`)} className={this.state.active ? 'active item-container': 'item-container'}>
+            <div onClick={this.onClick} className={this.state.active ? 'active item-container': 'item-container'}>
             <span className="file-list-item" key={fileName}>
                     <FontAwesomeIcon icon={iconType} size="1x"/> &nbsp; {fileName}
                 </span>
