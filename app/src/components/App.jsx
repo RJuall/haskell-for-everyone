@@ -22,10 +22,16 @@ export class App extends React.Component{
     constructor(props){
         super(props);
 
+        let initialFileColWidth = (window.innerWidth * 0.15);
+        let initialEdColWidth = (window.innerWidth * 0.6);
+
         this.state = {
             settings: null,
-            fileColSize: (window.innerWidth * 0.15),
-            edColSize: (window.innerWidth * 0.6)
+            setFileColWidth: initialFileColWidth,
+            setEdColWidth: initialEdColWidth,
+            currentFileColWidth: initialFileColWidth,
+            currentEdColWidth: initialEdColWidth,
+            windowSize: window.innerWidth
         };
     }
 
@@ -46,7 +52,18 @@ export class App extends React.Component{
         IpcRequester.getSettings();
 
         window.onresize = () => {
-            console.log(window.innerWidth);
+            let newWindowWidth = window.innerWidth;
+            let oldFileColRatio = this.state.currentFileColWidth / this.state.windowSize;
+            let oldEdColRatio = this.state.currentEdColWidth / this.state.windowSize;
+            let newFileColWidth = newWindowWidth * oldFileColRatio;
+            let newEdColWidth = newWindowWidth * oldEdColRatio;
+
+            this.setState({setFileColWidth: newFileColWidth, 
+                           setEdColWidth: newEdColWidth,
+                           currentFileColWidth: newFileColWidth,
+                           currentEdColWidth: newEdColWidth,
+                           windowSize: newWindowWidth
+                        });
         } 
     }
 
@@ -60,12 +77,22 @@ export class App extends React.Component{
                 <MenuBar/>
                 <Container>
                     <Row>
-                        <SplitPane split="vertical" minSize={175} defaultSize={this.state.fileColSize}>
+                        <SplitPane 
+                            split="vertical" 
+                            minSize={175} 
+                            defaultSize={this.state.setFileColWidth} 
+                            onDragFinished={size =>{this.setState({currentFileColWidth: size})}}
+                        >
                             <Col className="sidebar-panel">
                                 <FileList/>
                             </Col>
                             <div>
-                                <SplitPane split="vertical" minSize={375} defaultSize={this.state.edColSize}>
+                                <SplitPane 
+                                    split="vertical" 
+                                    minSize={375} 
+                                    defaultSize={this.state.setEdColWidth}
+                                    onDragFinished={size => {this.setState({currentEdColWidth: size})}}
+                                >
                                 <Col className="editor-panel">
                                     <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
                                 </Col>
