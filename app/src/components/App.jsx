@@ -96,9 +96,15 @@ export class App extends React.Component{
                                     <Col className="editor-panel">
                                         <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
                                     </Col>
-                                    <Col className="ghci-panel">
-                                    <GhciConsole/>
-                                    </Col>
+                                    {/* <SplitPane
+                                        split="horizontal"
+                                        size={500}
+                                    > */}
+                                        <Col className="ghci-panel">
+                                            <GhciConsole/>
+                                        </Col>
+                                        <div></div>
+                                    {/*</SplitPane>*/}
                                 </SplitPane>
                             </div>
                         </SplitPane>
