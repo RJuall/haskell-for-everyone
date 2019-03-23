@@ -3,7 +3,7 @@ const { FileUtils } = require("../utils/FileUtils");
 const { JsonParser } = require("../utils/JsonParser");
 
 // folder data file relative path 
-const FOLDER_DATA_FILE = `${app.getPath("userData")}/folder_data.json`;
+const FOLDER_DATA_FILE = process.argv.includes("--dev") ? "./folder_data.json" : `${app.getPath("userData")}/folder_data.json`;
 
 class FolderData{
     constructor(){
