@@ -50,7 +50,7 @@ export class FileListFolder extends React.Component{
         let folderIcon = this.state.collapsed ? faFolder : faFolderOpen;
 
         return (
-            <div className="file-list-folder-container">
+            <div className="file-list-folder-container" folderPath={folderPath}>
                 <div className="file-list-folder" title={folderPath} onClick={this.toggleCollapse} style={{cursor: "pointer"}}>
                     {/* <span className="folder-remove-icon" onClick={() => FolderDispatcher.removeFolder(folderPath)} title="Remove folder">
                         <FontAwesomeIcon icon={faTimes} size="lg" style={{ cursor: "pointer"}}/>
