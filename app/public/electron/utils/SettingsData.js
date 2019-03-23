@@ -2,7 +2,7 @@ const { app } = require("electron");
 const { FileUtils } = require("../utils/FileUtils");
 const { JsonParser } = require("../utils/JsonParser");
 
-const SETTINGS_FILE = app.getPath("userData") + "/settings.json";
+const SETTINGS_FILE = process.argv.includes("--dev") ? "./settings.json" : app.getPath("userData") + "/settings.json";
 
 const FONT_SIZE_INTERVAL = 2;
 
