@@ -17,29 +17,31 @@ contextMenu({
         // default menu
         let prepends = [];
 
+        // file system column addons
+        if(elementIsFileSystem(elem)){
+            prepends = [...prepends, {
+                label: "Add New File",
+                click: () => ModalDispatcher.selectFileModal()
+            },
+            {
+                label: "Add New Folder",
+                click: () => ModalDispatcher.selectFolderModal()
+            }];
+        }
+        
         // folder-only addons
         if(elementHasFileList(elem)){
-            prepends = [...prepends, 
-                {
-                    label: "Add New File",
-                    click: () => ModalDispatcher.selectFileModal()
-                },
-                {
-                    label: "Add New Folder",
-                    click: () => ModalDispatcher.selectFolderModal()
-                },
-                {
-                    label: "Remove Folder",
-                    click: () => {
-                        // find 'folderPath' attribute of element at (x, y)
-                        findElementKeyAt(params.x, params.y, "folderPath", (elem, folderPath) => {
-                            if(folderPath){
-                                FolderDispatcher.removeFolder(folderPath);
-                            }
-                        });
-                    }
+            prepends.push({
+                label: "Remove Folder",
+                click: () => {
+                    // find 'folderPath' attribute of element at (x, y)
+                    findElementKeyAt(params.x, params.y, "folderPath", (elem, folderPath) => {
+                        if(folderPath){
+                            FolderDispatcher.removeFolder(folderPath);
+                        }
+                    });
                 }
-            ];
+            });
         }
 
         return prepends;
@@ -73,10 +75,23 @@ let findElementKeyAt = (x, y, attrKey, callback) => {
 };
 
 // determines if current element or any parent element is a folder list folder 
-// @param       starting element to check
+// @param           starting element to check
 let elementHasFileList = elem => {
+    return checkForCSSClass(elem, "file-list-folder-container");
+};
+
+// determines if current element or any parent element is in the file system colun
+// @param           starting element to check
+let elementIsFileSystem = elem => {
+    return checkForCSSClass(elem, "sidebar-panel");
+}
+
+// determines if current element or any parent has a css class
+// @param elem      starting element
+// @param cssClass  css class to find
+let checkForCSSClass = (elem, cssClass) => {
     do{
-        if(elem.classList.contains("file-list-folder-container")){
+        if(elem.classList.contains(cssClass)){
             return true;
         }
         else{
@@ -85,7 +100,7 @@ let elementHasFileList = elem => {
     } while(elem.parentNode);
 
     return false;
-};
+}
 
 // render app 
 ReactDOM.render(<App/>, document.querySelector("#root"));
