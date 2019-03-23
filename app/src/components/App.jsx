@@ -24,7 +24,7 @@ export class App extends React.Component{
 
         this.state = {
             settings: null,
-            fileColSize: (window.innerWidth * 0.1),
+            fileColSize: (window.innerWidth * 0.15),
             edColSize: (window.innerWidth * 0.6)
         };
     }
@@ -44,6 +44,10 @@ export class App extends React.Component{
         this.checkForUpdate();
         IpcRequester.on("settings-get", evt => this.settings = evt.settings);
         IpcRequester.getSettings();
+
+        window.onresize = () => {
+            console.log(window.innerWidth);
+        } 
     }
 
     componentWillMount(){
