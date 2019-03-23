@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTimes, faCircleNotch, faMarker, faAngleRight, faAngleDown, faFolder } from "@fortawesome/pro-light-svg-icons"
+import { faPlus, faTimes, faCircleNotch, faMarker, faAngleRight, faAngleDown, faFolder, faFolderOpen } from "@fortawesome/pro-light-svg-icons"
 import { FileListFolderItem } from "./FileListFolderItem";
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
@@ -47,22 +47,23 @@ export class FileListFolder extends React.Component{
         let folderName = folderPath.split("/").pop();
 
         let collapseIcon = this.state.collapsed ? faAngleRight : faAngleDown;
+        let folderIcon = this.state.collapsed ? faFolder : faFolderOpen;
 
         return (
-            <div className="file-list-folder-container">
+            <div className="file-list-folder-container" folder-path={folderPath}>
                 <div className="file-list-folder" title={folderPath} onClick={this.toggleCollapse} style={{cursor: "pointer"}}>
-                    <span className="folder-remove-icon" onClick={() => FolderDispatcher.removeFolder(folderPath)} title="Remove folder">
+                    {/* <span className="folder-remove-icon" onClick={() => FolderDispatcher.removeFolder(folderPath)} title="Remove folder">
                         <FontAwesomeIcon icon={faTimes} size="lg" style={{ cursor: "pointer"}}/>
+                    </span> */}
+                    <span className="folder-collapse-icon">
+                        <FontAwesomeIcon icon={collapseIcon} size="sm"/>
                     </span>
                     <span className="folder-name">
-                        <FontAwesomeIcon icon={faFolder} size="sm"/>&nbsp;{folderName}
+                        <FontAwesomeIcon icon={folderIcon} size="sm"/>{folderName}
                     </span>
-                    <span className="folder-collapse-icon">
-                        &nbsp;&nbsp;<FontAwesomeIcon icon={collapseIcon} size="sm"/>&nbsp;
-                    </span>
-                    <span className="folder-add-icon" onClick={() => ModalDispatcher.createFileModal(folderPath)} title="Create new file here" data-no-collapse={true}>
+                    {/* <span className="folder-add-icon" onClick={() => ModalDispatcher.createFileModal(folderPath)} title="Create new file here" data-no-collapse={true}>
                         <FontAwesomeIcon icon={faPlus} size="lg" style={{ cursor: "pointer"}}/>
-                    </span>
+                    </span> */}
                 </div>
                 <div className="file-list-items">
                     {fileElements}

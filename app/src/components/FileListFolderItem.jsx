@@ -57,8 +57,8 @@ export class FileListFolderItem extends React.Component{
         }
 
         return (
-            <div onClick={this.makeActive} className={this.state.active ? 'active item-container': 'item-container'}>
-            <span className="file-list-item" key={fileName} onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fileName}`)}>
+            <div onClick={() => FileDispatcher.readFile(`${this.props.folderPath}/${fileName}`)} className={this.state.active ? 'active item-container': 'item-container'}>
+            <span className="file-list-item" key={fileName}>
                     <FontAwesomeIcon icon={iconType} size="1x"/> &nbsp; {fileName}
                 </span>
             </div>

@@ -26,7 +26,7 @@ ul.file-list-items{
 }
 
 .item-container{
-    padding: 10px 10px 10px 40px;
+    padding: 10px 0 10px 30px;
     border-bottom: 1px solid #3a3838;
 }
 
@@ -36,10 +36,7 @@ ul.file-list-items{
 }
 
 .file-list-folder{
-    padding: 10px 0 10px 0;
-}
-
-.file-list-folder{
+    padding: 10px 0 10px 15px;
     color: rgba(255,255,255,.7);
     background: rgba(0,0,0,.08);
 }
@@ -59,17 +56,7 @@ ul.file-list-items{
 }
 
 .file-list-folder .folder-name{
-    margin-left: 13px;
-}
-
-.file-list-folder .folder-remove-icon{
-    margin-left: 15px;
-    padding: 5px;
-}
-
-.file-list-folder .folder-add-icon {
-    margin-right: 15px;
-    float: right;
+    margin-left: 3px;
 }
 
 /*
@@ -98,4 +85,11 @@ ul.file-list-items{
     text-shadow: none;
     border-radius: 10px;
     opacity: 1;
+}
+
+.file-list-folder-container .svg-inline--fa{
+    width: 1em !important;
+}
+.folder-name svg {
+    margin-right: 5px;
 }

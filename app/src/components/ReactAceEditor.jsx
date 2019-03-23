@@ -144,6 +144,8 @@ class ReactAceEditor extends React.Component {
     //    based on a file's extension
     //    and emits a modeChange event
     setEditorMode = file => {
+        if(!file) return;
+
         let mode;
         if      (file.endsWith('.hs') 
                  || file.endsWith('.lhs')) {

@@ -56,11 +56,14 @@ body{
 }
 
 .sidebar-panel{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     overflow-y: auto;
 }
 
 .theme--light .nav{
-    background-color: #fff;
+    background-color: #f5f5f4;
     border-bottom: 1px solid #eee;
 }
 
@@ -73,12 +76,13 @@ body{
 }
 
 .theme--light .sidebar-panel.col {
-    background-color: #fff;
+    background-color: #f5f5f4;
     color: rgba(0,0,0, 0.8);
 }
 
 .theme--light .file-list-folder {
     color: rgba(255,255,255,.9);
+    background-color: #dcdfe1;
 }
 
 .theme--light .item-container{
@@ -91,10 +95,12 @@ body{
 
 .theme--light .item-container.active {
     color: rgba(0,0,0, 0.9);
+    background-color: #dcdfe1
 }
 
 .theme--light .item-container:hover {
     color: rgba(0,0,0,.7);
+    background-color: #dcdfe1;
 }
 
 .theme--light .file-list-folder {

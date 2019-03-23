@@ -61,24 +61,27 @@ export class ModalSelectFile extends React.Component{
 
 
     onSelection = () => {
-        // nothing selected (cancel button clicked)
-        if(!this.filePathInput.files.length) return;
+        // files array
+        let files = this.filePathInput.files;
 
-        // selected path
-        let path = this.filePathInput.files[0].path.replace(/(\\)/g, "/");
-        path = path.endsWith("/") ? path.substring(0, path.length-1) : path;
+        // !files.length = nothing selected (cancel button clicked)
+        if(files.length){
+            // selected path
+            let path = this.filePathInput.files[0].path.replace(/(\\)/g, "/");
+            path = path.endsWith("/") ? path.substring(0, path.length-1) : path;
 
-        if(this.state.fileNotFolder){
-            // remove file name (dir path)
-            let split = path.split("/");
-            split.pop();
+            if(this.state.fileNotFolder){
+                // remove file name (dir path)
+                let split = path.split("/");
+                split.pop();
 
-            FolderDispatcher.addFolder(split.join("/"));
-            FileDispatcher.readFile(path);
-        }
-        else{
-            FolderDispatcher.addFolder(path);
-        }
+                FolderDispatcher.addFolder(split.join("/"));
+                FileDispatcher.readFile(path);
+            }
+            else{
+                FolderDispatcher.addFolder(path);
+            }
+        }   
     }
 
     render(){
