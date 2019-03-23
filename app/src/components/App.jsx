@@ -23,7 +23,9 @@ export class App extends React.Component{
         super(props);
 
         this.state = {
-            settings: null
+            settings: null,
+            fileColSize: (window.innerWidth * 0.1),
+            edColSize: (window.innerWidth * 0.6)
         };
     }
 
@@ -54,12 +56,12 @@ export class App extends React.Component{
                 <MenuBar/>
                 <Container>
                     <Row>
-                        <SplitPane split="vertical" minSize={100} defaultSize={150}>
+                        <SplitPane split="vertical" minSize={175} defaultSize={this.state.fileColSize}>
                             <Col className="sidebar-panel">
                                 <FileList/>
                             </Col>
                             <div>
-                                <SplitPane split="vertical" minSize={200} defaultSize={1100}>
+                                <SplitPane split="vertical" minSize={375} defaultSize={this.state.edColSize}>
                                 <Col className="editor-panel">
                                     <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
                                 </Col>
