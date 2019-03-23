@@ -15,30 +15,31 @@ contextMenu({
         let elem = document.elementFromPoint(params.x, params.y);        
 
         // default menu
-        let prepends = [
-            {
-                label: "Add New File",
-                click: () => ModalDispatcher.selectFileModal()
-            },
-            {
-                label: "Add New Folder",
-                click: () => ModalDispatcher.selectFolderModal()
-            }
-        ];
+        let prepends = [];
 
         // folder-only addons
         if(elementHasFileList(elem)){
-            prepends.push({
-                label: "Remove Folder",
-                click: () => {
-                    // find 'folderPath' attribute of element at (x, y)
-                    findElementKeyAt(params.x, params.y, "folderPath", (elem, folderPath) => {
-                        if(folderPath){
-                            FolderDispatcher.removeFolder(folderPath);
-                        }
-                    });
+            prepends = [...prepends, 
+                {
+                    label: "Add New File",
+                    click: () => ModalDispatcher.selectFileModal()
+                },
+                {
+                    label: "Add New Folder",
+                    click: () => ModalDispatcher.selectFolderModal()
+                },
+                {
+                    label: "Remove Folder",
+                    click: () => {
+                        // find 'folderPath' attribute of element at (x, y)
+                        findElementKeyAt(params.x, params.y, "folderPath", (elem, folderPath) => {
+                            if(folderPath){
+                                FolderDispatcher.removeFolder(folderPath);
+                            }
+                        });
+                    }
                 }
-            });
+            ];
         }
 
         return prepends;
