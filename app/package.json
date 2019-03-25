@@ -59,6 +59,8 @@
     "events": "^3.0.0",
     "fs": "0.0.1-security",
     "jquery": "^3.3.1",
+    "mobx": "^5.9.0",
+    "mobx-react": "^5.4.3",
     "react": "^16.8.1",
     "react-ace": "^6.4.0",
     "react-dom": "^16.8.2",
