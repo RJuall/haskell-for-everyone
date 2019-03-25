@@ -20,12 +20,11 @@ export class ModalSelectFile extends React.Component{
     forceSelectDialog(){
         if(this.filePathInput){
             this.filePathInput.click();
+            ModalDispatcher.signalFileFolderInput();
         }
         else{
             // if it doesn't exist - force render then click 
-            this.forceUpdate(() => {
-                this.filePathInput.click();
-            });
+            this.forceUpdate(() => this.forceSelectDialog());
         }
     }
 

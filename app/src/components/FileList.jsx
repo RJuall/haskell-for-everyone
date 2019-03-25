@@ -81,7 +81,15 @@ export class FileList extends React.Component{
 
             // get files for path
             // this triggers the adding folder to the UI 
-            this.requestFileNames([path]);
+
+            // updates the currently folder only
+            //this.requestFileNames([path]);
+
+            // updates all folders 
+            let {folders={}} = this.state;
+            let folderPaths = Object.keys(folders);
+
+            this.requestFileNames([path, ...folderPaths]);
         }
         else ModalDispatcher.alertModal("Folder Add Error", evt.err);
     };
