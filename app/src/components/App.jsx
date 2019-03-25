@@ -67,7 +67,7 @@ export class App extends React.Component{
         } 
     }
 
-    componentWillMount(){
+    componentWillUnmount(){
         IpcRequester.removeListener("settings-get", evt => {});
     }
 
