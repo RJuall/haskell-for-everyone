@@ -53,6 +53,7 @@
     "@fortawesome/pro-regular-svg-icons": "^5.7.2",
     "@fortawesome/pro-solid-svg-icons": "^5.7.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
+    "babel-preset-mobx": "^2.0.0",
     "bootstrap": "^4.3.1",
     "child_process": "^1.0.2",
     "electron-context-menu": "^0.11.0",
