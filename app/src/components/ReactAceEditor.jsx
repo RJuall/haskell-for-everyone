@@ -33,6 +33,9 @@ import { testHask } from './Tokenise';
 class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
+
+        // ref for ace editor 
+        this.editorRef = React.createRef();
         
         // current file in the editor
         this.currFilePath = null; 
@@ -76,7 +79,9 @@ class ReactAceEditor extends React.Component {
         this.setEditorMode(evt.path);
         
         // load in the file's contents 
-        this.setState({value: evt.str});
+        this.setState({value: evt.str}, () => {
+            this.resetEditorSession();
+        });
     }
 
     // handler for when the file save button is clicked
@@ -139,6 +144,18 @@ class ReactAceEditor extends React.Component {
         EditorDispatcher.editorChangeOcccurred();
 
         this.state.value = val;
+    }
+
+    // resets the editor session 
+    resetEditorSession = () => {
+        let {editor} = this.editorRef.current;
+        if(editor){
+            let session = editor.getSession();
+            let undoManager = session.getUndoManager();
+            
+            undoManager.reset();
+            session.setUndoManager(undoManager);
+        }
     }
 
     // function that sets the mode state of the ce
@@ -204,6 +221,7 @@ class ReactAceEditor extends React.Component {
         return(
             <div>
                 <AceEditor
+                    ref={this.editorRef}
                     mode={this.state.mode}
                     theme={this.state.theme}
                     name={this.state.name}
