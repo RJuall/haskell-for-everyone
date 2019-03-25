@@ -14,6 +14,8 @@ import IpcRequester from '../utils/IpcRequester';
 import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
 import { ModalSelectFile } from "./ModalSelectFile";
+import Mousetrap from 'mousetrap';
+
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
@@ -51,6 +53,8 @@ export class App extends React.Component{
         IpcRequester.on("settings-get", evt => this.settings = evt.settings);
         IpcRequester.getSettings();
 
+        Mousetrap.bind('up up down down left right left right b a enter', () => { console.log("KONAMI"); });
+
         window.onresize = () => {
             let newWindowWidth = window.innerWidth;
             let oldFileColRatio = this.state.currentFileColWidth / this.state.windowSize;
@@ -64,11 +68,12 @@ export class App extends React.Component{
                            currentEdColWidth: newEdColWidth,
                            windowSize: newWindowWidth
                         });
-        } 
+        }        
     }
 
     componentWillUnmount(){
         IpcRequester.removeListener("settings-get", evt => {});
+        Mousetrap.unbind('up up down down left right left right b a enter');
     }
 
     render(){

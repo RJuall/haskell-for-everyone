@@ -215,6 +215,11 @@ class ReactAceEditor extends React.Component {
                     value={this.state.value}
                     setOptions={this.state.setOptions}
                     onChange={this.onChange}
+                    commands={[{
+                        name: 'save',
+                        bindKey: {win: 'Ctrl-s', mac: 'Command-s'},
+                        exec: () => { EditorDispatcher.saveCurrentFile(); }
+                    }]}
                 ></AceEditor>
             </div>
         )
