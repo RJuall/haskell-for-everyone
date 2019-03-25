@@ -56,7 +56,8 @@ class ReactAceEditor extends React.Component {
                 fontFamily: "Inconsolata, monospace",
                 enableBasicAutocompletion: true,
                 enableLiveAutocompletion: true,
-                enableSnippets: true
+                enableSnippets: true,
+                selectionStyle: "text",
             },
             wrapEnabled: false
         };
