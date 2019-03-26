@@ -86,20 +86,20 @@ class IpcRequester extends EventEmitter{
         this.send("settings-update", {settings: {editorSettings, terminalSettings, fileSettings, windowSettings}});
     }
 
-    updateEditorSettings({editorSettings}) {
-        this.updateSettings({editorSettings});
+    updateEditorSettings({settings}) {
+        this.updateSettings({editorSettings:{settings}});
     }
 
-    updateFileSettings({fileSettings}) {
-        this.updateSettings({fileSettings});
+    updateFileSettings({settings}) {
+        this.updateSettings({fileSettings:{settings}});
     }
 
-    updateTerminalSettings({terminalSettings}) {
-        this.updateSettings({terminalSettings});
+    updateTerminalSettings({settings}) {
+        this.updateSettings({terminalSettings:{settings}});
     }
 
-    updateWindowSettings({windowSettings}) {
-        this.updateSettings({windowSettings});
+    updateWindowSettings({settings}) {
+        this.updateSettings({windowSettings: {settings}});
     }
 
     // sends the get settings request

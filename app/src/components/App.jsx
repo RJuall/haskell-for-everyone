@@ -14,6 +14,7 @@ import IpcRequester from '../utils/IpcRequester';
 import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
 import { ModalSelectFile } from "./ModalSelectFile";
+import StoreManager from "../utils/StoreManager"
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
