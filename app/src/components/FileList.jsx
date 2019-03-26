@@ -5,6 +5,9 @@ import ModalDispatcher, { INPUT_FILE_FOLDER } from "../dispatchers/ModalDispatch
 import { FileListFolder } from "./FileListFolder";
 import "./FileList.css";
 
+// interval for refreshing the file list 
+export const AUTO_REFRESH_INTERVAL = 1000 * 60;
+
 export class FileList extends React.Component{
     constructor(props){
         super(props);
@@ -15,6 +18,9 @@ export class FileList extends React.Component{
 
         // secret input[type=folder] element for selecting folders
         this.folderRef = React.createRef();
+
+        // interval id for auto refreshing 
+        this.refreshIntervalId = -1;
     }
 
     // requests the the file names array for each folder in the array
@@ -117,8 +123,8 @@ export class FileList extends React.Component{
         this.setState({folders: {}});
     }
 
+    // when the folder modal is changed 
     handleFileFolderInput = () => {
-        console.log("UPDATE")
         this.updateFileNames();
     }
 
@@ -143,6 +149,12 @@ export class FileList extends React.Component{
 
         // listen for a UI change in file/folder input 
         ModalDispatcher.on(INPUT_FILE_FOLDER, this.handleFileFolderInput);
+
+        // auto refresh
+        this.refreshIntervalId = setInterval(
+            () => this.updateFileNames(),
+            AUTO_REFRESH_INTERVAL
+        );
 
         // get folder paths when component mounts  
         FolderDispatcher.getFolderPaths();
@@ -169,6 +181,9 @@ export class FileList extends React.Component{
 
         // stop listening for a UI change in file/folder input 
         ModalDispatcher.removeListener(INPUT_FILE_FOLDER, this.handleFileFolderInput);
+
+        // clear auto refresh
+        clearInterval(this.refreshIntervalId);
     }
 
     // handler for the when the user selects a folder 
