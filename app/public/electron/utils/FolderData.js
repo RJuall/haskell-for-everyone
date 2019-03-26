@@ -10,6 +10,7 @@ class FolderData{
         // all folders
         this._folderPaths = [];
         this._lastFile = null;
+        this._recentFilePaths = [];
     }
 
     // loads folder data from file 
@@ -20,6 +21,7 @@ class FolderData{
                     // file loaded - set fields base on file 
                     this._folderPaths = json.folderPaths || [];
                     this._lastFile = json.lastFile || null;
+                    this._recentFilePaths = json._recentFilePaths || [];
 
                     resolve(this);
                 })
@@ -86,11 +88,43 @@ class FolderData{
         });
     }
 
+    // updates recent files data
+    // @param paths     array of recent file paths
+    // @param dontWrite boolean where true = dont write json, false = write json
+    updateRecentFiles(paths=[], dontWrite=false){
+        // new paths array
+        let recentFilePaths = [...paths, ...this.recentFilePaths];
+
+        // remove any duplicates 
+        recentFilePaths = recentFilePaths.filter((val, i) => recentFilePaths.indexOf(val) === i);
+
+        // 10 most recent 
+        if(recentFilePaths.length > 10){
+            recentFilePaths = recentFilePaths.slice(0, 10);
+        }
+
+        // update 
+        this._recentFilePaths = recentFilePaths;
+
+        // optional update json file 
+        return dontWrite ? Promise.resolve() : this.update();
+    }
+
     // updates the underlying json file and field respresentation
-    update(){
+    update(update={}){
         return new Promise((resolve, reject) => {
+            // update recent files
+            if(update.recentFilePaths){
+                // update list but don't write file yet 
+                this.updateRecentFiles(update.recentFilePaths, true);
+            }
+
             // json to stringify
-            let json = {folderPaths: this.folderPaths};
+            let json = {
+                folderPaths:        update.folderPaths || this.folderPaths,
+                lastFile:           update.lastFile || this.lastFile,
+                recentFilePaths:    this.recentFilePaths
+            };
             
             // pretty json stringify
             JsonParser.stringifyPretty(json, (err, str) => {
@@ -122,6 +156,11 @@ class FolderData{
     // getter for last file 
     get lastFile(){
         return this._lastFile;
+    }
+
+    // getter for recent files 
+    get recentFilePaths(){
+        return this._recentFilePaths;
     }
 }
 
