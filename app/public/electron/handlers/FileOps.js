@@ -30,6 +30,13 @@ class FileOps{
             });
     }
 
+    // gets the file paths opened recently 
+    // @param evt       event object for response 
+    static getRecentFiles(evt){
+        let filePaths = FolderData.recentFilePaths;
+        IpcResponder.respond(evt, "files-recent", {filePaths});
+    }
+
     // reads the string contents of a file
     // @param evt       event object for response
     // @param path      name of file to read 
@@ -48,6 +55,9 @@ class FileOps{
                 // file name with forward slashes always
                 let pathClean = path.replace(/\\/g, "/"); 
                 IpcResponder.respond(evt, "file-read", {path, pathClean, str});
+
+                // update recent files 
+                FolderData.updateRecentFiles([path]);
             })
             .catch(err => {
                 // error
@@ -107,6 +117,9 @@ class FileOps{
             .then(() => {
                 // file created
                 IpcResponder.respond(evt, "file-create", {dir, fileName, knownFolder});
+
+                // update recent files 
+                FolderData.updateRecentFiles([path]);
             })
             .catch(err => {
                 // error
