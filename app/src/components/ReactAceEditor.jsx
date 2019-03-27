@@ -46,6 +46,9 @@ class ReactAceEditor extends React.Component {
         // the settings json data
         this.settings = null;
 
+        // editor ref
+        this.editorRef = React.createRef();
+
         this.state = {
             name: "ace-editor",
             mode: "haskell",
@@ -64,6 +67,7 @@ class ReactAceEditor extends React.Component {
             },
             wrapEnabled: false
         };
+
     }
 
     // handler when a file is read
@@ -203,6 +207,8 @@ class ReactAceEditor extends React.Component {
 
         // makes sure that the ce value matches the default value
         this.setState({value: this.state.defaultValue});
+
+        const editorRef = this.editorRef.current.editor;
     }    
 
     componentWillUnmount() {
@@ -238,7 +244,18 @@ class ReactAceEditor extends React.Component {
                         name: 'save',
                         bindKey: {win: 'Ctrl-s', mac: 'Command-s'},
                         exec: () => { EditorDispatcher.saveCurrentFile(); }
-                    }]}
+                    },
+                    {
+                        name: 'undo',
+                        bindKey: {win: 'Ctrl-z', mac: 'Command-s'},
+                        exec: () => this.editorRef.undo()
+                    },
+                    {
+                        name: 'redo',
+                        bindKey: {win: 'Ctrl-y', mac: 'Command-y'},
+                        exec: () => this.editorRef.redo()
+                    }    
+                    ]}
                 ></AceEditor>
             </div>
         )
