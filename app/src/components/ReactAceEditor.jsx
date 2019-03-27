@@ -207,8 +207,6 @@ class ReactAceEditor extends React.Component {
 
         // makes sure that the ce value matches the default value
         this.setState({value: this.state.defaultValue});
-
-        const editorRef = this.editorRef.current.editor;
     }    
 
     componentWillUnmount() {
@@ -244,17 +242,7 @@ class ReactAceEditor extends React.Component {
                         name: 'save',
                         bindKey: {win: 'Ctrl-s', mac: 'Command-s'},
                         exec: () => { EditorDispatcher.saveCurrentFile(); }
-                    },
-                    {
-                        name: 'undo',
-                        bindKey: {win: 'Ctrl-z', mac: 'Command-s'},
-                        exec: () => this.editorRef.undo()
-                    },
-                    {
-                        name: 'redo',
-                        bindKey: {win: 'Ctrl-y', mac: 'Command-y'},
-                        exec: () => this.editorRef.redo()
-                    }    
+                    }
                     ]}
                 ></AceEditor>
             </div>
