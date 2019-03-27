@@ -46,6 +46,9 @@ class ReactAceEditor extends React.Component {
         // the settings json data
         this.settings = null;
 
+        // editor ref
+        this.editorRef = React.createRef();
+
         this.state = {
             name: "ace-editor",
             mode: "haskell",
@@ -64,6 +67,7 @@ class ReactAceEditor extends React.Component {
             },
             wrapEnabled: false
         };
+
     }
 
     // handler when a file is read
@@ -238,7 +242,8 @@ class ReactAceEditor extends React.Component {
                         name: 'save',
                         bindKey: {win: 'Ctrl-s', mac: 'Command-s'},
                         exec: () => { EditorDispatcher.saveCurrentFile(); }
-                    }]}
+                    }
+                    ]}
                 ></AceEditor>
             </div>
         )
