@@ -1,19 +1,31 @@
-import { EventEmitter } from "events";
-import { observable } from 'mobx';
+import { observable, decorate, autorun, computed } from 'mobx';
 import IpcRequester from './IpcRequester';
-import { EditorStore } from '../stores/EditorStore';
 
 class StoreManager {
-    settings = {};
+    
+    settings = {
+        editorSettings: {},
+        terminalSettings: {},
+        fileSettings: {},
+        windowSettings: {}
+    };
 
     constructor(props) {
         IpcRequester.on("settings-get", evt => Object.assign(this.settings, evt.settings));
         IpcRequester.getSettings();
     }
 
-    createStores() {
-        console.log(this.settings);
+    saveSettings(settings) {
+        IpcRequester.updateSettings(settings);
     }
+
+    settingsUpdater = autorun( () => {
+         this.saveSettings(this.settings);
+    }, { delay: 60000, onError: () => { console.log("Settings file update error.") } });
 }
 
-export default new StoreManager().createStores();
+decorate(StoreManager, {
+    settings: observable,
+})
+
+export default new StoreManager()

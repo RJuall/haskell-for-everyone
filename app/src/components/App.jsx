@@ -75,7 +75,7 @@ export class App extends React.Component{
     render(){
         return (
             <>
-                <MenuBar/>
+git                 <MenuBar/>
                 <Container>
                     <Row>
                         <SplitPane 

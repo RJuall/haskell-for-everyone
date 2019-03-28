@@ -4,6 +4,7 @@ import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import IpcRequester from "../utils/IpcRequester";
 import GhciDispatcher from '../dispatchers/GhciDispatcher';
+import EditorStore from '../stores/EditorStore';
 
 // import syntax highlighting modes
 import 'brace/mode/haskell';
@@ -33,6 +34,8 @@ import { testHask } from './Tokenise';
 class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
+
+        this.editorStore = EditorStore;
         
         // current file in the editor
         this.currFilePath = null; 
