@@ -60,6 +60,8 @@ export class MenuBar extends React.Component {
                         <DropdownItem onClick={() => EditorDispatcher.saveCurrentFile()}>Save</DropdownItem>
                         <DropdownItem divider />
                         <DropdownItem onClick={() => EditorDispatcher.runCode()}>Run</DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem>Exit</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
                 <Dropdown nav isOpen={this.state.edit} toggle={this.toggleEdit.bind(this)}>
