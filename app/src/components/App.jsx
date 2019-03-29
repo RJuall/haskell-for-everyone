@@ -15,6 +15,7 @@ import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
 import { ModalSelectFile } from "./ModalSelectFile";
 import Mousetrap from 'mousetrap';
+import EditorIconBar from './EditorIconBar';
 
 import "./App.css";
 
@@ -80,6 +81,7 @@ export class App extends React.Component{
         return (
             <>
                 <MenuBar/>
+                <EditorIconBar/>
                 <Container>
                     <Row>
                         <SplitPane 
