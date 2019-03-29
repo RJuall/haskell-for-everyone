@@ -76,7 +76,7 @@ ul.file-list-items{
 .item-container.active:before{
     content: '';
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 15px;
     width: 8px;
     height: 8px;
