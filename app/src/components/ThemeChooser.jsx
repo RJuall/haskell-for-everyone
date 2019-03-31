@@ -1,13 +1,9 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import EditorDispatcher from '../dispatchers/EditorDispatcher';
 
 export const ThemeChooser = inject("editorStore")(observer(class ThemeChooser extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            value: 'dracula'
-        };
 
         // sets the theme value state and emits
         //    a theme change event

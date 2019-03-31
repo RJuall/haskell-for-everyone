@@ -11,6 +11,8 @@ class EditorStore {
         fontSize: this.globalEditorSettings.fontSize || editorDefaults.fontSize,
         fontFamily: this.globalEditorSettings.fontFamily || editorDefaults.fontFamily,
         theme: this.globalEditorSettings.theme || editorDefaults.theme,
+        name: editorDefaults.name,
+        
     }
 
     editorSettingsDisposer = autorun( () => {

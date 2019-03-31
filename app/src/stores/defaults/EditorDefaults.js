@@ -1,5 +1,7 @@
 export const editorDefaults = {
     fontSize: '20px',
-    fontFamily: 'Inconsolata, monospace',
+    fontFamily: 'Inconsolata',
     theme: 'dracula',
+    name: 'ace-editor',
+    
 };

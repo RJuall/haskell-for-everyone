@@ -49,14 +49,12 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         this.state = {
             name: "ace-editor",
             mode: "haskell",
-            theme: "dracula",
             width: "100%",
             height: "100vh",
             fontSize: "16px",
             defaultValue: testHask,
             editorProps: {$blockScrolling: true},
             setOptions: {
-                fontFamily: "Inconsolata, monospace",
                 enableBasicAutocompletion: true,
                 enableLiveAutocompletion: true,
                 enableSnippets: true
@@ -208,7 +206,7 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
                 <AceEditor
                     mode={this.state.mode}
                     theme={this.props.editorStore.editorSettings.theme}
-                    name={this.state.name}
+                    name={this.props.editorStore.editorSettings.name}
                     width={this.state.width}
                     height={this.state.height}
                     fontSize={this.state.fontSize}
@@ -216,7 +214,9 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
                     defaultValue={this.state.defaultValue}
                     wrapEnabled={this.state.wrapEnabled}
                     value={this.state.value}
-                    setOptions={this.state.setOptions}
+                    setOptions={
+                        {fontFamily: this.props.editorStore.editorSettings.fontFamily}
+                    }
                     onChange={this.onChange}
                 ></AceEditor>
             </div>
