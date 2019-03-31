@@ -167,8 +167,6 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         EditorDispatcher.on("ce-font-size-minus", this.fontSizeMinus);
         EditorDispatcher.on("save-as", this.handleSaveFileAs);
         EditorDispatcher.on("run-code", this.handleRunCode);
-        EditorDispatcher.on("ce-font-family-set", this.handleFontChange);
-        EditorDispatcher.on("ce-theme-set", this.handleThemeChange);
 
         // makes sure that the ce value matches the default value
         this.setState({value: this.state.defaultValue});
@@ -182,8 +180,6 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         EditorDispatcher.removeListener("ce-font-size-minus", this.fontSizeMinus);
         EditorDispatcher.removeListener("save-as", this.handleSaveFileAs);
         EditorDispatcher.removeListener("run-code", this.handleRunCode);
-        EditorDispatcher.removeListener("ce-font-family-set", this.handleFontChange);
-        EditorDispatcher.removeListener("ce-theme-set", this.handleThemeChange);
     }
 
     render() {
