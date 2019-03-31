@@ -6,9 +6,10 @@ import { faSave, faPlay, faMinus, faPlus, faArrowAltSquareLeft, faPaperPlane } f
 import { FontChooser } from './FontChooser';
 import { ThemeChooser } from './ThemeChooser';
 import { UIChooser } from './UIChooser';
+import { observer, inject } from 'mobx-react';
 import './EditorIconBar.css';
 
-class EditorIconBar extends React.Component {
+export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar extends React.Component {
     constructor(props) {
         super(props);
 
@@ -119,6 +120,4 @@ class EditorIconBar extends React.Component {
             </div>
         );
     }
-}
-
-export default EditorIconBar;
+}));

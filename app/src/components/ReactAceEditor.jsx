@@ -4,7 +4,7 @@ import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import IpcRequester from "../utils/IpcRequester";
 import GhciDispatcher from '../dispatchers/GhciDispatcher';
-import EditorStore from '../stores/EditorStore';
+import { observer, inject } from 'mobx-react';
 
 // import syntax highlighting modes
 import 'brace/mode/haskell';
@@ -31,11 +31,11 @@ import 'brace/ext/language_tools';
 // default Haskell code when program starts
 import { testHask } from './Tokenise';
 
-class ReactAceEditor extends React.Component {
+export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
 
-        this.editorStore = EditorStore;
+        //this.editorStore = EditorStore;
         
         // current file in the editor
         this.currFilePath = null; 
@@ -207,7 +207,7 @@ class ReactAceEditor extends React.Component {
             <div>
                 <AceEditor
                     mode={this.state.mode}
-                    theme={this.state.theme}
+                    theme={this.props.editorStore.editorSettings.theme}
                     name={this.state.name}
                     width={this.state.width}
                     height={this.state.height}
@@ -222,6 +222,4 @@ class ReactAceEditor extends React.Component {
             </div>
         )
     }
-}
-
-export default ReactAceEditor;
+}));

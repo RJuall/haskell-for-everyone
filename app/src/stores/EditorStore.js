@@ -1,17 +1,25 @@
-import StoreManager from '../utils/StoreManager';
-import { computed, decorate } from 'mobx';
+import { settingsStore } from '../utils/SettingsStore';
+import { computed, decorate, autorun, observable } from 'mobx';
+import { observer } from 'mobx-react';
+import { editorDefaults } from './defaults/EditorDefaults';
 
-export default class EditorStore {
+class EditorStore {
 
-    get editorSettings() {
-        return StoreManager.settings.editorSettings;
+    globalEditorSettings = settingsStore.getEditorSettings;
+
+    editorSettings = {
+        fontSize: this.globalEditorSettings.fontSize || editorDefaults.fontSize,
+        fontFamily: this.globalEditorSettings.fontFamily || editorDefaults.fontFamily,
+        theme: this.globalEditorSettings.theme || editorDefaults.theme,
     }
 
-    editorSettings = this.editorSettings();
+    editorSettingsDisposer = autorun( () => {
+        settingsStore.updateSettings(this.editorSettings);
+    })
 
-    fontSize = editorSettings.fontSize || '20px';
-    fontFamily = editorSettings.fontFamily || 'Inconsolata';
-    theme = editorSettings.theme || 'dracula';
+    cleanUp() {
+        this.editorSettingsDisposer();
+    }
 
     test() {
         console.log("editorSettings");
@@ -19,5 +27,7 @@ export default class EditorStore {
 }
 
 decorate(EditorStore, {
-    editorSettings: computed,
+    editorSettings: observable,
 });
+
+export const editorStore = new EditorStore();
