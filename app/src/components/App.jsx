@@ -13,7 +13,6 @@ import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import IpcRequester from '../utils/IpcRequester';
 import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
-import { ModalSelectFile } from "./ModalSelectFile";
 import Mousetrap from 'mousetrap';
 
 import "./App.css";
@@ -118,7 +117,6 @@ export class App extends React.Component{
                 <ModalCreateFile/>
                 <ModalSaveFileAs/>
                 <ModalAlert/>
-                <ModalSelectFile/>
                 <ModalCreateRoom/>
                 <ModalJoinRoom/>
             </>
