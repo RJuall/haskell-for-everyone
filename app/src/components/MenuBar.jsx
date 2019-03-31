@@ -1,11 +1,11 @@
 import React from 'react';
 import ModalDispatcher from '../dispatchers/ModalDispatcher';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Navbar as RNavbar, NavItem, Collapse, NavbarToggler, Nav, NavLink } from "reactstrap";
-import { NavbarBrand } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import './MenuBar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/pro-regular-svg-icons';
+import { SelectFileFolder } from '../utils/SelectFileFolder';
 
 
 export class MenuBar extends React.Component {
@@ -54,8 +54,8 @@ export class MenuBar extends React.Component {
                     </DropdownToggle>
                     <DropdownMenu>
                         <DropdownItem onClick={() => ModalDispatcher.createFileModal()}>New File</DropdownItem>
-                        <DropdownItem onClick={() => ModalDispatcher.selectFileModal()}>Open File</DropdownItem>
-                        <DropdownItem onClick={() => ModalDispatcher.selectFolderModal()}>Open Folder</DropdownItem>
+                        <DropdownItem onClick={() => SelectFileFolder.selectFile()}>Open File</DropdownItem>
+                        <DropdownItem onClick={() => SelectFileFolder.selectFolder()}>Open Folder</DropdownItem>
                         <DropdownItem onClick={() => ModalDispatcher.saveFileAsModal()}>Save As</DropdownItem>
                         <DropdownItem onClick={() => EditorDispatcher.saveCurrentFile()}>Save</DropdownItem>
                         <DropdownItem divider />
