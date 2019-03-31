@@ -1,6 +1,5 @@
 import { settingsStore } from '../utils/SettingsStore';
-import { computed, decorate, autorun, observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { decorate, autorun, observable } from 'mobx';
 import { editorDefaults } from './defaults/EditorDefaults';
 
 class EditorStore {

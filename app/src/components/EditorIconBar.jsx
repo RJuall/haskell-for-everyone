@@ -2,7 +2,7 @@ import React from 'react';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faPlay, faMinus, faPlus, faArrowAltSquareLeft, faPaperPlane } from '@fortawesome/pro-regular-svg-icons';
+import { faSave, faPlay, faMinus, faPlus } from '@fortawesome/pro-regular-svg-icons';
 import { FontChooser } from './FontChooser';
 import { ThemeChooser } from './ThemeChooser';
 import { UIChooser } from './UIChooser';

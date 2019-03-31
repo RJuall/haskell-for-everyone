@@ -2,7 +2,6 @@ import React from 'react';
 import AceEditor from 'react-ace';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
-import IpcRequester from "../utils/IpcRequester";
 import GhciDispatcher from '../dispatchers/GhciDispatcher';
 import { observer, inject } from 'mobx-react';
 
@@ -27,9 +26,6 @@ import 'brace/theme/twilight';
 
 // allows code completion
 import 'brace/ext/language_tools';
-
-// default Haskell code when program starts
-import { testHask } from './Tokenise';
 
 export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEditor extends React.Component {
     constructor(props) {
@@ -85,7 +81,7 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
     // handler for when the current code should be executed
     // will not execute if mode is not set to haskell 
     handleRunCode = () => {
-        if (this.state.mode === 'haskell') {
+        if (this.props.editorStore.editorSettings.mode === 'haskell') {
             GhciDispatcher.executeFile(this.currFilePath, this.state.value);
             EditorDispatcher.editorChangeReset();
         }
