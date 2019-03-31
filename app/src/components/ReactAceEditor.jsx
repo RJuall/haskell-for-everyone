@@ -47,10 +47,7 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         this.settings = null;
 
         this.state = {
-            name: "ace-editor",
             mode: "haskell",
-            width: "100%",
-            height: "100vh",
             fontSize: "16px",
             defaultValue: testHask,
             editorProps: {$blockScrolling: true},
@@ -207,8 +204,8 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
                     mode={this.state.mode}
                     theme={this.props.editorStore.editorSettings.theme}
                     name={this.props.editorStore.editorSettings.name}
-                    width={this.state.width}
-                    height={this.state.height}
+                    width={this.props.editorStore.editorSettings.width}
+                    height={this.props.editorStore.editorSettings.height}
                     fontSize={this.state.fontSize}
                     editorProps={this.state.editorProps}
                     defaultValue={this.state.defaultValue}
