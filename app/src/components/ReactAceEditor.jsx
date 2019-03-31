@@ -47,15 +47,9 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         this.settings = null;
 
         this.state = {
-            mode: "haskell",
             fontSize: "16px",
             defaultValue: testHask,
             editorProps: {$blockScrolling: true},
-            setOptions: {
-                enableBasicAutocompletion: true,
-                enableLiveAutocompletion: true,
-                enableSnippets: true
-            },
             wrapEnabled: false
         };
     }
@@ -144,12 +138,10 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
     setEditorMode = file => {
         if(!file) return;
 
-        let mode;
         if      (file.endsWith('.hs') 
                  || file.endsWith('.lhs')) {
-            this.setState({mode: 'haskell'});
-            mode = '.hs';
-                 }
+            Object.assign(this.props.editorStore.editorSettings, {mode: 'haskell'});
+        }
         else if (file.endsWith('.md')
                  || file.endsWith('.mkd')
                  || file.endsWith('.mdown')
@@ -160,14 +152,11 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
                  || file.endsWith('.mdtext')
                  || file.endsWith('.text')
                  || file.endsWith('.Rmd')) {
-            this.setState({mode: 'markdown'});
-            mode = '.md';
+            Object.assign(this.props.editorStore.editorSettings, {mode: 'markdown'});
         }
         else {
-            this.setState({mode: 'plain_text'});
-            mode = '.txt';
+            Object.assign(this.props.editorStore.editorSettings, {mode: 'plain_text'});
         }
-        EditorDispatcher.modeChange(mode);
     }
 
     componentDidMount() {
@@ -201,7 +190,7 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         return(
             <div>
                 <AceEditor
-                    mode={this.state.mode}
+                    mode={this.props.editorStore.editorSettings.mode}
                     theme={this.props.editorStore.editorSettings.theme}
                     name={this.props.editorStore.editorSettings.name}
                     width={this.props.editorStore.editorSettings.width}
@@ -212,7 +201,12 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
                     wrapEnabled={this.state.wrapEnabled}
                     value={this.state.value}
                     setOptions={
-                        {fontFamily: this.props.editorStore.editorSettings.fontFamily}
+                        {
+                            fontFamily: this.props.editorStore.editorSettings.fontFamily,
+                            enableBasicAutocompletion: true,
+                            enableLiveAutocompletion: true,
+                            enableSnippets: true,
+                        }
                     }
                     onChange={this.onChange}
                 ></AceEditor>

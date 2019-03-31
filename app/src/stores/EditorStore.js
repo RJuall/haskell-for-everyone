@@ -14,6 +14,7 @@ class EditorStore {
         name: this.globalEditorSettings.name || editorDefaults.name,
         height: this.globalEditorSettings.height || editorDefaults.height,
         width: this.globalEditorSettings.width || editorDefaults.width,
+        mode: this.globalEditorSettings.mode || editorDefaults.mode,
     }
 
     editorSettingsDisposer = autorun( () => {

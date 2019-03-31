@@ -40,14 +40,6 @@ export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar 
             })
         }
 
-        // sets the mode state when the syntax
-        //    highlighting mode of the ce changes
-        this.handleModeChange = evt => {
-            this.setState({
-                mode: evt.mode
-            })
-        }
-
         // sets the filename state when a new file
         //    is loaded into the ce
         this.handleFileLoad = evt => {
@@ -80,7 +72,6 @@ export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar 
 
     componentDidMount() {
         // sets up event listeners
-        EditorDispatcher.on("mode-change", this.handleModeChange);
         EditorDispatcher.on("editor-change", this.handleEditorChange);
         EditorDispatcher.on("editor-change-reset", this.handleEditorChangeReset);
         FileDispatcher.on(FILE_READ, this.handleFileLoad);
@@ -88,7 +79,6 @@ export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar 
 
     componentWillUnmount() {
         // removes event listeners
-        EditorDispatcher.removeListener("mode-change", this.handleModeChange);
         EditorDispatcher.removeListener("editor-change", this.handleEditorChange);
         EditorDispatcher.removeListener("editor-change-reset", this.handleEditorChangeReset);
         FileDispatcher.removeListener(FILE_READ, this.handleFileLoad);
