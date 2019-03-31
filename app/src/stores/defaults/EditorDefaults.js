@@ -6,4 +6,7 @@ export const editorDefaults = {
     width: '100%',
     height: '100vh',
     mode: 'haskell',
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
+    enableSnippets: true,
 };

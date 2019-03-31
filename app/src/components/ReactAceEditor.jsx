@@ -199,9 +199,9 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
                     setOptions={
                         {
                             fontFamily: this.props.editorStore.editorSettings.fontFamily,
-                            enableBasicAutocompletion: true,
-                            enableLiveAutocompletion: true,
-                            enableSnippets: true,
+                            enableBasicAutocompletion: this.props.editorStore.editorSettings.enableBasicAutocompletion,
+                            enableLiveAutocompletion: this.props.editorStore.editorSettings.enableLiveAutocompletion,
+                            enableSnippets: this.props.editorStore.editorSettings.enableSnippets,
                         }
                     }
                     onChange={this.onChange}

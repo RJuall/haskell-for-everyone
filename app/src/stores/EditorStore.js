@@ -15,6 +15,9 @@ class EditorStore {
         height: this.globalEditorSettings.height || editorDefaults.height,
         width: this.globalEditorSettings.width || editorDefaults.width,
         mode: this.globalEditorSettings.mode || editorDefaults.mode,
+        enableBasicAutocompletion: this.globalEditorSettings.enableBasicAutocompletion || editorDefaults.enableBasicAutocompletion,
+        enableLiveAutocompletion: this.globalEditorSettings.enableLiveAutocompletion || editorDefaults.enableLiveAutocompletion,
+        enableSnippets: this.globalEditorSettings.enableSnippets || editorDefaults.enableSnippets,
     }
 
     editorSettingsDisposer = autorun( () => {
