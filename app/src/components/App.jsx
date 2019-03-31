@@ -15,6 +15,7 @@ import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
 import { ModalSelectFile } from "./ModalSelectFile";
 import { settingsStore } from "../utils/SettingsStore"
+import { editorStore } from "../stores/EditorStore";
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
@@ -71,12 +72,13 @@ export class App extends React.Component{
     componentWillUnmount(){
         IpcRequester.removeListener("settings-get", evt => {});
         settingsStore.cleanUp();
+        editorStore.cleanUp();
     }
 
     render(){
         return (
             <>
-git                 <MenuBar/>
+                <MenuBar/>
                 <Container>
                     <Row>
                         <SplitPane 
