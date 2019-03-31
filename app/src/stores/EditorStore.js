@@ -18,6 +18,8 @@ class EditorStore {
         enableBasicAutocompletion: this.globalEditorSettings.enableBasicAutocompletion || editorDefaults.enableBasicAutocompletion,
         enableLiveAutocompletion: this.globalEditorSettings.enableLiveAutocompletion || editorDefaults.enableLiveAutocompletion,
         enableSnippets: this.globalEditorSettings.enableSnippets || editorDefaults.enableSnippets,
+        blockScrolling: this.globalEditorSettings.blockScrolling || editorDefaults.blockScrolling,
+        wrapEnabled: this.globalEditorSettings.wrapEnabled || editorDefaults.wrapEnabled,
     }
 
     editorSettingsDisposer = autorun( () => {

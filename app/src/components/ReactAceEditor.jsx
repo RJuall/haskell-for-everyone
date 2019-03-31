@@ -47,10 +47,7 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         this.settings = null;
 
         this.state = {
-            fontSize: "16px",
-            defaultValue: testHask,
-            editorProps: {$blockScrolling: true},
-            wrapEnabled: false
+            value: '',
         };
     }
 
@@ -94,36 +91,6 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         }
     }
 
-    // handler for increasing the font size of the ce
-    fontSizePlus = () => {
-        this.setState({
-            fontSize: (parseInt(this.state.fontSize) + 2).toString() + 'px'
-        });
-     }
-
-    // handler for decreasing the font size of the ce
-    fontSizeMinus = () => {
-        this.setState({
-            fontSize: (parseInt(this.state.fontSize) - 2).toString() + 'px'
-        })
-    }
-
-    // handler for changing the font family of the ce
-    handleFontChange = evt => {
-        this.setState({
-            setOptions: {
-                fontFamily: evt.font
-            }
-        });
-    }
-
-    // handler for changing the theme of the ce
-    handleThemeChange = evt => {
-        this.setState({
-            theme: evt.theme
-        })
-    }
-
     // when the editor changes... (no longer sync with file)
     onChange = (val, evt) => {
         this.changedPostSave = true
@@ -163,21 +130,14 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         // listen for events
         FileDispatcher.on(FILE_READ, this.handleFileRead);
         EditorDispatcher.on("editor-save-file", this.handleSaveFile);
-        EditorDispatcher.on("ce-font-size-plus", this.fontSizePlus);
-        EditorDispatcher.on("ce-font-size-minus", this.fontSizeMinus);
         EditorDispatcher.on("save-as", this.handleSaveFileAs);
         EditorDispatcher.on("run-code", this.handleRunCode);
-
-        // makes sure that the ce value matches the default value
-        this.setState({value: this.state.defaultValue});
     }    
 
     componentWillUnmount() {
         // remove event listeners
         FileDispatcher.removeListener(FILE_READ, this.handleFileRead);
         EditorDispatcher.removeListener("editor-save-file", this.handleSaveFile);
-        EditorDispatcher.removeListener("ce-font-size-plus", this.fontSizePlus);
-        EditorDispatcher.removeListener("ce-font-size-minus", this.fontSizeMinus);
         EditorDispatcher.removeListener("save-as", this.handleSaveFileAs);
         EditorDispatcher.removeListener("run-code", this.handleRunCode);
     }
@@ -191,11 +151,13 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
                     name={this.props.editorStore.editorSettings.name}
                     width={this.props.editorStore.editorSettings.width}
                     height={this.props.editorStore.editorSettings.height}
-                    fontSize={this.state.fontSize}
-                    editorProps={this.state.editorProps}
-                    defaultValue={this.state.defaultValue}
-                    wrapEnabled={this.state.wrapEnabled}
-                    value={this.state.value}
+                    fontSize={this.props.editorStore.editorSettings.fontSize}
+                    editorProps={
+                        {
+                            $blockScrolling: this.props.editorStore.editorSettings.blockScrolling,
+                        }
+                    }
+                    wrapEnabled={this.props.editorStore.editorSettings.wrapEnabled}
                     setOptions={
                         {
                             fontFamily: this.props.editorStore.editorSettings.fontFamily,
@@ -204,6 +166,7 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
                             enableSnippets: this.props.editorStore.editorSettings.enableSnippets,
                         }
                     }
+                    value={this.state.value}
                     onChange={this.onChange}
                 ></AceEditor>
             </div>

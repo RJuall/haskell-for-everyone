@@ -17,27 +17,33 @@ export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar 
         this.settings = null;
 
         this.state = {
-            fontSize: '20px',
-            mode: '.hs',
-            filename: ''
+            filename: '',
         };
 
         // signals that the ce font size should increase
         //    and sets the fontSize state
         this.fontIncrease = () => {
-            EditorDispatcher.fontSizePlus();
-            this.setState({
-                fontSize: (parseInt(this.state.fontSize) + 2).toString() + 'px'
-            })
+            if (parseInt(this.props.editorStore.editorSettings.fontSize) < 60) {
+                Object.assign(
+                    this.props.editorStore.editorSettings,
+                    {
+                    fontSize: (parseInt(this.props.editorStore.editorSettings.fontSize) + 2).toString() + 'px'
+                    }
+                )
+            }
         }
 
         // signals that the ce font size should decrease
         //    and sets the fontsize state
         this.fontDecrease = () => {
-            EditorDispatcher.fontSizeMinus();
-            this.setState({
-                fontSize: (parseInt(this.state.fontSize) - 2).toString() + 'px'
-            })
+            if (parseInt(this.props.editorStore.editorSettings.fontSize) > 8) {
+                Object.assign(
+                    this.props.editorStore.editorSettings,
+                    {
+                    fontSize: (parseInt(this.props.editorStore.editorSettings.fontSize) - 2).toString() + 'px'
+                    }
+                )
+            }
         }
 
         // sets the filename state when a new file
@@ -92,7 +98,7 @@ export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar 
                 <button title="Decrease font size" onClick={this.fontDecrease}>
                     <FontAwesomeIcon size="2x" icon={faMinus}/>
                 </button>
-                <button title="Font Size">{this.state.fontSize}</button>
+                <button title="Font Size">{this.props.editorStore.editorSettings.fontSize}</button>
                 <button title="Increase font size" onClick={this.fontIncrease}>
                     <FontAwesomeIcon size="2x" icon={faPlus}/>
                 </button>

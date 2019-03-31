@@ -9,4 +9,6 @@ export const editorDefaults = {
     enableBasicAutocompletion: true,
     enableLiveAutocompletion: true,
     enableSnippets: true,
+    blockScrolling: true,
+    wrapEnabled: false,
 };
