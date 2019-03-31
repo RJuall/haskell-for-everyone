@@ -1,6 +1,7 @@
 import React from 'react';
 import ModalDispatcher from '../dispatchers/ModalDispatcher';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
+import IpcRequester from '../utils/IpcRequester';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import './MenuBar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -61,7 +62,7 @@ export class MenuBar extends React.Component {
                         <DropdownItem divider />
                         <DropdownItem onClick={() => EditorDispatcher.runCode()}>Run</DropdownItem>
                         <DropdownItem divider />
-                        <DropdownItem>Exit</DropdownItem>
+                        <DropdownItem onClick={() => IpcRequester.quit()}>Exit</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
                 <Dropdown nav isOpen={this.state.edit} toggle={this.toggleEdit.bind(this)}>

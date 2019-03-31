@@ -102,6 +102,11 @@ class IpcRequester extends EventEmitter{
         this.updateSettings({windowSettings});
     }
 
+    // tells the main process to die
+    quit(){
+        this.send("quit");
+    }
+
     // sends the get settings request
     getSettings(){
         this.send("settings-get");
