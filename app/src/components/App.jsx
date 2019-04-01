@@ -19,7 +19,6 @@ import { editorStore } from "../stores/EditorStore";
 import { terminalStore } from '../stores/TerminalStore';
 import { fileStore } from '../stores/FileStore';
 import { windowStore } from '../stores/WindowStore';
-import { ModalSelectFile } from "./ModalSelectFile";
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
