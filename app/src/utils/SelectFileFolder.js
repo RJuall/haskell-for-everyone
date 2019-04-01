@@ -1,36 +1,33 @@
 import FolderDispatcher from "../dispatchers/FolderDispatcher";
 import FileDispatcher from "../dispatchers/FileDispatcher";
+import { FileExtension } from "./FileExtension";
 
 const { dialog } = window.require("electron").remote;
 
 export class SelectFileFolder{
-    // properties for input folder dialog 
-    static folderProperties = [
-        "openFile", "openDirectory"
-    ];
-
-    // properties for input file dialog
-    static fileProperties = [
-        "openFile"
-    ];
-
-    // forces a dialog with properties
-    // @param properties    dialog options
-    // @param clalback      selection callback (array or undefined)
-    static forceDialog(properties, callback){
-        dialog.showOpenDialog({properties}, callback);
-    }
 
     // forces the folder select dialog
     // @param callback      selection callback (array or undefined)
     static selectFolderDialog(callback){
-        SelectFileFolder.forceDialog(SelectFileFolder.folderProperties, callback);
+        let options = {
+            properties: ["openFile", "openDirectory"]
+        };
+
+        dialog.showOpenDialog(options, callback);
     }
 
     // forces the file select dialog
     // @param callback      selection callback (array or undefined)
     static selectFileDialog(callback){
-        SelectFileFolder.forceDialog(SelectFileFolder.fileProperties, callback);
+        // only allow valid extensions
+        let extensions = FileExtension.list().map(a => a.replace(/\./g, ""));
+
+        let options = {
+            properties: ["openFile"],
+            filters: [{name: "All Files", extensions}]
+        };
+
+        dialog.showOpenDialog(options, callback);
     }
 
     // forces the select folder dialog THEN adds the folder to the system
