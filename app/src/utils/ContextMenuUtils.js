@@ -61,6 +61,17 @@ export class ContextMenuUtils{
         callback(value ? elem : null, value);
     };
 
+    // finds the folder path at for the element at the x, y position (or null)
+    // @param x         x pixel coordinate of element
+    // @param y         y pixel coordinate of element
+    // @param callback  callback function that resolves the folder path string (or null)
+    static findFolderPathAt(x, y, callback){
+        // find 'folderPath' attribute of element at (x, y)
+        ContextMenuUtils.findElementKeyAt(x, y, "folder-path", (elem, folderPath) => {
+            callback(folderPath || null);
+        });
+    }
+
     // uses the context menu library to create a dynamic/custom context menu
     static setupContextMenu(){
         contextMenu({
@@ -89,7 +100,7 @@ export class ContextMenuUtils{
                         label: "Create New File",
                         click: () => {
                             // find 'folderPath' attribute of element at (x, y)
-                            ContextMenuUtils.findElementKeyAt(params.x, params.y, "folder-path", (elem, folderPath) => {
+                            ContextMenuUtils.findFolderPathAt(params.x, params.y, folderPath => {
                                 if(folderPath){
                                     ModalDispatcher.createFileModal(folderPath);
                                 }
@@ -100,11 +111,12 @@ export class ContextMenuUtils{
                         label: "Remove Folder",
                         click: () => {
                             // find 'folderPath' attribute of element at (x, y)
-                            ContextMenuUtils.findElementKeyAt(params.x, params.y, "folder-path", (elem, folderPath) => {
+                            ContextMenuUtils.findFolderPathAt(params.x, params.y, folderPath => {
                                 if(folderPath){
                                     FolderDispatcher.removeFolder(folderPath);
                                 }
                             });
+
                         }
                     }];
                 }
