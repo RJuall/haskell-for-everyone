@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col, Container } from "reactstrap";
 import SplitPane from 'react-split-pane';
+import Mousetrap from 'mousetrap';
 import { FileList } from "./FileList";
 import { GhciConsole } from "./GhciConsole";
 import { Editor } from './Editor';
@@ -13,8 +14,12 @@ import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import IpcRequester from '../utils/IpcRequester';
 import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
-import Mousetrap from 'mousetrap';
-
+import { settingsStore } from "../stores/SettingsStore"
+import { editorStore } from "../stores/EditorStore";
+import { terminalStore } from '../stores/TerminalStore';
+import { fileStore } from '../stores/FileStore';
+import { windowStore } from '../stores/WindowStore';
+import { ModalSelectFile } from "./ModalSelectFile";
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
@@ -72,7 +77,13 @@ export class App extends React.Component{
 
     componentWillUnmount(){
         IpcRequester.removeListener("settings-get", evt => {});
+        settingsStore.cleanUp();
+        editorStore.cleanUp();
+        terminalStore.cleanUp();
+        fileStore.cleanUp();
+        windowStore.cleanUp();
         Mousetrap.unbind('up up down down left right left right b a enter');
+
     }
 
     render(){

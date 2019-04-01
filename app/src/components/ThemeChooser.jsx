@@ -1,25 +1,22 @@
 import React from 'react';
-import EditorDispatcher from '../dispatchers/EditorDispatcher';
+import { observer, inject } from 'mobx-react';
+import { action } from 'mobx';
 
-export class ThemeChooser extends React.Component {
+export const ThemeChooser = inject("editorStore")(observer(class ThemeChooser extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            value: 'dracula'
-        };
 
         // sets the theme value state and emits
         //    a theme change event
-        this.selectTheme = event => {
-            this.setState({value: event.target.value});
-            EditorDispatcher.themeSet(event.target.value);
-        }
-    }
+        this.selectTheme = action( event => {
+            this.props.editorStore.editorSettings.theme = event.target.value;
+        })
+}
 
     render() {
         return(
             <div className="icon-bar-chooser">
-                <select name="theme-chooser" value={this.state.value} onChange={this.selectTheme}>
+                <select name="theme-chooser" value={this.props.editorStore.editorSettings.theme} onChange={this.selectTheme}>
                     <option value="dracula">Dracula</option>
                     <option value="github">Github</option>
                     <option value="tomorrow">Tomorrow</option>
@@ -36,4 +33,4 @@ export class ThemeChooser extends React.Component {
             </div>
         )
     }
-}
+}));
