@@ -45,6 +45,7 @@ class SettingsStore {
 
     cleanUp() {
         this.settingsUpdateDisposer();
+        IpcRequester.removeListener("settings-get", evt => {});
     }
 }
 

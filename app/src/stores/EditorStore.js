@@ -49,6 +49,7 @@ class EditorStore {
 
     cleanUp() {
         this.editorSettingsDisposer();
+        IpcRequester.removeListener("settings-get", evt => {});
     }
   
 }
