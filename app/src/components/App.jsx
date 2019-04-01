@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col, Container } from "reactstrap";
 import SplitPane from 'react-split-pane';
+import Mousetrap from 'mousetrap';
 import { FileList } from "./FileList";
 import { GhciConsole } from "./GhciConsole";
 import { Editor } from './Editor';
@@ -13,16 +14,12 @@ import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import IpcRequester from '../utils/IpcRequester';
 import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
-import { ModalSelectFile } from "./ModalSelectFile";
-
 import { settingsStore } from "../stores/SettingsStore"
 import { editorStore } from "../stores/EditorStore";
 import { terminalStore } from '../stores/TerminalStore';
 import { fileStore } from '../stores/FileStore';
 import { windowStore } from '../stores/WindowStore';
-
-import Mousetrap from 'mousetrap';
-
+import { ModalSelectFile } from "./ModalSelectFile";
 import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
@@ -131,7 +128,6 @@ export class App extends React.Component{
                 <ModalCreateFile/>
                 <ModalSaveFileAs/>
                 <ModalAlert/>
-                <ModalSelectFile/>
                 <ModalCreateRoom/>
                 <ModalJoinRoom/>
             </>

@@ -196,6 +196,10 @@ class MainProcess{
             case "settings-get":
                 SettingsOps.getSettings(evt);
                 break;
+
+            case "quit":
+                app.quit();
+                break;
                 
             default:
                 break;
