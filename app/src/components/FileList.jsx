@@ -1,11 +1,12 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/pro-light-svg-icons"
 import FileDispatcher, { FILES_GET, FILE_CREATE } from "../dispatchers/FileDispatcher";
 import FolderDispatcher, { FOLDER_LIST, FOLDER_ADD, FOLDER_REMOVE, FOLDER_RESET} from "../dispatchers/FolderDispatcher";
-import ModalDispatcher from "../dispatchers/ModalDispatcher";
-import "./FileList.css";
+import ModalDispatcher, { INPUT_FILE_FOLDER } from "../dispatchers/ModalDispatcher";
 import { FileListFolder } from "./FileListFolder";
+import "./FileList.css";
+
+// interval for refreshing the file list 
+export const AUTO_REFRESH_INTERVAL = 1000 * 60;
 
 export class FileList extends React.Component{
     constructor(props){
@@ -17,6 +18,9 @@ export class FileList extends React.Component{
 
         // secret input[type=folder] element for selecting folders
         this.folderRef = React.createRef();
+
+        // interval id for auto refreshing 
+        this.refreshIntervalId = -1;
     }
 
     // requests the the file names array for each folder in the array
@@ -26,6 +30,15 @@ export class FileList extends React.Component{
             // get names and update state 
             FileDispatcher.getFileNames(folderPath);
         });
+    }
+
+    // updates the entire file list component
+    // @param newPaths      array of new folder paths to add
+    updateFileNames(newPaths=[]){
+        let {folders={}} = this.state;
+        let folderPaths = Object.keys(folders);
+
+        this.requestFileNames([...newPaths, ...folderPaths]);
     }
 
     // state update when file names received 
@@ -81,6 +94,8 @@ export class FileList extends React.Component{
 
             // get files for path
             // this triggers the adding folder to the UI 
+
+            // updates the currently folder only
             this.requestFileNames([path]);
         }
         else ModalDispatcher.alertModal("Folder Add Error", evt.err);
@@ -108,6 +123,11 @@ export class FileList extends React.Component{
         this.setState({folders: {}});
     }
 
+    // when the folder modal is changed 
+    handleFileFolderInput = () => {
+        this.updateFileNames();
+    }
+
     componentDidMount(){
         // listen for folder path updates
         FolderDispatcher.on(FOLDER_LIST, this.handleFolderPaths);
@@ -126,6 +146,15 @@ export class FileList extends React.Component{
 
         // listen for file names update
         FileDispatcher.on(FILES_GET, this.handleFileNames);
+
+        // listen for a UI change in file/folder input 
+        ModalDispatcher.on(INPUT_FILE_FOLDER, this.handleFileFolderInput);
+
+        // auto refresh
+        this.refreshIntervalId = setInterval(
+            () => this.updateFileNames(),
+            AUTO_REFRESH_INTERVAL
+        );
 
         // get folder paths when component mounts  
         FolderDispatcher.getFolderPaths();
@@ -149,6 +178,12 @@ export class FileList extends React.Component{
 
         // stop listening for file names update
         FileDispatcher.removeListener(FILES_GET, this.handleFileNames);
+
+        // stop listening for a UI change in file/folder input 
+        ModalDispatcher.removeListener(INPUT_FILE_FOLDER, this.handleFileFolderInput);
+
+        // clear auto refresh
+        clearInterval(this.refreshIntervalId);
     }
 
     // handler for the when the user selects a folder 

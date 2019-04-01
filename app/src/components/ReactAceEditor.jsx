@@ -31,8 +31,8 @@ import 'brace/ext/language_tools';
 export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
-
-        //this.editorStore = EditorStore;
+        // ref for ace editor 
+        this.editorRef = React.createRef();
         
         // current file in the editor
         this.currFilePath = null; 
@@ -43,9 +43,13 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         // the settings json data
         this.settings = null;
 
+        // editor ref
+        this.editorRef = React.createRef();
+
         this.state = {
             value: '',
         };
+
     }
 
     // handler when a file is read
@@ -61,7 +65,9 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         this.setEditorMode(evt.path);
         
         // load in the file's contents 
-        this.setState({value: evt.str});
+        this.setState({value: evt.str}, () => {
+            this.resetEditorSession();
+        });
     }
 
     // handler for when the file save button is clicked
@@ -94,6 +100,18 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         EditorDispatcher.editorChangeOcccurred();
 
         this.state.value = val;
+    }
+
+    // resets the editor session 
+    resetEditorSession = () => {
+        let {editor} = this.editorRef.current;
+        if(editor){
+            let session = editor.getSession();
+            let undoManager = session.getUndoManager();
+            
+            undoManager.reset();
+            session.setUndoManager(undoManager);
+        }
     }
 
     // function that sets the mode state of the ce
@@ -161,10 +179,18 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
                             enableBasicAutocompletion: this.props.editorStore.editorSettings.enableBasicAutocompletion,
                             enableLiveAutocompletion: this.props.editorStore.editorSettings.enableLiveAutocompletion,
                             enableSnippets: this.props.editorStore.editorSettings.enableSnippets,
+                            selectionStyle: "text",
                         }
+                    },
+                    ref={this.editorRef},                 
+                    value={this.state.value},
+                    onChange={this.onChange},
+                    commands={[{
+                        name: 'save',
+                        bindKey: {win: 'Ctrl-s', mac: 'Command-s'},
+                        exec: () => { EditorDispatcher.saveCurrentFile(); }
                     }
-                    value={this.state.value}
-                    onChange={this.onChange}
+                    ]},
                 ></AceEditor>
             </div>
         )

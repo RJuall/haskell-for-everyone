@@ -141,6 +141,10 @@ class MainProcess{
                 FileOps.getFileNames(evt, data);
                 break;
 
+            case "files-recent":
+                FileOps.getRecentFiles(evt, data);
+                break;
+
             case "file-read":
                 FileOps.readFile(evt, data);
                 break;
