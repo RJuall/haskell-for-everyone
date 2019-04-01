@@ -1,5 +1,5 @@
 import { observable, decorate, autorun, computed, action } from 'mobx';
-import IpcRequester from './IpcRequester';
+import IpcRequester from '../utils/IpcRequester';
 
 class SettingsStore {
     

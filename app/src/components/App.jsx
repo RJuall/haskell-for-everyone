@@ -14,7 +14,7 @@ import IpcRequester from '../utils/IpcRequester';
 import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
 import { ModalSelectFile } from "./ModalSelectFile";
-import { settingsStore } from "../utils/SettingsStore"
+import { settingsStore } from "../stores/SettingsStore"
 import { editorStore } from "../stores/EditorStore";
 import Mousetrap from 'mousetrap';
 
