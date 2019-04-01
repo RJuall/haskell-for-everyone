@@ -1,6 +1,7 @@
 import { settingsStore } from '../utils/SettingsStore';
-import { decorate, autorun, observable, action, computed } from 'mobx';
+import { decorate, autorun, observable, action } from 'mobx';
 import { editorDefaults } from './defaults/EditorDefaults';
+import IpcRequester from '../utils/IpcRequester';
 
 class EditorStore {
 
@@ -21,6 +22,25 @@ class EditorStore {
             blockScrolling: this.globalEditorSettings.blockScrolling || editorDefaults.blockScrolling,
             wrapEnabled: this.globalEditorSettings.wrapEnabled || editorDefaults.wrapEnabled,
         }
+
+        IpcRequester.on("settings-get", ({settings}) => {
+            this.globalEditorSettings = settings.editorSettings;
+
+            this.editorSettings = {
+                fontSize: this.globalEditorSettings.fontSize || editorDefaults.fontSize,
+                fontFamily: this.globalEditorSettings.fontFamily || editorDefaults.fontFamily,
+                theme: this.globalEditorSettings.theme || editorDefaults.theme,
+                name: this.globalEditorSettings.name || editorDefaults.name,
+                height: this.globalEditorSettings.height || editorDefaults.height,
+                width: this.globalEditorSettings.width || editorDefaults.width,
+                mode: this.globalEditorSettings.mode || editorDefaults.mode,
+                enableBasicAutocompletion: this.globalEditorSettings.enableBasicAutocompletion || editorDefaults.enableBasicAutocompletion,
+                enableLiveAutocompletion: this.globalEditorSettings.enableLiveAutocompletion || editorDefaults.enableLiveAutocompletion,
+                enableSnippets: this.globalEditorSettings.enableSnippets || editorDefaults.enableSnippets,
+                blockScrolling: this.globalEditorSettings.blockScrolling || editorDefaults.blockScrolling,
+                wrapEnabled: this.globalEditorSettings.wrapEnabled || editorDefaults.wrapEnabled,
+            }
+        } )
     }
 
     editorSettingsDisposer = action( autorun( () => {
@@ -36,7 +56,7 @@ class EditorStore {
             enableLiveAutocompletion: this.editorSettings.enableLiveAutocompletion,
             enableSnippets: this.editorSettings.enableSnippets,
             blockScrolling: this.editorSettings.blockScrolling,
-            wrapEnabled: this.editorSettings.wrapEnabled,            
+            wrapEnabled: this.editorSettings.wrapEnabled            
         }
         settingsStore.updateSettings(editorSettings);
     }))

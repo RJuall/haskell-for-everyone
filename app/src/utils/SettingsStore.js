@@ -11,7 +11,7 @@ class SettingsStore {
     };
 
     constructor(props) {
-        IpcRequester.on("settings-get", evt => Object.assign(this.settings, evt.settings));
+        IpcRequester.on("settings-get", evt => { Object.assign(this.settings, evt.settings) });
         IpcRequester.getSettings();
     }
 
