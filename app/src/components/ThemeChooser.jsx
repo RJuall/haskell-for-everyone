@@ -8,12 +8,10 @@ export const ThemeChooser = inject("editorStore")(observer(class ThemeChooser ex
 
         // sets the theme value state and emits
         //    a theme change event
-        action(
-            this.selectTheme = event => {
-                this.props.editorStore.editorSettings.theme = event.target.value;
-            }
-        )
-    }
+        this.selectTheme = action( event => {
+            this.props.editorStore.editorSettings.theme = event.target.value;
+        })
+}
 
     render() {
         return(

@@ -4,6 +4,7 @@ import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import GhciDispatcher from '../dispatchers/GhciDispatcher';
 import { observer, inject } from 'mobx-react';
+import { action } from 'mobx';
 
 // import syntax highlighting modes
 import 'brace/mode/haskell';
@@ -98,7 +99,7 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
     // function that sets the mode state of the ce
     //    based on a file's extension
     //    and emits a modeChange event
-    setEditorMode = file => {
+    setEditorMode = action(file => {
         if(!file) return;
 
         if      (file.endsWith('.hs') 
@@ -120,7 +121,7 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
         else {
             Object.assign(this.props.editorStore.editorSettings, {mode: 'plain_text'});
         }
-    }
+    })
 
     componentDidMount() {
         // listen for events

@@ -8,11 +8,9 @@ export const FontChooser = inject("editorStore")(observer( class FontChooser ext
 
         // sets the font family state and emits
         //    a font change event
-        action(
-            this.fontChange = event => {
-                this.props.editorStore.editorSettings.fontFamily = event.target.value;
-            }
-        )
+        this.fontChange = action( event => {
+            this.props.editorStore.editorSettings.fontFamily = event.target.value;
+        })
     }    
 
     render() {

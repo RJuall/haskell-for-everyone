@@ -1,4 +1,4 @@
-import { observable, decorate, autorun, computed } from 'mobx';
+import { observable, decorate, autorun, computed, action } from 'mobx';
 import IpcRequester from './IpcRequester';
 
 class SettingsStore {
@@ -35,13 +35,16 @@ class SettingsStore {
         return this.settings.windowSettings;
     }
 
-    updateSettings(editorSettings = {}, terminalSettings = {}, fileSettings = {}, windowSettings = {}) {
-        Object.assign(this.settings, {editorSettings, terminalSettings, fileSettings, windowSettings});
-    }
+    updateSettings = action ((editorSettings = {}, terminalSettings = {}, fileSettings = {}, windowSettings = {}) => {
+        console.log({editorSettings, terminalSettings, fileSettings, windowSettings})
+        //Object.assign(this.settings, {editorSettings: editorSettings, terminalSettings: terminalSettings, fileSettings: fileSettings, windowSettings: windowSettings});
+        console.log("SUCCESS");
+        console.log(this.settings);
+    })
 
-    settingsUpdateDisposer = autorun( () => {
-         this.saveSettings(this.settings);
-    }, { delay: 60000, onError: () => { console.log("Settings file update error.") } });
+    settingsUpdateDisposer = action( autorun( () => {
+        this.saveSettings(this.settings);
+    }, { delay: 60000, onError: () => { console.log("Settings file update error.") } }));
 
     cleanUp() {
         this.settingsUpdateDisposer();
