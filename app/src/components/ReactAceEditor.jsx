@@ -181,16 +181,16 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
                             enableSnippets: this.props.editorStore.editorSettings.enableSnippets,
                             selectionStyle: "text",
                         }
-                    },
-                    ref={this.editorRef},                 
-                    value={this.state.value},
-                    onChange={this.onChange},
+                    }
+                    ref={this.editorRef}                 
+                    value={this.state.value}
+                    onChange={this.onChange}
                     commands={[{
                         name: 'save',
                         bindKey: {win: 'Ctrl-s', mac: 'Command-s'},
                         exec: () => { EditorDispatcher.saveCurrentFile(); }
                     }
-                    ]},
+                    ]}
                 ></AceEditor>
             </div>
         )
