@@ -85,7 +85,18 @@ export class ContextMenuUtils{
                 
                 // folder-only addons (clicked a folder list in the left column)
                 if(ContextMenuUtils.elementHasFileList(elem)){
-                    prepends.push({
+                    prepends = [...prepends, {
+                        label: "Create New File",
+                        click: () => {
+                            // find 'folderPath' attribute of element at (x, y)
+                            ContextMenuUtils.findElementKeyAt(params.x, params.y, "folder-path", (elem, folderPath) => {
+                                if(folderPath){
+                                    ModalDispatcher.createFileModal(folderPath);
+                                }
+                            });
+                        }
+                    },
+                    {
                         label: "Remove Folder",
                         click: () => {
                             // find 'folderPath' attribute of element at (x, y)
@@ -95,7 +106,7 @@ export class ContextMenuUtils{
                                 }
                             });
                         }
-                    });
+                    }];
                 }
         
                 return prepends;
