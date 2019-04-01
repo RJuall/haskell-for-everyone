@@ -14,6 +14,8 @@ import IpcRequester from '../utils/IpcRequester';
 import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
 import { ModalSelectFile } from "./ModalSelectFile";
+import { settingsStore } from "../utils/SettingsStore"
+import { editorStore } from "../stores/EditorStore";
 import Mousetrap from 'mousetrap';
 
 import "./App.css";
@@ -73,7 +75,10 @@ export class App extends React.Component{
 
     componentWillUnmount(){
         IpcRequester.removeListener("settings-get", evt => {});
+        settingsStore.cleanUp();
+        editorStore.cleanUp();
         Mousetrap.unbind('up up down down left right left right b a enter');
+
     }
 
     render(){

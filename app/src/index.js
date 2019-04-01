@@ -3,6 +3,9 @@ import ReactDOM from "react-dom";
 import { App } from "./components/App";
 import ModalDispatcher from "./dispatchers/ModalDispatcher";
 import FolderDispatcher from "./dispatchers/FolderDispatcher";
+import { settingsStore } from './utils/SettingsStore';
+import { editorStore } from './stores/EditorStore';
+import { Provider } from 'mobx-react';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 // import context menu
@@ -103,4 +106,9 @@ let checkForCSSClass = (elem, cssClass) => {
 }
 
 // render app 
-ReactDOM.render(<App/>, document.querySelector("#root"));
+ReactDOM.render(
+    <Provider settingsStore={settingsStore}
+              editorStore={editorStore}>
+        <App/>   
+    </Provider>, 
+    document.querySelector("#root"));

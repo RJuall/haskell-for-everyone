@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactAceEditor from './ReactAceEditor'
-import EditorIconBar from './EditorIconBar';
+import { ReactAceEditor } from './ReactAceEditor'
+import { EditorIconBar } from './EditorIconBar';
 
 import './Editor.css';
 
