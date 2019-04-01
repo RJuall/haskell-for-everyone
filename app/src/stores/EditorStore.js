@@ -6,7 +6,7 @@ class EditorStore {
 
     constructor(props) {
         this.globalEditorSettings = settingsStore.getEditorSettings;
-
+ 
         this.editorSettings = {
             fontSize: this.globalEditorSettings.fontSize || editorDefaults.fontSize,
             fontFamily: this.globalEditorSettings.fontFamily || editorDefaults.fontFamily,
