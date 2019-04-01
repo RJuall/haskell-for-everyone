@@ -1,6 +1,7 @@
 import { settingsStore } from '../utils/SettingsStore';
 import { decorate, autorun, observable } from 'mobx';
 import { editorDefaults } from './defaults/EditorDefaults';
+import { observer, inject } from 'mobx-react';
 
 class EditorStore {
 
@@ -22,16 +23,14 @@ class EditorStore {
     }
 
     editorSettingsDisposer = autorun( () => {
-        settingsStore.updateSettings(this.editorSettings);
+        this.props.settingsStore.settings = {editorSettings: this.editorSettings.get()};
+        console.log("ed set auto ran" + this.editorSettings.get());
     })
 
     cleanUp() {
         this.editorSettingsDisposer();
     }
-
-    test() {
-        console.log("editorSettings");
-    }    
+  
 }
 
 decorate(EditorStore, {

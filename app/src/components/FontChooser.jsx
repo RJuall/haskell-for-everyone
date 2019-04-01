@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer, inject} from 'mobx-react';
+import { action } from 'mobx';
 
 export const FontChooser = inject("editorStore")(observer( class FontChooser extends React.Component {
     constructor(props) {
@@ -7,9 +8,11 @@ export const FontChooser = inject("editorStore")(observer( class FontChooser ext
 
         // sets the font family state and emits
         //    a font change event
-        this.fontChange = event => {
-            this.props.editorStore.editorSettings.fontFamily = event.target.value;
-        }
+        action(
+            this.fontChange = event => {
+                this.props.editorStore.editorSettings.fontFamily = event.target.value;
+            }
+        )
     }    
 
     render() {

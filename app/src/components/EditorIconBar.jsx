@@ -8,6 +8,7 @@ import { ThemeChooser } from './ThemeChooser';
 import { UIChooser } from './UIChooser';
 import { observer, inject } from 'mobx-react';
 import './EditorIconBar.css';
+import { action } from 'mobx';
 
 export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar extends React.Component {
     constructor(props) {
@@ -22,29 +23,33 @@ export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar 
 
         // signals that the ce font size should increase
         //    and sets the fontSize state
-        this.fontIncrease = () => {
-            if (parseInt(this.props.editorStore.editorSettings.fontSize) < 60) {
-                Object.assign(
-                    this.props.editorStore.editorSettings,
-                    {
-                    fontSize: (parseInt(this.props.editorStore.editorSettings.fontSize) + 2).toString() + 'px'
-                    }
-                )
+        action(
+            this.fontIncrease = () => {
+                if (parseInt(this.props.editorStore.editorSettings.fontSize) < 60) {
+                    Object.assign(
+                        this.props.editorStore.editorSettings,
+                        {
+                        fontSize: (parseInt(this.props.editorStore.editorSettings.fontSize) + 2).toString() + 'px'
+                        }
+                    )
+                }
             }
-        }
+        )
 
         // signals that the ce font size should decrease
         //    and sets the fontsize state
-        this.fontDecrease = () => {
-            if (parseInt(this.props.editorStore.editorSettings.fontSize) > 8) {
-                Object.assign(
-                    this.props.editorStore.editorSettings,
-                    {
-                    fontSize: (parseInt(this.props.editorStore.editorSettings.fontSize) - 2).toString() + 'px'
-                    }
-                )
+        action(
+            this.fontDecrease = () => {
+                if (parseInt(this.props.editorStore.editorSettings.fontSize) > 8) {
+                    Object.assign(
+                        this.props.editorStore.editorSettings,
+                        {
+                        fontSize: (parseInt(this.props.editorStore.editorSettings.fontSize) - 2).toString() + 'px'
+                        }
+                    )
+                }
             }
-        }
+        )
 
         // sets the filename state when a new file
         //    is loaded into the ce

@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
+import { action } from 'mobx';
 
 export const ThemeChooser = inject("editorStore")(observer(class ThemeChooser extends React.Component {
     constructor(props) {
@@ -7,9 +8,11 @@ export const ThemeChooser = inject("editorStore")(observer(class ThemeChooser ex
 
         // sets the theme value state and emits
         //    a theme change event
-        this.selectTheme = event => {
-            this.props.editorStore.editorSettings.theme = event.target.value;
-        }
+        action(
+            this.selectTheme = event => {
+                this.props.editorStore.editorSettings.theme = event.target.value;
+            }
+        )
     }
 
     render() {
