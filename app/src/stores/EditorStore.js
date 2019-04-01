@@ -1,4 +1,4 @@
-import { settingsStore } from '../utils/SettingsStore';
+import { settingsStore } from './SettingsStore';
 import { decorate, autorun, observable, action } from 'mobx';
 import { editorDefaults } from './defaults/EditorDefaults';
 import IpcRequester from '../utils/IpcRequester';
@@ -6,40 +6,26 @@ import IpcRequester from '../utils/IpcRequester';
 class EditorStore {
 
     constructor(props) {
-        this.globalEditorSettings = settingsStore.getEditorSettings;
+        this.globalEditorSettings = {};
  
         this.editorSettings = {
-            fontSize: this.globalEditorSettings.fontSize || editorDefaults.fontSize,
-            fontFamily: this.globalEditorSettings.fontFamily || editorDefaults.fontFamily,
-            theme: this.globalEditorSettings.theme || editorDefaults.theme,
-            name: this.globalEditorSettings.name || editorDefaults.name,
-            height: this.globalEditorSettings.height || editorDefaults.height,
-            width: this.globalEditorSettings.width || editorDefaults.width,
-            mode: this.globalEditorSettings.mode || editorDefaults.mode,
-            enableBasicAutocompletion: this.globalEditorSettings.enableBasicAutocompletion || editorDefaults.enableBasicAutocompletion,
-            enableLiveAutocompletion: this.globalEditorSettings.enableLiveAutocompletion || editorDefaults.enableLiveAutocompletion,
-            enableSnippets: this.globalEditorSettings.enableSnippets || editorDefaults.enableSnippets,
-            blockScrolling: this.globalEditorSettings.blockScrolling || editorDefaults.blockScrolling,
-            wrapEnabled: this.globalEditorSettings.wrapEnabled || editorDefaults.wrapEnabled,
+            fontSize: editorDefaults.fontSize,
+            fontFamily: editorDefaults.fontFamily,
+            theme: editorDefaults.theme,
+            name: editorDefaults.name,
+            height: editorDefaults.height,
+            width: editorDefaults.width,
+            mode: editorDefaults.mode,
+            enableBasicAutocompletion: editorDefaults.enableBasicAutocompletion,
+            enableLiveAutocompletion: editorDefaults.enableLiveAutocompletion,
+            enableSnippets: editorDefaults.enableSnippets,
+            blockScrolling: editorDefaults.blockScrolling,
+            wrapEnabled: editorDefaults.wrapEnabled,
         }
 
         IpcRequester.on("settings-get", ({settings}) => {
             this.globalEditorSettings = settings.editorSettings;
-
-            this.editorSettings = {
-                fontSize: this.globalEditorSettings.fontSize || editorDefaults.fontSize,
-                fontFamily: this.globalEditorSettings.fontFamily || editorDefaults.fontFamily,
-                theme: this.globalEditorSettings.theme || editorDefaults.theme,
-                name: this.globalEditorSettings.name || editorDefaults.name,
-                height: this.globalEditorSettings.height || editorDefaults.height,
-                width: this.globalEditorSettings.width || editorDefaults.width,
-                mode: this.globalEditorSettings.mode || editorDefaults.mode,
-                enableBasicAutocompletion: this.globalEditorSettings.enableBasicAutocompletion || editorDefaults.enableBasicAutocompletion,
-                enableLiveAutocompletion: this.globalEditorSettings.enableLiveAutocompletion || editorDefaults.enableLiveAutocompletion,
-                enableSnippets: this.globalEditorSettings.enableSnippets || editorDefaults.enableSnippets,
-                blockScrolling: this.globalEditorSettings.blockScrolling || editorDefaults.blockScrolling,
-                wrapEnabled: this.globalEditorSettings.wrapEnabled || editorDefaults.wrapEnabled,
-            }
+            Object.assign(this.editorSettings, this.globalEditorSettings);
         } )
     }
 
@@ -63,6 +49,7 @@ class EditorStore {
 
     cleanUp() {
         this.editorSettingsDisposer();
+        IpcRequester.removeListener("settings-get", evt => {});
     }
   
 }
