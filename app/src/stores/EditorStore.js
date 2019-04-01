@@ -38,7 +38,7 @@ class EditorStore {
             blockScrolling: this.editorSettings.blockScrolling,
             wrapEnabled: this.editorSettings.wrapEnabled,            
         }
-        Object.assign(settingsStore.updateSettings(editorSettings));
+        settingsStore.updateSettings(editorSettings);
     }))
 
     cleanUp() {

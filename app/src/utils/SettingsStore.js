@@ -36,15 +36,12 @@ class SettingsStore {
     }
 
     updateSettings = action ((editorSettings = {}, terminalSettings = {}, fileSettings = {}, windowSettings = {}) => {
-        console.log({editorSettings, terminalSettings, fileSettings, windowSettings})
-        //Object.assign(this.settings, {editorSettings: editorSettings, terminalSettings: terminalSettings, fileSettings: fileSettings, windowSettings: windowSettings});
-        console.log("SUCCESS");
-        console.log(this.settings);
+        Object.assign(this.settings, {editorSettings, terminalSettings, fileSettings, windowSettings});
     })
 
     settingsUpdateDisposer = action( autorun( () => {
         this.saveSettings(this.settings);
-    }, { delay: 60000, onError: () => { console.log("Settings file update error.") } }));
+    }, { delay: 30000, onError: () => { console.log("Settings file update error.") } }));
 
     cleanUp() {
         this.settingsUpdateDisposer();
