@@ -55,7 +55,7 @@ export class MenuBar extends React.Component {
                         File 
                     </DropdownToggle>
                     <DropdownMenu>
-                        <DropdownItem onClick={() => ModalDispatcher.createFileModal()}>New File</DropdownItem>
+                        <DropdownItem onClick={() => EditorDispatcher.emptyFile()}>New File</DropdownItem>
                         <DropdownItem onClick={() => SelectFileFolder.selectFile()}>Open File</DropdownItem>
                         <DropdownItem onClick={() => SelectFileFolder.selectFolder()}>Open Folder</DropdownItem>
                         <RecentFiles/>
