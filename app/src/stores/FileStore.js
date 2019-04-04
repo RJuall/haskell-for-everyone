@@ -1,4 +1,3 @@
-import { settingsStore } from './SettingsStore';
 import { decorate, autorun, observable, action } from 'mobx';
 import { fileDefaults } from './defaults/FileDefaults';
 import IpcRequester from '../utils/IpcRequester';
@@ -9,27 +8,26 @@ class FileStore {
  
         this.fileSettings = {
             //default settings go here
+            recentFilePaths:    [],
+            lastFilePath:       null
         };
 
-        IpcRequester.on("settings-get", this.handleInitialSettings);
+        IpcRequester.on("folder-data-get", this.handleInitialFolderData);
+        IpcRequester.getFolderData();
     }
 
-    handleInitialSettings = ({settings}) => {
-        this.globalFileSettings = settings.fileSettings;
+    handleInitialFolderData = ({lastFilePath, recentFilePaths}) => {
+        this.globalFileSettings = {lastFilePath, recentFilePaths};
         Object.assign(this.fileSettings, this.globalFileSettings);
     }
 
     fileSettingsDisposer = action( autorun( () => {
-        let fileSettings = {
-            // all fileSettings fields go here
-        };
-        
-        settingsStore.updateSettings(fileSettings);
+        IpcRequester.updateFolderData(this.fileSettings);
     }))
 
     cleanUp() {
         this.fileSettingsDisposer();
-        IpcRequester.removeListener("settings-get", this.handleInitialSettings);
+        IpcRequester.removeListener("folder-data-get", this.handleInitialFolderData);
     }
   
 }
