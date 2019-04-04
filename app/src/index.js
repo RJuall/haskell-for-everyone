@@ -7,8 +7,6 @@ import { editorStore } from './stores/EditorStore';
 import { terminalStore } from './stores/TerminalStore';
 import { fileStore } from './stores/FileStore';
 import { windowStore } from './stores/WindowStore';
-import FolderDispatcher from "./dispatchers/FolderDispatcher";
-import ModalDispatcher from "./dispatchers/ModalDispatcher";
 import { ContextMenuUtils } from "./utils/ContextMenuUtils";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 

@@ -11,7 +11,7 @@ import { action } from 'mobx';
 
 import './EditorIconBar.css';
 
-export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar extends React.Component {
+export const EditorIconBar = inject("editorStore", "fileStore")(observer(class EditorIconBar extends React.Component {
     constructor(props) {
         super(props);
 
@@ -48,17 +48,6 @@ export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar 
                 )
             }
         })
-
-        // sets the filename state when a new file
-        //    is loaded into the ce
-        this.handleFileLoad = evt => {
-            if(!evt.err){
-                let filename = evt.pathClean.split('/').pop();
-                this.setState({
-                    filename: filename
-                });
-            }
-        }
     }
 
     // mark file changed 
@@ -83,20 +72,18 @@ export const EditorIconBar = inject("editorStore")(observer(class EditorIconBar 
         // sets up event listeners
         EditorDispatcher.on("editor-change", this.handleEditorChange);
         EditorDispatcher.on("editor-change-reset", this.handleEditorChangeReset);
-        FileDispatcher.on(FILE_READ, this.handleFileLoad);
     }
 
     componentWillUnmount() {
         // removes event listeners
         EditorDispatcher.removeListener("editor-change", this.handleEditorChange);
         EditorDispatcher.removeListener("editor-change-reset", this.handleEditorChangeReset);
-        FileDispatcher.removeListener(FILE_READ, this.handleFileLoad);
     }
 
     render() {
         return(
             <div className="icon-bar">
-                <div className="filename">{this.state.filename}</div>
+                <div className="filename">{(this.props.fileStore.fileSettings.lastFilePath || "").split("/").pop()}</div>
                 <button></button>
                 <button title="Decrease font size" onClick={this.fontDecrease}>
                     <FontAwesomeIcon size="2x" icon={faMinus}/>

@@ -1,11 +1,12 @@
 import React from "react";
+import { observer, inject } from "mobx-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileAlt, faHSquare } from "@fortawesome/pro-regular-svg-icons";
 import { faMarker } from "@fortawesome/pro-light-svg-icons"
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import FileListDispatcher, { FILES_DEACTIVATE } from "../dispatchers/FileListDispatcher";
 
-export class FileListFolderItem extends React.Component{
+export const FileListFolderItem = inject("fileStore")(observer(class FileListFolderItem extends React.Component {
     constructor(props){
         super(props);
 
@@ -30,8 +31,14 @@ export class FileListFolderItem extends React.Component{
 
     // on click handler 
     onClick = () => {
-        this.makeActive();
-        FileDispatcher.readFile(`${this.props.folderPath}/${this.props.fileName}`);
+        // file path held within this element 
+        let filePath = `${this.props.folderPath}/${this.props.fileName}`;
+
+        // don't load same file 
+        if(filePath !== this.props.fileStore.fileSettings.lastFilePath){
+            this.makeActive();
+            FileDispatcher.readFile(filePath);
+        }
     }
 
     componentDidMount(){
@@ -70,4 +77,4 @@ export class FileListFolderItem extends React.Component{
             </div>
         );
     }
-}
+}));

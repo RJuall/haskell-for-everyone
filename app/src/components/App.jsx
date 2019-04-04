@@ -20,6 +20,7 @@ import { terminalStore } from '../stores/TerminalStore';
 import { fileStore } from '../stores/FileStore';
 import { windowStore } from '../stores/WindowStore';
 import "./App.css";
+import FileDispatcher from "../dispatchers/FileDispatcher";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
 
@@ -71,7 +72,12 @@ export class App extends React.Component{
                            currentEdColWidth: newEdColWidth,
                            windowSize: newWindowWidth
                         });
-        }        
+        }      
+        
+        IpcRequester.on("folder-data-get", ({lastFilePath}) => {
+            FileDispatcher.readFile(lastFilePath);
+        });
+        IpcRequester.getFolderData();
     }
 
     componentWillUnmount(){

@@ -197,6 +197,10 @@ class MainProcess{
                 SettingsOps.getSettings(evt);
                 break;
 
+            case "folder-data-get":
+                FolderOps.getFolderData(evt);
+                break;
+
             case "quit":
                 app.quit();
                 break;

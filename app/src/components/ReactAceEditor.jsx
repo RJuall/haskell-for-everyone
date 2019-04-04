@@ -28,14 +28,11 @@ import 'brace/theme/twilight';
 // allows code completion
 import 'brace/ext/language_tools';
 
-export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEditor extends React.Component {
+export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
         // ref for ace editor 
         this.editorRef = React.createRef();
-        
-        // current file in the editor
-        this.currFilePath = null; 
 
         // changed after save?
         this.changedPostSave = false;
@@ -55,11 +52,12 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
     // handler when a file is read
     handleFileRead = (evt) => {
         if(evt.path !== this.currFilePath){
-            // save current file logic 
+            // save current file logic before switching 
         }
 
         // update current file name
-        this.currFilePath = evt.path;
+        this.props.fileStore.fileSettings.lastFilePath = evt.path;
+        this.props.fileStore.recentPathUpdate(evt.path);
 
         // set the editor mode
         this.setEditorMode(evt.path);
@@ -73,7 +71,10 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
     // handler for when the file save button is clicked
     handleSaveFile = () => {
         // issue a request to write current code to current file 
-        FileDispatcher.writeFile(this.currFilePath, this.state.value);
+        FileDispatcher.writeFile(
+            this.props.fileStore.fileSettings.lastFilePath,
+            this.state.value
+        );
         
         // mark file as same as the save
         this.changedPostSave = false;
@@ -89,7 +90,11 @@ export const ReactAceEditor = inject("editorStore")(observer(class ReactAceEdito
     // will not execute if mode is not set to haskell 
     handleRunCode = () => {
         if (this.props.editorStore.editorSettings.mode === 'haskell') {
-            GhciDispatcher.executeFile(this.currFilePath, this.state.value);
+            GhciDispatcher.executeFile(
+                this.props.fileStore.fileSettings.lastFilePath,
+                this.state.value
+            );
+
             EditorDispatcher.editorChangeReset();
         }
     }

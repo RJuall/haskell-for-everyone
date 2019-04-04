@@ -56,8 +56,8 @@ class FileOps{
                 let pathClean = path.replace(/\\/g, "/"); 
                 IpcResponder.respond(evt, "file-read", {path, pathClean, str});
 
-                // update recent files 
-                FolderData.updateRecentFiles([path]);
+                // update folder data
+                FolderData.update({recentFilePaths: [path], lastFilePath: path});
             })
             .catch(err => {
                 // error
