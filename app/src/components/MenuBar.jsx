@@ -7,6 +7,7 @@ import './MenuBar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/pro-regular-svg-icons';
 import { SelectFileFolder } from '../utils/SelectFileFolder';
+import { RecentFiles } from './RecentFiles';
 
 
 export class MenuBar extends React.Component {
@@ -57,6 +58,7 @@ export class MenuBar extends React.Component {
                         <DropdownItem onClick={() => ModalDispatcher.createFileModal()}>New File</DropdownItem>
                         <DropdownItem onClick={() => SelectFileFolder.selectFile()}>Open File</DropdownItem>
                         <DropdownItem onClick={() => SelectFileFolder.selectFolder()}>Open Folder</DropdownItem>
+                        <RecentFiles/>
                         <DropdownItem onClick={() => ModalDispatcher.saveFileAsModal()}>Save As</DropdownItem>
                         <DropdownItem onClick={() => EditorDispatcher.saveCurrentFile()}>Save</DropdownItem>
                         <DropdownItem divider />
