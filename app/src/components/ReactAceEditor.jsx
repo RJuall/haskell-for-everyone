@@ -57,6 +57,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
         // update current file name
         this.props.fileStore.fileSettings.lastFilePath = evt.path;
+        this.props.fileStore.recentPathUpdate(evt.path);
 
         // set the editor mode
         this.setEditorMode(evt.path);
