@@ -31,7 +31,7 @@ class FolderData{
                         // missing file - use defaults (empty)
                         this.update()
                             .then(() => resolve(this))
-                            .catch(err => reject(err))
+                            .catch(err => reject(err));
                     }
                     else reject(err);
                 });

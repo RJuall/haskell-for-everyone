@@ -31,12 +31,14 @@ export const FileListFolderItem = inject("fileStore")(observer(class FileListFol
 
     // on click handler 
     onClick = () => {
+        // style change 
+        this.makeActive();
+
         // file path held within this element 
         let filePath = `${this.props.folderPath}/${this.props.fileName}`;
 
         // don't load same file 
         if(filePath !== this.props.fileStore.fileSettings.lastFilePath){
-            this.makeActive();
             FileDispatcher.readFile(filePath);
         }
     }
