@@ -102,6 +102,11 @@ class IpcRequester extends EventEmitter{
         this.updateSettings({windowSettings});
     }
 
+    // updates folder data file 
+    updateFolderData({lastFilePath=null, recentFilePaths=null}){
+        this.send("folder-data-update", {lastFilePath, recentFilePaths})
+    }
+
     // tells the main process to die
     quit(){
         this.send("quit");
@@ -110,6 +115,11 @@ class IpcRequester extends EventEmitter{
     // sends the get settings request
     getSettings(){
         this.send("settings-get");
+    }
+
+    // sends the get folder data request
+    getFolderData(){
+        this.send("folder-data-get");
     }
 }
 
