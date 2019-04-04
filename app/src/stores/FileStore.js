@@ -4,7 +4,6 @@ import { fileDefaults } from './defaults/FileDefaults';
 import IpcRequester from '../utils/IpcRequester';
 
 class FileStore {
-
     constructor(props) {
         this.globalFileSettings = {};
  
@@ -12,22 +11,25 @@ class FileStore {
             //default settings go here
         };
 
-        IpcRequester.on("settings-get", ({settings}) => {
-            this.globalFileSettings = settings.fileSettings;
-            Object.assign(this.fileSettings, this.globalFileSettings);
-        } )
+        IpcRequester.on("settings-get", this.handleInitialSettings);
+    }
+
+    handleInitialSettings = ({settings}) => {
+        this.globalFileSettings = settings.fileSettings;
+        Object.assign(this.fileSettings, this.globalFileSettings);
     }
 
     fileSettingsDisposer = action( autorun( () => {
         let fileSettings = {
             // all fileSettings fields go here
         };
+        
         settingsStore.updateSettings(fileSettings);
     }))
 
     cleanUp() {
         this.fileSettingsDisposer();
-        IpcRequester.removeListener("settings-get", evt => {});
+        IpcRequester.removeListener("settings-get", this.handleInitialSettings);
     }
   
 }

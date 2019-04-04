@@ -65,10 +65,17 @@ class FolderOps{
     }
 
     // gets the list of all stored folder paths
-    // @Param evt       event object for responding 
+    // @param evt       event object for responding 
     static getFolderPaths(evt){
         let folderPaths = FolderData.folderPaths;
         IpcResponder.respond(evt, "folder-list", {folderPaths});
+    }
+
+    // gets the persistent folder data
+    // @param evt       event object for responding
+    static getFolderData(evt){
+        let {recentFilePaths, lastFilePath} = FolderData;
+        IpcResponder.respond(evt, "folder-data-get", {recentFilePaths, lastFilePath});
     }
 }
 
