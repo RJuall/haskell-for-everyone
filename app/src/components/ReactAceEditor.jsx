@@ -53,7 +53,12 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     // handler when a file is read
     handleFileRead = (evt) => {
         if(evt.path !== this.currFilePath){
-            // save current file logic before switching 
+            // save current file logic before switching
+            // replace this for temp files later!  
+            FileDispatcher.writeFile(
+                this.props.fileStore.fileSettings.lastFilePath,
+                this.state.value
+            );
         }
 
         // update current file name
