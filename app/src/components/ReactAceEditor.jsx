@@ -27,6 +27,7 @@ import 'brace/theme/twilight';
 
 // allows code completion
 import 'brace/ext/language_tools';
+import ModalDispatcher from '../dispatchers/ModalDispatcher';
 
 export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class ReactAceEditor extends React.Component {
     constructor(props) {
@@ -70,6 +71,12 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
     // handler for when the file save button is clicked
     handleSaveFile = () => {
+        // blank file? 
+        if(!this.props.fileStore.fileSettings.lastFilePath){
+            ModalDispatcher.saveFileAsModal();
+            return;
+        }
+
         // issue a request to write current code to current file 
         FileDispatcher.writeFile(
             this.props.fileStore.fileSettings.lastFilePath,
@@ -97,6 +104,13 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
             EditorDispatcher.editorChangeReset();
         }
+    }
+
+    handleEmptyFile = () => {
+        this.props.fileStore.fileSettings.lastFilePath = null;
+
+        this.resetEditorSession();
+        this.setState({value: ""});
     }
 
     // when the editor changes... (no longer sync with file)
@@ -152,6 +166,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         EditorDispatcher.on("editor-save-file", this.handleSaveFile);
         EditorDispatcher.on("save-as", this.handleSaveFileAs);
         EditorDispatcher.on("run-code", this.handleRunCode);
+        EditorDispatcher.on("empty-file", this.handleEmptyFile);
     }    
 
     componentWillUnmount() {
@@ -160,6 +175,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         EditorDispatcher.removeListener("editor-save-file", this.handleSaveFile);
         EditorDispatcher.removeListener("save-as", this.handleSaveFileAs);
         EditorDispatcher.removeListener("run-code", this.handleRunCode);
+        EditorDispatcher.removeListener("empty-file", this.handleEmptyFile);
     }
 
     render() {
