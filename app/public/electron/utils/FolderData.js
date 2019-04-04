@@ -9,7 +9,7 @@ class FolderData{
     constructor(){
         // all folders
         this._folderPaths = [];
-        this._lastFile = null;
+        this._lastFilePath = null;
         this._recentFilePaths = [];
     }
 
@@ -20,7 +20,7 @@ class FolderData{
                 .then(json => {
                     // file loaded - set fields base on file 
                     this._folderPaths = json.folderPaths || [];
-                    this._lastFile = json.lastFile || null;
+                    this._lastFilePath = json.lastFilePath || null;
                     this._recentFilePaths = json._recentFilePaths || [];
 
                     resolve(this);
@@ -122,7 +122,7 @@ class FolderData{
             // json to stringify
             let json = {
                 folderPaths:        update.folderPaths || this.folderPaths,
-                lastFile:           update.lastFile || this.lastFile,
+                lastFilePath:       update.lastFilePath || this.lastFilePath,
                 recentFilePaths:    this.recentFilePaths
             };
             
@@ -139,23 +139,14 @@ class FolderData{
         });
     }
 
-    // setter for last file
-    // @param fname     last file used name 
-    set lastFile(fname){
-        // set the name
-        this._lastFile = fname;
-        // update file 
-        this.update();
-    }
-
     // getter for folder pathsf
     get folderPaths(){
         return this._folderPaths;
     }
 
     // getter for last file 
-    get lastFile(){
-        return this._lastFile;
+    get lastFilePath(){
+        return this._lastFilePath;
     }
 
     // getter for recent files 
