@@ -21,7 +21,7 @@ class FolderData{
                     // file loaded - set fields base on file 
                     this._folderPaths = json.folderPaths || [];
                     this._lastFilePath = json.lastFilePath || null;
-                    this._recentFilePaths = json._recentFilePaths || [];
+                    this._recentFilePaths = json.recentFilePaths || [];
 
                     resolve(this);
                 })
@@ -31,7 +31,7 @@ class FolderData{
                         // missing file - use defaults (empty)
                         this.update()
                             .then(() => resolve(this))
-                            .catch(err => reject(err));
+                            .catch(err => reject(err))
                     }
                     else reject(err);
                 });
