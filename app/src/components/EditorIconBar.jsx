@@ -15,13 +15,6 @@ export const EditorIconBar = inject("editorStore", "fileStore")(observer(class E
     constructor(props) {
         super(props);
 
-        // the settings json data
-        this.settings = null;
-
-        this.state = {
-            filename: '',
-        };
-
         // signals that the ce font size should increase
         //    and sets the fontSize state
         
@@ -50,40 +43,16 @@ export const EditorIconBar = inject("editorStore", "fileStore")(observer(class E
         })
     }
 
-    // mark file changed 
-    handleEditorChange = evt => {
-        if(this.state.filename && !this.state.filename.endsWith("*")){
-            let filename = `${this.state.filename}*`;
-            this.setState({filename});
-        }
-    }
-
-    // mark file not changed 
-    handleEditorChangeReset = evt => {
-        let fname = this.state.filename;
-
-        if(fname && fname.endsWith("*")){
-            let filename = fname.substring(0, fname.length - 1);
-            this.setState({filename});
-        }
-    }
-
-    componentDidMount() {
-        // sets up event listeners
-        EditorDispatcher.on("editor-change", this.handleEditorChange);
-        EditorDispatcher.on("editor-change-reset", this.handleEditorChangeReset);
-    }
-
-    componentWillUnmount() {
-        // removes event listeners
-        EditorDispatcher.removeListener("editor-change", this.handleEditorChange);
-        EditorDispatcher.removeListener("editor-change-reset", this.handleEditorChangeReset);
-    }
-
     render() {
+        // file name to display 
+        let fileName = (this.props.fileStore.fileSettings.lastFilePath || "").split("/").pop();
+        if(fileName && this.props.fileStore.fileSettings.currFileAltered && !fileName.endsWith("*")){
+            fileName += "*";
+        }
+
         return(
             <div className="icon-bar">
-                <div className="filename">{(this.props.fileStore.fileSettings.lastFilePath || "").split("/").pop()}</div>
+                <div className="filename">{fileName}</div>
                 <button></button>
                 <button title="Decrease font size" onClick={this.fontDecrease}>
                     <FontAwesomeIcon size="2x" icon={faMinus}/>

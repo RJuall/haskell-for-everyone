@@ -8,8 +8,9 @@ class FileStore {
  
         this.fileSettings = {
             //default settings go here
-            recentFilePaths:    [],
-            lastFilePath:       null
+            recentFilePaths:    [],         // array of recent file paths
+            lastFilePath:       null,       // last/current file loaded
+            currFileAltered:    false       // file modified and not saved? 
         };
 
         IpcRequester.on("folder-data-get", this.handleInitialFolderData);

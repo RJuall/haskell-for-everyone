@@ -34,9 +34,6 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         super(props);
         // ref for ace editor 
         this.editorRef = React.createRef();
-
-        // changed after save?
-        this.changedPostSave = false;
         
         // the settings json data
         this.settings = null;
@@ -89,8 +86,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         );
         
         // mark file as same as the save
-        this.changedPostSave = false;
-        EditorDispatcher.editorChangeReset();
+        this.props.fileStore.fileSettings.currFileAltered = false;
     }
 
     // handler for when the file save-as button is clicked
@@ -107,10 +103,12 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                 this.state.value
             );
 
-            EditorDispatcher.editorChangeReset();
+            // mark file as same as the save
+            this.props.fileStore.fileSettings.currFileAltered = false;
         }
     }
 
+    // "new" file clicked 
     handleEmptyFile = () => {
         this.props.fileStore.fileSettings.lastFilePath = null;
 
@@ -120,8 +118,8 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
     // when the editor changes... (no longer sync with file)
     onChange = (val, evt) => {
-        this.changedPostSave = true
-        EditorDispatcher.editorChangeOcccurred();
+        // mark file as same as the save
+        this.props.fileStore.fileSettings.currFileAltered = true;
 
         this.state.value = val;
     }
