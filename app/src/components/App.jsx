@@ -80,6 +80,10 @@ export class App extends React.Component{
         IpcRequester.getFolderData();
     }
 
+    componentWillMount(){
+        window.addEventListener('resize', this.handleWindowSizeChange);
+    }
+
     componentWillUnmount(){
         IpcRequester.removeListener("settings-get", evt => {});
         settingsStore.cleanUp();
@@ -88,54 +92,109 @@ export class App extends React.Component{
         fileStore.cleanUp();
         windowStore.cleanUp();
         Mousetrap.unbind('up up down down left right left right b a enter');
-
+        window.removeEventListener('resize', this.handleWindowSizeChange);
     }
 
+    handleWindowSizeChange = () => {
+        this.setState({ windowSize: window.innerWidth });
+    };
+
     render(){
-        return (
-            <>
-                <MenuBar/>
-                <Container>
-                    <Row>
-                        <SplitPane 
-                            split="vertical" 
-                            minSize={175} 
-                            size={this.state.setFileColWidth} 
-                            onDragFinished={size => {this.setState({currentFileColWidth: size})}}
-                        >
-                                <Col className="sidebar-panel">
-                                    <FileList/>
-                                </Col>
-                            <div>
-                                <SplitPane 
-                                    split="vertical" 
-                                    minSize={375} 
-                                    size={this.state.setEdColWidth}
-                                    onDragFinished={size => {console.log(size); this.setState({currentEdColWidth: size})}}
-                                >
-                                    <Col className="editor-panel">
-                                        <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
+
+        const width = this.state.windowSize;
+        const isSmallWindow = width <= 1024;
+
+        if(!isSmallWindow){
+            return (
+                <>
+                    <MenuBar/>
+                    <Container>
+                        <Row>
+                            <SplitPane 
+                                split="vertical" 
+                                minSize={175} 
+                                size={this.state.setFileColWidth} 
+                                onDragFinished={size => {this.setState({currentFileColWidth: size})}}
+                            >
+                                    <Col className="sidebar-panel">
+                                        <FileList/>
                                     </Col>
-                                    {/* <SplitPane
-                                        split="horizontal"
-                                        size={500}
-                                    > */}
-                                        <Col className="ghci-panel">
-                                            <GhciConsole/>
+                                <div>
+                                    <SplitPane 
+                                        split="vertical" 
+                                        minSize={375} 
+                                        size={this.state.setEdColWidth}
+                                        onDragFinished={size => {console.log(size); this.setState({currentEdColWidth: size})}}
+                                    >
+                                        <Col className="editor-panel">
+                                            <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
                                         </Col>
-                                        <div></div>
-                                    {/*</SplitPane>*/}
+                                        {/* <SplitPane
+                                            split="horizontal"
+                                            size={500}
+                                        > */}
+                                            <Col className="ghci-panel">
+                                                <GhciConsole/>
+                                            </Col>
+                                            <div></div>
+                                        {/*</SplitPane>*/}
+                                    </SplitPane>
+                                </div>
+                            </SplitPane>
+                        </Row>
+                    </Container>
+                    <ModalCreateFile/>
+                    <ModalSaveFileAs/>
+                    <ModalAlert/>
+                    <ModalCreateRoom/>
+                    <ModalJoinRoom/>
+                </>
+            );
+        } else {
+            return(
+                <>
+                <MenuBar/>
+                    <Container>
+                        <Row>
+                            <SplitPane 
+                                split="vertical" 
+                                minSize={175} 
+                                size={this.state.setFileColWidth} 
+                                onDragFinished={size => {this.setState({currentFileColWidth: size})}}
+                            >
+                                    <Col className="sidebar-panel">
+                                        <FileList/>
+                                    </Col>
+                            </SplitPane>
+                            <div>
+                                    <SplitPane 
+                                        split="horizontal" 
+                                        minSize={375} 
+                                        size={this.state.setEdColWidth}
+                                        onDragFinished={size => {console.log(size); this.setState({currentEdColWidth: size})}}
+                                    >
+                                        <Col className="editor-panel">
+                                            <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
+                                        </Col>
+                                    </SplitPane>
+                                </div>
+                                <SplitPane
+                                    split="horizontal"
+                                    size={width}
+                                >
+                                    <Col className="ghci-panel">
+                                        <GhciConsole/>
+                                    </Col>
                                 </SplitPane>
-                            </div>
-                        </SplitPane>
-                    </Row>
-                </Container>
-                <ModalCreateFile/>
-                <ModalSaveFileAs/>
-                <ModalAlert/>
-                <ModalCreateRoom/>
-                <ModalJoinRoom/>
-            </>
-        );
+                        </Row>
+                    </Container>
+                    <ModalCreateFile/>
+                    <ModalSaveFileAs/>
+                    <ModalAlert/>
+                    <ModalCreateRoom/>
+                    <ModalJoinRoom/>
+                </>
+            );
+        }
     }
 }
