@@ -17,19 +17,32 @@ export const ModalEasterEgg = inject('windowStore')(observer(class ModalEasterEg
 
     render() {
         return(
-            <Modal isOpen={this.props.windowStore.sessionWindowStore.modalEasterEggOpen} toggle={this.toggle.bind(this)}>
-                <ModalHeader toggle={this.toggle.bind(this)}>
-                    <h1>Haskell For Everyone</h1>
+            <Modal 
+                isOpen={this.props.windowStore.sessionWindowStore.modalEasterEggOpen} 
+                toggle={this.toggle.bind(this)}
+                style={{  
+                     textAlign: 'center',
+                }}
+            >
+                <ModalHeader style={{border: 'none', padding: '1em', margin: '0'}} toggle={this.toggle.bind(this)}>
                 </ModalHeader>
                 <ModalBody>
-                    <p>Built by David Rosenblum, Robert Juall, JT Pojero, Rajib Bastola</p>
-                    <p>For Dr. Barry Burd's Functional Programming course</p>
-                    <p>as part of the Computer Science capstone at Drew University</p>
-                    <img 
+                    <h1 style={{paddingBottom: '0.85em'}}>
+                        OBLIGATORY<br/>EASTER EGG
+                    </h1>
+                    <img
                         width="90%" 
                         src={castle}>
                     </img>
+                    <p style={{fontSize: '0.85em', paddingTop: '1em'}}>
+                        &copy; Konami
+                    </p>
                 </ModalBody>
+                <ModalFooter style={{border: 'none'}}>
+                    <p style={{fontSize: '0.85em', padding: '0', margin: '0'}}>
+                        Thanks for trying our app!   --RJ, DR, JTP, RB
+                    </p>
+                </ModalFooter>
             </Modal>
         );
     }
