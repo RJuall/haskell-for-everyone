@@ -61,6 +61,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         // update current file name
         this.props.fileStore.fileSettings.lastFilePath = evt.path;
         this.props.fileStore.recentPathUpdate(evt.path);
+        this.props.fileStore.fileSettings.currFileAltered = false;
 
         // set the editor mode
         this.setEditorMode(evt.path);
@@ -218,6 +219,11 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                         name: 'run',
                         bindKey: {win: 'Ctrl-l', mac: 'Command-l'},
                         exec: () => { EditorDispatcher.runCode(); }
+                    },
+                    {
+                        name: 'newFile',
+                        bindKey: {win: 'Ctrl-n', mac: 'Command-n'},
+                        exec: () => { EditorDispatcher.emptyFile(); }
                     }
                     ]}
                 ></AceEditor>
