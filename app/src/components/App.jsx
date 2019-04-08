@@ -8,10 +8,12 @@ import { Editor } from './Editor';
 import { ModalCreateFile } from "./ModalCreateFile";
 import { ModalSaveFileAs } from "./ModalSaveFileAs";
 import { ModalAlert } from "./ModalAlert";
+import { ModalEasterEgg } from './ModalEasterEgg';
 import { VersionAPI } from "../utils/VersionAPI";
 import { MenuBar } from "./MenuBar";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import IpcRequester from '../utils/IpcRequester';
+import { inject, observer } from 'mobx-react';
 import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
 import { settingsStore } from "../stores/SettingsStore"
@@ -19,12 +21,13 @@ import { editorStore } from "../stores/EditorStore";
 import { terminalStore } from '../stores/TerminalStore';
 import { fileStore } from '../stores/FileStore';
 import { windowStore } from '../stores/WindowStore';
-import "./App.css";
 import FileDispatcher from "../dispatchers/FileDispatcher";
+
+import "./App.css";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
 
-export class App extends React.Component{
+export const App = inject("editorStore", "windowStore")(observer(class App extends React.Component{
     constructor(props){
         super(props);
 
@@ -57,7 +60,13 @@ export class App extends React.Component{
         IpcRequester.on("settings-get", evt => this.settings = evt.settings);
         IpcRequester.getSettings();
 
-        Mousetrap.bind('up up down down left right left right b a enter', () => { console.log("KONAMI"); });
+        Mousetrap.bind('up up down down left right left right b a enter', () => { 
+            console.log("KONAMI");
+            Object.assign(
+                this.props.windowStore.sessionWindowStore,
+                { modalEasterEggOpen: !this.props.windowStore.sessionWindowStore.modalEasterEggOpen }
+            );
+        });
 
         window.onresize = () => {
             let newWindowWidth = window.innerWidth;
@@ -135,7 +144,8 @@ export class App extends React.Component{
                 <ModalAlert/>
                 <ModalCreateRoom/>
                 <ModalJoinRoom/>
+                <ModalEasterEgg/>
             </>
         );
     }
-}
+}));
