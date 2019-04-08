@@ -224,6 +224,34 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                         name: 'newFile',
                         bindKey: {win: 'Ctrl-n', mac: 'Command-n'},
                         exec: () => { EditorDispatcher.emptyFile(); }
+                    },
+                    {
+                        name: 'fontDecrease',
+                        bindKey: {win: 'Ctrl--', mac: 'Command--'},
+                        exec: () => {
+                            if (parseInt(this.props.editorStore.editorSettings.fontSize) > 8) {
+                                Object.assign(
+                                    this.props.editorStore.editorSettings,
+                                    {
+                                    fontSize: (parseInt(this.props.editorStore.editorSettings.fontSize) - 2).toString() + 'px'
+                                    }
+                                )
+                            }
+                        }
+                    },
+                    {
+                        name: 'fontIncrease',
+                        bindKey: {win: 'Ctrl-=', mac: 'Command-='},
+                        exec: () => {
+                            if (parseInt(this.props.editorStore.editorSettings.fontSize) < 60) {
+                                Object.assign(
+                                    this.props.editorStore.editorSettings,
+                                    {
+                                    fontSize: (parseInt(this.props.editorStore.editorSettings.fontSize) + 2).toString() + 'px'
+                                    }
+                                )
+                            }
+                        }
                     }
                     ]}
                 ></AceEditor>
