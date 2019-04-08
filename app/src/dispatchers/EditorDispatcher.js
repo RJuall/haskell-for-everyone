@@ -60,14 +60,9 @@ class EditorDispatcher extends EventEmitter {
         this.emit("mode-change", {mode});
     }
 
-    // signals the code editor is not same as saved file 
-    editorChangeOcccurred(){
-        this.emit("editor-change");
-    }
-
-    // signals the code editor is the same as saved file 
-    editorChangeReset(){
-        this.emit("editor-change-reset");
+    // signals to create an empty file 
+    emptyFile(){
+        this.emit("empty-file");
     }
 }
 

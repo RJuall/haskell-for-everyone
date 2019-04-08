@@ -2,8 +2,9 @@ import React from 'react';
 import AceEditor from 'react-ace';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
-import IpcRequester from "../utils/IpcRequester";
 import GhciDispatcher from '../dispatchers/GhciDispatcher';
+import { observer, inject } from 'mobx-react';
+import { action } from 'mobx';
 
 // import syntax highlighting modes
 import 'brace/mode/haskell';
@@ -26,22 +27,13 @@ import 'brace/theme/twilight';
 
 // allows code completion
 import 'brace/ext/language_tools';
+import ModalDispatcher from '../dispatchers/ModalDispatcher';
 
-// default Haskell code when program starts
-import { testHask } from './Tokenise';
-
-class ReactAceEditor extends React.Component {
+export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
-
         // ref for ace editor 
         this.editorRef = React.createRef();
-        
-        // current file in the editor
-        this.currFilePath = null; 
-
-        // changed after save?
-        this.changedPostSave = false;
         
         // the settings json data
         this.settings = null;
@@ -50,22 +42,7 @@ class ReactAceEditor extends React.Component {
         this.editorRef = React.createRef();
 
         this.state = {
-            name: "ace-editor",
-            mode: "haskell",
-            theme: "dracula",
-            width: "100%",
-            height: "100vh",
-            fontSize: "16px",
-            defaultValue: testHask,
-            editorProps: {$blockScrolling: true},
-            setOptions: {
-                fontFamily: "Inconsolata, monospace",
-                enableBasicAutocompletion: true,
-                enableLiveAutocompletion: true,
-                enableSnippets: true,
-                selectionStyle: "text",
-            },
-            wrapEnabled: false
+            value: '',
         };
 
     }
@@ -73,11 +50,17 @@ class ReactAceEditor extends React.Component {
     // handler when a file is read
     handleFileRead = (evt) => {
         if(evt.path !== this.currFilePath){
-            // save current file logic 
+            // save current file logic before switching
+            // replace this for temp files later!  
+            FileDispatcher.writeFile(
+                this.props.fileStore.fileSettings.lastFilePath,
+                this.state.value
+            );
         }
 
         // update current file name
-        this.currFilePath = evt.path;
+        this.props.fileStore.fileSettings.lastFilePath = evt.path;
+        this.props.fileStore.recentPathUpdate(evt.path);
 
         // set the editor mode
         this.setEditorMode(evt.path);
@@ -90,12 +73,20 @@ class ReactAceEditor extends React.Component {
 
     // handler for when the file save button is clicked
     handleSaveFile = () => {
+        // blank file? 
+        if(!this.props.fileStore.fileSettings.lastFilePath){
+            ModalDispatcher.saveFileAsModal();
+            return;
+        }
+
         // issue a request to write current code to current file 
-        FileDispatcher.writeFile(this.currFilePath, this.state.value);
+        FileDispatcher.writeFile(
+            this.props.fileStore.fileSettings.lastFilePath,
+            this.state.value
+        );
         
         // mark file as same as the save
-        this.changedPostSave = false;
-        EditorDispatcher.editorChangeReset();
+        this.props.fileStore.fileSettings.currFileAltered = false;
     }
 
     // handler for when the file save-as button is clicked
@@ -106,46 +97,29 @@ class ReactAceEditor extends React.Component {
     // handler for when the current code should be executed
     // will not execute if mode is not set to haskell 
     handleRunCode = () => {
-        if (this.state.mode === 'haskell') {
-            GhciDispatcher.executeFile(this.currFilePath, this.state.value);
-            EditorDispatcher.editorChangeReset();
+        if (this.props.editorStore.editorSettings.mode === 'haskell') {
+            GhciDispatcher.executeFile(
+                this.props.fileStore.fileSettings.lastFilePath,
+                this.state.value
+            );
+
+            // mark file as same as the save
+            this.props.fileStore.fileSettings.currFileAltered = false;
         }
     }
 
-    // handler for increasing the font size of the ce
-    fontSizePlus = () => {
-        this.setState({
-            fontSize: (parseInt(this.state.fontSize) + 2).toString() + 'px'
-        });
-     }
+    // "new" file clicked 
+    handleEmptyFile = () => {
+        this.props.fileStore.fileSettings.lastFilePath = null;
 
-    // handler for decreasing the font size of the ce
-    fontSizeMinus = () => {
-        this.setState({
-            fontSize: (parseInt(this.state.fontSize) - 2).toString() + 'px'
-        })
-    }
-
-    // handler for changing the font family of the ce
-    handleFontChange = evt => {
-        this.setState({
-            setOptions: {
-                fontFamily: evt.font
-            }
-        });
-    }
-
-    // handler for changing the theme of the ce
-    handleThemeChange = evt => {
-        this.setState({
-            theme: evt.theme
-        })
+        this.resetEditorSession();
+        this.setState({value: ""});
     }
 
     // when the editor changes... (no longer sync with file)
     onChange = (val, evt) => {
-        this.changedPostSave = true
-        EditorDispatcher.editorChangeOcccurred();
+        // mark file as same as the save
+        this.props.fileStore.fileSettings.currFileAltered = true;
 
         this.state.value = val;
     }
@@ -165,15 +139,13 @@ class ReactAceEditor extends React.Component {
     // function that sets the mode state of the ce
     //    based on a file's extension
     //    and emits a modeChange event
-    setEditorMode = file => {
+    setEditorMode = action(file => {
         if(!file) return;
 
-        let mode;
         if      (file.endsWith('.hs') 
                  || file.endsWith('.lhs')) {
-            this.setState({mode: 'haskell'});
-            mode = '.hs';
-                 }
+            Object.assign(this.props.editorStore.editorSettings, {mode: 'haskell'});
+        }
         else if (file.endsWith('.md')
                  || file.endsWith('.mkd')
                  || file.endsWith('.mdown')
@@ -184,59 +156,58 @@ class ReactAceEditor extends React.Component {
                  || file.endsWith('.mdtext')
                  || file.endsWith('.text')
                  || file.endsWith('.Rmd')) {
-            this.setState({mode: 'markdown'});
-            mode = '.md';
+            Object.assign(this.props.editorStore.editorSettings, {mode: 'markdown'});
         }
         else {
-            this.setState({mode: 'plain_text'});
-            mode = '.txt';
+            Object.assign(this.props.editorStore.editorSettings, {mode: 'plain_text'});
         }
-        EditorDispatcher.modeChange(mode);
-    }
+    })
 
     componentDidMount() {
         // listen for events
         FileDispatcher.on(FILE_READ, this.handleFileRead);
         EditorDispatcher.on("editor-save-file", this.handleSaveFile);
-        EditorDispatcher.on("ce-font-size-plus", this.fontSizePlus);
-        EditorDispatcher.on("ce-font-size-minus", this.fontSizeMinus);
         EditorDispatcher.on("save-as", this.handleSaveFileAs);
         EditorDispatcher.on("run-code", this.handleRunCode);
-        EditorDispatcher.on("ce-font-family-set", this.handleFontChange);
-        EditorDispatcher.on("ce-theme-set", this.handleThemeChange);
-
-        // makes sure that the ce value matches the default value
-        this.setState({value: this.state.defaultValue});
+        EditorDispatcher.on("empty-file", this.handleEmptyFile);
     }    
 
     componentWillUnmount() {
         // remove event listeners
         FileDispatcher.removeListener(FILE_READ, this.handleFileRead);
         EditorDispatcher.removeListener("editor-save-file", this.handleSaveFile);
-        EditorDispatcher.removeListener("ce-font-size-plus", this.fontSizePlus);
-        EditorDispatcher.removeListener("ce-font-size-minus", this.fontSizeMinus);
         EditorDispatcher.removeListener("save-as", this.handleSaveFileAs);
         EditorDispatcher.removeListener("run-code", this.handleRunCode);
-        EditorDispatcher.removeListener("ce-font-family-set", this.handleFontChange);
-        EditorDispatcher.removeListener("ce-theme-set", this.handleThemeChange);
+        EditorDispatcher.removeListener("empty-file", this.handleEmptyFile);
     }
 
     render() {
         return(
             <div>
                 <AceEditor
-                    ref={this.editorRef}
-                    mode={this.state.mode}
-                    theme={this.state.theme}
-                    name={this.state.name}
-                    width={this.state.width}
-                    height={this.state.height}
-                    fontSize={this.state.fontSize}
-                    editorProps={this.state.editorProps}
-                    defaultValue={this.state.defaultValue}
-                    wrapEnabled={this.state.wrapEnabled}
+                    mode={this.props.editorStore.editorSettings.mode}
+                    theme={this.props.editorStore.editorSettings.theme}
+                    name={this.props.editorStore.editorSettings.name}
+                    width={this.props.editorStore.editorSettings.width}
+                    height={this.props.editorStore.editorSettings.height}
+                    fontSize={this.props.editorStore.editorSettings.fontSize}
+                    editorProps={
+                        {
+                            $blockScrolling: this.props.editorStore.editorSettings.blockScrolling,
+                        }
+                    }
+                    wrapEnabled={this.props.editorStore.editorSettings.wrapEnabled}
+                    setOptions={
+                        {
+                            fontFamily: this.props.editorStore.editorSettings.fontFamily,
+                            enableBasicAutocompletion: this.props.editorStore.editorSettings.enableBasicAutocompletion,
+                            enableLiveAutocompletion: this.props.editorStore.editorSettings.enableLiveAutocompletion,
+                            enableSnippets: this.props.editorStore.editorSettings.enableSnippets,
+                            selectionStyle: "text",
+                        }
+                    }
+                    ref={this.editorRef}                 
                     value={this.state.value}
-                    setOptions={this.state.setOptions}
                     onChange={this.onChange}
                     commands={[{
                         name: 'save',
@@ -248,6 +219,4 @@ class ReactAceEditor extends React.Component {
             </div>
         )
     }
-}
-
-export default ReactAceEditor;
+}));

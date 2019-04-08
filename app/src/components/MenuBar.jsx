@@ -1,11 +1,13 @@
 import React from 'react';
 import ModalDispatcher from '../dispatchers/ModalDispatcher';
 import EditorDispatcher from '../dispatchers/EditorDispatcher';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Navbar as RNavbar, NavItem, Collapse, NavbarToggler, Nav, NavLink } from "reactstrap";
-import { NavbarBrand } from 'reactstrap';
+import IpcRequester from '../utils/IpcRequester';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import './MenuBar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/pro-regular-svg-icons';
+import { SelectFileFolder } from '../utils/SelectFileFolder';
+import { RecentFiles } from './RecentFiles';
 
 
 export class MenuBar extends React.Component {
@@ -53,15 +55,16 @@ export class MenuBar extends React.Component {
                         File 
                     </DropdownToggle>
                     <DropdownMenu>
-                        <DropdownItem onClick={() => ModalDispatcher.createFileModal()}>New File</DropdownItem>
-                        <DropdownItem onClick={() => ModalDispatcher.selectFileModal()}>Open File</DropdownItem>
-                        <DropdownItem onClick={() => ModalDispatcher.selectFolderModal()}>Open Folder</DropdownItem>
+                        <DropdownItem onClick={() => EditorDispatcher.emptyFile()}>New File</DropdownItem>
+                        <DropdownItem onClick={() => SelectFileFolder.selectFile()}>Open File</DropdownItem>
+                        <DropdownItem onClick={() => SelectFileFolder.selectFolder()}>Open Folder</DropdownItem>
+                        <RecentFiles/>
                         <DropdownItem onClick={() => ModalDispatcher.saveFileAsModal()}>Save As</DropdownItem>
                         <DropdownItem onClick={() => EditorDispatcher.saveCurrentFile()}>Save</DropdownItem>
                         <DropdownItem divider />
                         <DropdownItem onClick={() => EditorDispatcher.runCode()}>Run</DropdownItem>
                         <DropdownItem divider />
-                        <DropdownItem>Exit</DropdownItem>
+                        <DropdownItem onClick={() => IpcRequester.quit()}>Exit</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
                 <Dropdown nav isOpen={this.state.edit} toggle={this.toggleEdit.bind(this)}>
