@@ -20,6 +20,11 @@
     text-decoration: underline;
 }
 
+.bgImage{
+    background-image: url('./images/editorBackground.JPG');
+    opacity: 0.5;
+}
+
 footer {
     width: 100%;
     bottom: 0;
