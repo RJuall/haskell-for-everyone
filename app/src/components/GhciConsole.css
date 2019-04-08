@@ -19,11 +19,18 @@
 .clear{
     background-color: transparent;
     border: none;
-    color: white;
+    color: #fff;
     padding-top: 10px;
     padding-bottom: 14px;
 }
 
 .consoleIcons{
-    background: #32353D;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9;
+}
+
+.consoleIcons .btn{
+    color: #fff;
 }
