@@ -19,8 +19,10 @@ export class MenuBar extends React.Component {
             preference: false,
             appearance: false,
             background: false,
-            value: false,
-            bc : "Toggle Light Background"
+            value: false,   //True = Light  False = Dark
+            bc: "Toggle Light Background", // State value for text in the toggle dropdown button in menubar
+            hideGHCI: false, // state for whether the GHCI console is shown or not
+            hideFile: false // state for whether the file list is shown or not
         };
 
     }
@@ -56,12 +58,29 @@ export class MenuBar extends React.Component {
                 document.body.classList.remove('theme--dark');
                 document.body.classList.add('theme--light');
                 this.setState({bc: "Toggle Dark Background"});
-                console.log("light chosen");
             } else {
                 document.body.classList.add('theme--dark');
                 document.body.classList.remove('theme--light');
                 this.setState({bc: "Toggle Light Background"});
             }
+    }
+
+    toggleGhciConsole(){
+        this.setState({hideGHCI: !this.state.hideGHCI});
+        if(!this.state.hideGHCI){
+            console.log("Hide Console");
+        }else{
+            console.log("Show Console");
+        }
+    }
+
+    toggleFileList(){
+        this.setState({hideGHCI: !this.state.hideFile});
+        if(!this.state.hideFile){
+            console.log("Show File List");
+        }else{
+            console.log("Show File List");
+        }
     }
 
     render() {
@@ -92,7 +111,7 @@ export class MenuBar extends React.Component {
                         <DropdownItem onClick={() => document.execCommand("paste")}>Paste</DropdownItem>
                         <DropdownItem onClick={() => document.execCommand("copy")}>Copy</DropdownItem>
                         <DropdownItem onClick={() => document.execCommand("cut")}>Cut</DropdownItem>
-                        <DropdownItem>Find</DropdownItem>
+                        {/* <DropdownItem>Find</DropdownItem> */}
                         <DropdownItem divider />
                         <DropdownItem onClick={() => document.execCommand("redo")}>Redo</DropdownItem>
                         <DropdownItem onClick={() => document.execCommand("undo")}>Undo</DropdownItem>
@@ -106,8 +125,8 @@ export class MenuBar extends React.Component {
                         <Dropdown nav isOpen={this.state.appearance} toggle={this.toggleAppearance.bind(this)}>
                              <DropdownToggle nav className="menuItem">Appearance <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon></DropdownToggle>
                                 <DropdownMenu>
-                                    <DropdownItem>Toggle GHCI Console</DropdownItem>
-                                    <DropdownItem>Toggle File List</DropdownItem>
+                                    <DropdownItem onClick={this.toggleGhciConsole.bind(this)}>Toggle GHCI Console</DropdownItem>
+                                    <DropdownItem onClick={this.toggleFileList.bind(this)}>Toggle File List</DropdownItem>
                                     <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{this.state.bc}</DropdownItem>
                                 </DropdownMenu>
                         </Dropdown>
