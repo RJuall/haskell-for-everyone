@@ -25,7 +25,10 @@ export const ModalEasterEgg = inject('windowStore')(observer(class ModalEasterEg
                     <p>Built by David Rosenblum, Robert Juall, JT Pojero, Rajib Bastola</p>
                     <p>For Dr. Barry Burd's Functional Programming course</p>
                     <p>as part of the Computer Science capstone at Drew University</p>
-                    <img src={castle}></img>
+                    <img 
+                        width="90%" 
+                        src={castle}>
+                    </img>
                 </ModalBody>
             </Modal>
         );
