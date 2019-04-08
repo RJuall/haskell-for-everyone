@@ -18,8 +18,11 @@ export class MenuBar extends React.Component {
             edit: false,
             preference: false,
             appearance: false,
-            background: false
+            background: false,
+            value: false,
+            bc : "Toggle Light Background"
         };
+
     }
 
     // Toggle for the file dropdown
@@ -45,6 +48,20 @@ export class MenuBar extends React.Component {
     // Toggle Dropdown for background color
     toggleBackground(){
         this.setState({background: !this.state.background})
+    }
+
+    toggleBackgroundColor(){
+        this.setState({value: !this.state.value});
+            if(!this.state.value){
+                document.body.classList.remove('theme--dark');
+                document.body.classList.add('theme--light');
+                this.setState({bc: "Toggle Dark Background"});
+                console.log("light chosen");
+            } else {
+                document.body.classList.add('theme--dark');
+                document.body.classList.remove('theme--light');
+                this.setState({bc: "Toggle Light Background"});
+            }
     }
 
     render() {
@@ -91,13 +108,7 @@ export class MenuBar extends React.Component {
                                 <DropdownMenu>
                                     <DropdownItem>Toggle GHCI Console</DropdownItem>
                                     <DropdownItem>Toggle File List</DropdownItem>
-                                    <Dropdown nav isOpen={this.state.background} toggle={this.toggleBackground.bind(this)}>
-                                        <DropdownToggle nav className="menuItem">Background Theme <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon></DropdownToggle>
-                                            <DropdownMenu>
-                                                <DropdownItem>Light</DropdownItem>
-                                                <DropdownItem>Dark</DropdownItem>
-                                            </DropdownMenu>
-                                    </Dropdown>
+                                    <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{this.state.bc}</DropdownItem>
                                 </DropdownMenu>
                         </Dropdown>
                         <DropdownItem>Editor Layout</DropdownItem>
