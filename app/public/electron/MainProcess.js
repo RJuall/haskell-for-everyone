@@ -34,7 +34,8 @@ class MainProcess{
             width:  1280,
             height: 720,
             show: false,
-            backgroundColor: "black"
+            backgroundColor: "black",
+            icon: `${__dirname}/../images/HaskellLogo.png`
         });
 
         // dev mode? 
