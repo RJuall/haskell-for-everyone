@@ -9,6 +9,9 @@ export class GhciConsole extends React.Component{
     constructor(props){
         super(props);
 
+        this.historyDepth = 0;
+        this.commandHistory = [];
+
         // input <input> element ref
         this.inputRef = React.createRef();
         // output <textarea> element ref
@@ -70,20 +73,86 @@ export class GhciConsole extends React.Component{
         GhciDispatcher.removeListener(GHCI_ERROR, this.handleGhciError);
     }
 
+    submitCommand(){
+        let elem = this.inputRef.current;       // input element ref
+        let code = elem.value.trim();           // code in element
+        let outElem = this.consoleRef.current;  // output elem ref
+
+        // only send if there is actual code (aka user is not spamming enter)
+        if(code.length){
+            // display current input in the output 
+            outElem.value += (outElem.value.endsWith("\n")) ? `\n{code}\n` : `${code}\n`;
+
+            // clear the input element
+            elem.value = "";
+
+            // send the code 
+            GhciDispatcher.executeCode(code);
+
+            // remember the command 
+            this.commandHistory.push(code);
+            
+            // reset 'current' index
+            this.historyDepth = 0;
+        }
+    }
+
+    displayPrevCommand(){
+        // increase history index 
+        this.historyDepth = Math.min(this.historyDepth + 1, this.commandHistory.length );
+
+        // display  command
+        this.displayCommandAtHistoryDepth();
+    }
+
+    displayNextCommand(){
+        // decreaste history index 
+        this.historyDepth = Math.max(this.historyDepth - 1, 0);
+
+        // display command
+        this.displayCommandAtHistoryDepth();
+    }
+
+    // displays the remembered command at the current history depth
+    displayCommandAtHistoryDepth(){
+        // get index from depth
+        let commandIndex = this.commandHistory.length - this.historyDepth;
+
+        // get command at index 
+        let lastCommand = this.commandHistory[commandIndex] || "";
+
+        // display command if possible
+        if(lastCommand){
+            this.inputRef.current.value = lastCommand;
+        }
+    }
+
     onKeyUp(evt){
+        switch(evt.keyCode){
+            case 13:
+                // key entered was 'ENTER' so time to send the code
+                this.submitCommand();
+                break;
+
+            case 38:
+                // key entered was "UP ARROW" so show last command
+                this.displayPrevCommand();
+                break;
+
+            case 40:
+                // key entered was "DOWN ARROW" so show next command 
+                this.displayNextCommand();
+                break;
+
+            default:
+                break;
+        }
         // keyboard input 
         if(evt.keyCode === 13){
-            // key entered was 'ENTER' so time to send the code
-            let elem = this.inputRef.current;   // input element ref
-            let code = elem.value.trim();       // code in element
-
-            // only send if there is actual code (aka user is not spamming enter)
-            if(code.length){
-                // clear the input element
-                elem.value = "";
-                // send the code 
-                GhciDispatcher.executeCode(code);
-            }
+            
+        }
+        else if(evt.keyCode === 38){
+            
         }
     }
 
