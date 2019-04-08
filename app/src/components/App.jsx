@@ -16,9 +16,7 @@ import IpcRequester from '../utils/IpcRequester';
 import { inject, observer } from 'mobx-react';
 import { ModalCreateRoom } from "./ModalCreateRoom";
 import { ModalJoinRoom } from "./ModalJoinRoom";
-import { ModalSelectFile } from "./ModalSelectFile";
-import Mousetrap from 'mousetrap';
-import EditorIconBar from './EditorIconBar';
+import { EditorIconBar } from './EditorIconBar';
 import { settingsStore } from "../stores/SettingsStore"
 import { editorStore } from "../stores/EditorStore";
 import { terminalStore } from '../stores/TerminalStore';
