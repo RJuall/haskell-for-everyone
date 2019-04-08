@@ -213,6 +213,11 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                         name: 'save',
                         bindKey: {win: 'Ctrl-s', mac: 'Command-s'},
                         exec: () => { EditorDispatcher.saveCurrentFile(); }
+                    },
+                    {
+                        name: 'run',
+                        bindKey: {win: 'Ctrl-l', mac: 'Command-l'},
+                        exec: () => { EditorDispatcher.runCode(); }
                     }
                     ]}
                 ></AceEditor>
