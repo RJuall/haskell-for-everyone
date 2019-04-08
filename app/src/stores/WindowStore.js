@@ -9,6 +9,7 @@ class WindowStore {
         this.globalWindowSettings = {};
  
         this.windowSettings = {
+            
         };
 
         this.sessionWindowStore = {
