@@ -23,6 +23,7 @@
   "build": {
     "productName": "Haskell For Everyone",
     "win": {
+      "icon": "./build/icon.ico",
       "target": "NSIS"
     },
     "linux": {
