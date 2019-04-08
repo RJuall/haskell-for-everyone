@@ -9,7 +9,11 @@ class WindowStore {
         this.globalWindowSettings = {};
  
         this.windowSettings = {
-            //default settings go here
+            
+        };
+
+        this.sessionWindowStore = {
+            modalEasterEggOpen: windowDefaults.modalEasterEggOpen,
         };
 
         IpcRequester.on("settings-get", ({settings}) => {
@@ -34,6 +38,7 @@ class WindowStore {
 
 decorate(WindowStore, {
     windowSettings: observable,
+    sessionWindowStore: observable,
 });
 
 export const windowStore = new WindowStore();

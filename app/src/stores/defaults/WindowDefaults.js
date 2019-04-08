@@ -1,1 +1,3 @@
-export const windowDefaults = {};
+export const windowDefaults = {
+    modalEasterEggOpen: false,
+};
