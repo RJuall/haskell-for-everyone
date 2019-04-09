@@ -1,25 +1,22 @@
 import React from 'react';
-import EditorDispatcher from '../dispatchers/EditorDispatcher';
+import { observer, inject} from 'mobx-react';
+import { action } from 'mobx';
 
-export class FontChooser extends React.Component {
+export const FontChooser = inject("editorStore")(observer( class FontChooser extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            value: 'Inconsolata'
-        };
 
         // sets the font family state and emits
         //    a font change event
-        this.fontChange = event => {
-            this.setState({value: event.target.value});
-            EditorDispatcher.fontFamilySet(event.target.value);
-        }
+        this.fontChange = action( event => {
+            this.props.editorStore.editorSettings.fontFamily = event.target.value;
+        })
     }    
 
     render() {
         return(
             <div className="icon-bar-chooser">
-                <select name="font-chooser" value={this.state.value} onChange={this.fontChange}>
+                <select name="font-chooser" value={this.props.editorStore.editorSettings.fontFamily} onChange={this.fontChange}>
                     <option value="Inconsolata">Inconsolata</option>
                     <option value="Roboto Mono">Roboto Mono</option>
                     <option value="Source Code Pro">Source Code Pro</option>
@@ -42,4 +39,4 @@ export class FontChooser extends React.Component {
             </div>
         )
     }
-}
+}));

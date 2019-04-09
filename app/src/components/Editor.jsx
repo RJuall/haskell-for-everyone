@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactAceEditor from './ReactAceEditor'
-import './Editor.css';
+import { ReactAceEditor } from './ReactAceEditor'
 
 export class Editor extends React.Component {
     constructor(props) {

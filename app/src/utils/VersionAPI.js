@@ -1,7 +1,7 @@
 import { Ajax } from "./Ajax";
 
 // production server origin 
-export const SERVER_ORIGIN = ""; /* https://haskell-for-everyone.herokuapp.com ??? */
+export const SERVER_ORIGIN = "https://haskell-for-everyone.herokuapp.com";
 
 // cross-origin resource sharing headers
 export const CORS_HEADERS = {

@@ -1,9 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTimes, faCircleNotch, faMarker, faAngleRight, faAngleDown, faFolder, faFolderOpen } from "@fortawesome/pro-light-svg-icons"
+import { faAngleRight, faAngleDown, faFolder, faFolderOpen } from "@fortawesome/pro-light-svg-icons"
 import { FileListFolderItem } from "./FileListFolderItem";
-import FolderDispatcher from "../dispatchers/FolderDispatcher";
-import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import { FILE_EXTENSIONS } from "../utils/FileExtension";
 
 

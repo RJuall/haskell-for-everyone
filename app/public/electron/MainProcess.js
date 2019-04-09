@@ -34,7 +34,8 @@ class MainProcess{
             width:  1280,
             height: 720,
             show: false,
-            backgroundColor: "black"
+            backgroundColor: "black",
+            icon: `${__dirname}/../images/HaskellLogo.png`
         });
 
         // dev mode? 
@@ -141,6 +142,10 @@ class MainProcess{
                 FileOps.getFileNames(evt, data);
                 break;
 
+            case "files-recent":
+                FileOps.getRecentFiles(evt, data);
+                break;
+
             case "file-read":
                 FileOps.readFile(evt, data);
                 break;
@@ -191,6 +196,14 @@ class MainProcess{
 
             case "settings-get":
                 SettingsOps.getSettings(evt);
+                break;
+
+            case "folder-data-get":
+                FolderOps.getFolderData(evt);
+                break;
+
+            case "quit":
+                app.quit();
                 break;
                 
             default:

@@ -5,7 +5,8 @@ import IpcRequester from "../utils/IpcRequester";
 export const FILE_READ =    "file-read",
             FILE_WRITE =    "file-write",
             FILE_CREATE =   "file-create",
-            FILES_GET =     "files-get";
+            FILES_GET =     "files-get",
+            FILES_RECENT =  "files-recent";
 
 class FileDispatcher extends EventEmitter{
     constructor(){
@@ -42,6 +43,11 @@ class FileDispatcher extends EventEmitter{
     // @param dir           directory to search in
     getFileNames(dir){
         IpcRequester.send(FILES_GET, {dir});
+    }
+
+    // requests all recent file paths 
+    getRecentFiles(){
+        IpcRequester.send(FILES_RECENT);
     }
 }
 
