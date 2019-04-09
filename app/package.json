@@ -2,9 +2,8 @@
   "name": "haskell-for-everyone",
   "version": "0.1.0",
   "description": "An easy-to-use educational editor for learning the Haskell programming language",
-  "author": "test",
+  "author": "test <test@test.com>",
   "license": "MIT",
-  "email": "test@test",
   "main": "public/electron.js",
   "scripts": {
     "dev": "electron . --dev",
@@ -22,15 +21,22 @@
   "homepage": "./",
   "build": {
     "productName": "Haskell For Everyone",
+    "directories": {
+      "app": "./",
+      "buildResources": "./build"
+    },
     "win": {
+      "icon": "./build/icon.png",
       "target": "NSIS"
     },
     "linux": {
+      "icon": "./build/icon.png",
       "target": [
-        "AppImage"
+        "AppImage", "deb"
       ]
     },
     "dmg": {
+      "icon": "./build/icon.png",
       "contents": [
         {
           "x": 110,
