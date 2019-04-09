@@ -104,8 +104,10 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
     render(){
         return (
             <>
-                <MenuBar/>
-                <EditorIconBar/>
+                <div className="iconbar-container">
+                    <MenuBar/>
+                    <EditorIconBar/>
+                </div>
                 <Container>
                     <Row>
                         <SplitPane 

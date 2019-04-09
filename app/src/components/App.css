@@ -2,8 +2,12 @@
 
 body{
     font: caption !important;
-    overflow: hidden !important;
+    overflow-y: scroll;
     background-color: black !important;
+}
+
+.iconbar-container{
+    padding: 0;
 }
 
 .Resizer {
