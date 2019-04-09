@@ -22,6 +22,10 @@
   "homepage": "./",
   "build": {
     "productName": "Haskell For Everyone",
+    "directories": {
+      "app": "./",
+      "buildDirectory": "./build"
+    },
     "win": {
       "icon": "./build/icon.png",
       "target": "NSIS"
