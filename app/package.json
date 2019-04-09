@@ -24,7 +24,7 @@
     "productName": "Haskell For Everyone",
     "directories": {
       "app": "./",
-      "buildDirectory": "./build"
+      "buildResources": "./build"
     },
     "win": {
       "icon": "./build/icon.png",
