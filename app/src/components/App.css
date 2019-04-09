@@ -3,7 +3,11 @@
 body{
     font: caption !important;
     overflow-y: scroll;
-    background-color: black !important;
+    background-color: #000000 !important;
+}
+
+::-webkit-scrollbar { 
+    display: none; 
 }
 
 .iconbar-container{
@@ -119,10 +123,6 @@ body{
     color: rgba(0,0,0,.7);
 }
 
-.theme--light .consoleIcons{
-    background-color: #e8e8e8;
-}
-
 .theme--light .ghci-console, .ghci-input{
     background-color: #ffffff;
     color: #000;
@@ -134,4 +134,18 @@ body{
 
 .theme--light.body{
     background-color: #fff !important;
+}
+
+.theme--light .consoleIcons .btn{
+    color: #000;
+    border: none;
+}
+
+.theme--light .icon-bar .filename{
+    color: rgba(0,0,0,.7);
+}
+
+.theme--light .btn-run:hover,
+.theme--light .btn-save:hover{
+    color: #fff;
 }

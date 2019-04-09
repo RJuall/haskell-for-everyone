@@ -64,7 +64,7 @@ export const EditorIconBar = inject("editorStore", "fileStore")(observer(class E
                 <FontChooser/>
                 <ThemeChooser/>
                 <UIChooser/>
-                <button className="btn btn-danger btn-run" title="Run" onClick={() => EditorDispatcher.saveCurrentFile()} title="Saves current file">
+                <button className="btn btn-danger btn-save" title="Run" onClick={() => EditorDispatcher.saveCurrentFile()} title="Saves current file">
                     <FontAwesomeIcon icon={faSave}/>
                     <span>Save</span>
                 </button>

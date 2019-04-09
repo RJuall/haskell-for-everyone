@@ -15,7 +15,8 @@
     margin-right: 5px;
 }
 
-.icon-bar .btn-run span{
+.icon-bar .btn-run span,
+.icon-bar .btn-save span{
     margin-left: 5px;
 }
 
