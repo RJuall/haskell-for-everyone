@@ -19,6 +19,7 @@ export class MenuBar extends React.Component {
             preference: false,
             appearance: false,
             background: false,
+            online:     false,
             value: false,   //True = Light  False = Dark
             bc: "Toggle Light Background", // State value for text in the toggle dropdown button in menubar
             hideGHCI: false, // state for whether the GHCI console is shown or not
@@ -50,6 +51,11 @@ export class MenuBar extends React.Component {
     // Toggle Dropdown for background color
     toggleBackground(){
         this.setState({background: !this.state.background})
+    }
+
+    // toggles online dropdown menu 
+    toggleOnline(){
+        this.setState({online: !this.state.online});
     }
 
     toggleBackgroundColor(){
@@ -131,6 +137,19 @@ export class MenuBar extends React.Component {
                                 </DropdownMenu>
                         </Dropdown>
                         <DropdownItem>Editor Layout</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+                <Dropdown nav isOpen={this.state.online} toggle={this.toggleOnline.bind(this)}>
+                    <DropdownToggle nav className="menuItem">
+                        Online
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem onClick={() => ModalDispatcher.joinRoomModal()}>
+                            Join Room
+                        </DropdownItem>
+                        <DropdownItem onClick={() => ModalDispatcher.createRoomModal()}>
+                            Create Room
+                        </DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
             </div>
