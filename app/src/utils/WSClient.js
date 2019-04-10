@@ -1,5 +1,5 @@
-import { EventEmitter } from "events";
 import { SERVER_ORIGIN } from "./VersionAPI";
+import { Dispatcher } from "./Dispatcher";
 
 // message delimiter
 export const MSG_DELIM = "*!*";
@@ -12,7 +12,7 @@ export const ROOM_CREATE =  "room-create",
     CHAT =                  "chat",
     CODE =                  "code";
 
-export class WSClient extends EventEmitter{
+export class WSClient extends Dispatcher{
     constructor(){
         super();
 
@@ -26,9 +26,9 @@ export class WSClient extends EventEmitter{
             this._socket = new WebSocket(this.getSocketURL());
 
             // forward events 
-            this._socket.addEventListener("open", evt => this.emit("open", evt));
-            this._socket.addEventListener("errot", evt => this.emit("error", evt));
-            this._socket.addEventListener("close", evt => this.emit("close", evt));
+            this._socket.addEventListener("open", () => this.dispatch("open"));
+            this._socket.addEventListener("errot", () => this.dispatch("error"));
+            this._socket.addEventListener("close", () => this.dispatch("close"));
 
             // handle socket data
             this._socket.addEventListener("message", this.handleSocketData);
@@ -44,7 +44,7 @@ export class WSClient extends EventEmitter{
 
     // handle socket data 
     // @param evt       socket message event 
-    handleSocketData(evt){
+    handleSocketData = evt => {
         // split messages (can be concat!) on delimiter
         evt.data.toString().split(MSG_DELIM).forEach(msg => {
             // parse json and extract type/data
@@ -52,6 +52,7 @@ export class WSClient extends EventEmitter{
             try{
                 // parse json string
                 let json = JSON.parse(msg);
+                console.log("socketdata", json);
             
                 // extract type/data from json
                 ({type=null, data=null} = json);
@@ -76,22 +77,23 @@ export class WSClient extends EventEmitter{
     // @param data      socket message data
     processSocketData(type, data){
         // emit updates 
-        this.emit(type, data);
+        this.dispatch({type, data});
     }
 
     // requests a room to be created for user
     // @param roomName  room to create
     // @param userName  name to assign self in room 
     createRoom(roomName, userName){
-        this.send("room-create", {roomName, userName});
+        this.send(ROOM_CREATE, {roomName, userName});
     }
 
     // joins an existing room
     // @param roomName  room to join (by unique name)
     // @param userName  name to assign self in room
     joinRoom(roomName, userName){
-        if(this.isConnected)
-        this.send(ROOM_JOIN, {roomName, userName});
+        if(this.isConnected){
+            this.send(ROOM_JOIN, {roomName, userName});
+        }
     }
 
     // exits current room
@@ -122,7 +124,7 @@ export class WSClient extends EventEmitter{
     // @param data      message data
     send(type, data=null){
         if(!this.isConnected){
-            this.emit(type, {err: "Not connected to server."});
+            this.dispatch({type, err: "Not connected to server."});
             return;
         }
 
