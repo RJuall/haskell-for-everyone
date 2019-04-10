@@ -1,7 +1,10 @@
-const { webContents } = require("electron");
+const { app, webContents } = require("electron");
 const { IpcResponder } = require("../utils/IpcResponder");
 const { FileUtils } = require("../utils/FileUtils");
 const { GhciWrapper } = require("../utils/GhciWrapper");
+
+// file path to use if none are provided 
+const TEMP_EXEC_PATH = `${app.getPath("userData")}/temp_run_file.hs`;
 
 // GHCI process (essentially a private static field)
 let GHCI_PROCESS = new GhciWrapper();
@@ -33,13 +36,9 @@ class GhciOps{
     // @param evt   event object for responding
     // @param str   haskell file to run 
     // @param save  auto save the file 
-    static executeFile(evt, {path=null, str=""}){
-        // must have haskell file to execute 
-        if(!path){
-            let err = "No file path provided (path is null or empty.)";
-            IpcResponder.respond(evt, "ghci", {err: err.message});
-            return;
-        }
+    static executeFile(evt, {path="", str=""}){
+         // if file is unsaved give a fake path to allow execution 
+         path = path || TEMP_EXEC_PATH;
 
         // fix problem where path folder had spaces
         // (don't save with this path, just special for ghci)
@@ -64,6 +63,7 @@ class GhciOps{
                     .catch(err => {
                         // file write error (don't run)
                         IpcResponder.respond(evt, "file-write", {err: err.message, path});
+                        console.log("ERR");
                     });
             }
             else{
