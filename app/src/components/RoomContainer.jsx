@@ -35,6 +35,11 @@ export class RoomContainer extends React.Component{
         this.setState({inRoom: true});
     }
 
+    // this happens when disconnection occurs 
+    handleSocketClose = () => {
+        this.setState({inRoom: false});
+    }
+
     handleWsClientUpdate = payload => {
         switch(payload.type){
             case ROOM_LEAVE:
@@ -43,6 +48,10 @@ export class RoomContainer extends React.Component{
 
             case ROOM_JOIN:
                 this.handleRoomJoin(payload);
+                break;
+
+            case "close":
+                this.handleSocketClose();
                 break;
         }
     }
