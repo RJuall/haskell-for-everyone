@@ -1,0 +1,38 @@
+.room-container{
+    border: 1px solid black;
+    height: 100%;
+}
+
+.room-cards{
+    margin: auto;
+    max-width: 325px;
+}
+
+.room-empty-container, .room-chat-container{
+    color: rgba(255,255,255,.5);
+    background-color: #32353D;
+    height: 100vh;
+}
+
+.room-chat-container{
+    text-align: center;
+}
+
+.room-chat-container .room-chat-textarea{
+    min-height: 25vh;
+    overflow-y: scroll;
+}
+
+/* apparently ".room-chat-container input, textarea" does weird stuff to modals? */
+.room-chat-container .room-chat-textarea, .room-chat-input{
+    background-color: #e8e8e8;
+    width: 95%;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 5px;
+    box-shadow: 1px 1px 1px 1px black;
+}
+
+.room-chat-container .room-chat-textarea:focus, .room-chat-input:focus{
+    outline: none;
+}

@@ -25,6 +25,7 @@ import { windowStore } from '../stores/WindowStore';
 import FileDispatcher from "../dispatchers/FileDispatcher";
 
 import "./App.css";
+import { RoomContainer } from "./RoomContainer";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
 
@@ -135,6 +136,8 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
                                     > */}
                                         <Col className="ghci-panel">
                                             <GhciConsole/>
+                                            <RoomContainer/>
+                                            {/* RoomContainer does not appear when outside this <Col>....? */}
                                         </Col>
                                         <div></div>
                                     {/*</SplitPane>*/}

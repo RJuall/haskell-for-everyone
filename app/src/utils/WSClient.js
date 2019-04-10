@@ -44,7 +44,7 @@ export class WSClient extends Dispatcher{
 
     // handle socket data 
     // @param evt       socket message event 
-    handleSocketData(evt){
+    handleSocketData = evt => {
         // split messages (can be concat!) on delimiter
         evt.data.toString().split(MSG_DELIM).forEach(msg => {
             // parse json and extract type/data
@@ -52,6 +52,7 @@ export class WSClient extends Dispatcher{
             try{
                 // parse json string
                 let json = JSON.parse(msg);
+                console.log("socketdata", json);
             
                 // extract type/data from json
                 ({type=null, data=null} = json);
