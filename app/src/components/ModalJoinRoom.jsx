@@ -15,6 +15,8 @@ export class ModalJoinRoom extends React.Component{
 
         this.userNameInput = null;  // user name <input> 
         this.roomNameInput = null;  // room name <input>
+
+        this.wsCallbackId = -1;     // wsclient callback id
     }
 
     toggle = () => {
@@ -30,14 +32,14 @@ export class ModalJoinRoom extends React.Component{
     }
 
     // handler for response to room join request 
-    handleRoomJoinResponse = evt => {
-        if(!evt.err){
+    handleRoomJoinResponse = ({err=null}) => {
+        if(!err){
             // room created! 
             ModalDispatcher.alertModal("Room Joined", "You are in an online room.");
         }
         else{
             // error creating room
-            ModalDispatcher.alertModal("Join Room Error", evt.err);
+            ModalDispatcher.alertModal("Join Room Error", err);
         }
 
         // unlock UI 
@@ -45,15 +47,28 @@ export class ModalJoinRoom extends React.Component{
     }
 
     // handler for rooms list response
-    handleRoomListResponse = evt => {
+    handleRoomListResponse = ({err=null, roomsList=[]}) => {
         if(this.state.isOpen){
-            if(!evt.err){
-                this.setState({roomsList: evt.roomsList || []});
+            if(!err){
+                this.setState({roomsList});
             }
             else{
                 this.setState({roomsList: []});
-                ModalDispatcher.alertModal("Rooms List Error", `Unable to load available rooms: ${evt.err}`);
+                ModalDispatcher.alertModal("Rooms List Error", `Unable to load available rooms: ${err}`);
             }
+        }
+    }
+
+    // handler for websocket update 
+    handleWsClientUpdate = payload => {
+        switch(payload.type){
+            case ROOM_JOIN:
+                this.handleRoomJoinResponse(payload);
+                break;
+
+            case ROOM_LIST:
+                this.handleRoomListResponse(payload);
+                break;
         }
     }
 
@@ -75,19 +90,17 @@ export class ModalJoinRoom extends React.Component{
     componentDidMount(){
         // listen for modal trigger
         ModalDispatcher.on(JOIN_ROOM_MODAL, this.handleJoinRoomModal);
-        // listen for join response
-        WSClient.on(ROOM_JOIN, this.handleRoomJoinResponse);
-        // listen for room list 
-        WSClient.on(ROOM_LIST, this.handleRoomListResponse);
+        
+        // listen for websocket updates
+        this.wsCallbackId = WSClient.register(this.handleWsClientUpdate)
     }
 
     componentWillUnmount(){
         // stop listening for modal trigger
         ModalDispatcher.removeListener(JOIN_ROOM_MODAL, this.handleJoinRoomModal);
-        // stop listening for join response
-        WSClient.removeListener(ROOM_JOIN, this.handleRoomJoinResponse);
-        // stop listening for room list 
-        WSClient.removeListener(ROOM_LIST, this.handleRoomListResponse);
+
+        // stop listening  for websocket updates
+        WSClient.unregister(this.wsCallbackId);
     }
 
     renderRoomsListInput(){

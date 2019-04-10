@@ -14,6 +14,8 @@ export class ModalCreateRoom extends React.Component{
 
         this.roomNameInput = null;  // room name <input>
         this.userNameInput = null;  // user name <input
+
+        this.wsCallbackId = -1;     // wsclient callback id 
     }
 
     toggle = () => {
@@ -26,18 +28,27 @@ export class ModalCreateRoom extends React.Component{
     }
 
     // handles server response for creating the room 
-    handleRoomCreateResponse = evt => {
-        if(!evt.err){
+    handleRoomCreateResponse = ({err}) => {
+        if(!err){
             // room created! 
             ModalDispatcher.alertModal("Room Created", "You online room is now live.");
         }
         else{
             // error creating room
-            ModalDispatcher.alertModal("Create Room Error", evt.err);
+            ModalDispatcher.alertModal("Create Room Error", err);
         }
 
         // unlock UI 
         this.setState({locked: false});
+    }
+
+    // handle websocket client update
+    handleWsClientUpdate = payload => {
+        switch(payload.type){
+            case ROOM_CREATE:
+                this.handleRoomCreateResponse(payload);
+                break;
+        }
     }
 
     // form submission 
@@ -59,15 +70,17 @@ export class ModalCreateRoom extends React.Component{
     componentDidMount(){
         // listen for modal trigger
         ModalDispatcher.on(CREATE_ROOM_MODAL, this.handleCreateRoomModal);
+        
         // listen for room creation response 
-        WSClient.on(ROOM_CREATE, this.handleRoomCreateResponse);
+        this.wsCallbackId = WSClient.register(this.handleWsClientUpdate);
     }
 
     componentWillUnmount(){
         // stop listening for modal trigger
         ModalDispatcher.removeListener(CREATE_ROOM_MODAL, this.handleCreateRoomModal);
+
         // stop listening for room creation response
-        WSClient.removeListener(ROOM_CREATE, this.handleRoomCreateResponse);
+        WSClient.unregister(this.wsCallbackId);
     }
 
     render(){
