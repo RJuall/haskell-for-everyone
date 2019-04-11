@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Button } from "reactstrap";
 import ModalDispatcher, { CREATE_ROOM_MODAL } from "../dispatchers/ModalDispatcher";
 import WSClient, { ROOM_CREATE } from "../utils/WSClient";
 
@@ -106,13 +106,18 @@ export class ModalCreateRoom extends React.Component{
                         </FormGroup>
                         <FormGroup>
                             <Label>Your Name</Label>
-                            <Input
-                                innerRef={elem => this.userNameInput = elem}
-                                type="text"
-                                maxLength={16}
-                                disabled={this.state.locked}
-                                required
-                            />
+                            <InputGroup>
+                                <Input
+                                    innerRef={elem => this.userNameInput = elem}
+                                    type="text"
+                                    maxLength={16}
+                                    disabled={this.state.locked}
+                                    required
+                                />
+                                <InputGroupAddon>
+                                    {WSClient.id}
+                                </InputGroupAddon>
+                            </InputGroup>
                         </FormGroup>
                         <div>
                             <Button disabled={this.state.locked}>Create</Button>
