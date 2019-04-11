@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Button } from "reactstrap";
 import ModalDispatcher, { JOIN_ROOM_MODAL } from "../dispatchers/ModalDispatcher";
 import WSClient, { ROOM_JOIN, ROOM_LIST } from "../utils/WSClient";
 
@@ -10,11 +10,13 @@ export class ModalJoinRoom extends React.Component{
         this.state = {
             isOpen:     false,      // modal visibility 
             roomsList:  null,       // list of joinable rooms 
+            filter:     null,
             locked:     false       // UI input lock 
         };
 
         this.userNameInput = null;  // user name <input> 
         this.roomNameInput = null;  // room name <input>
+        this.filterInput =  null;   // filter <input>
 
         this.wsCallbackId = -1;     // wsclient callback id
     }
@@ -25,7 +27,7 @@ export class ModalJoinRoom extends React.Component{
 
     // shows the modal 
     handleJoinRoomModal = () => {
-        this.setState({isOpen: true, roomsList: null}, () => {
+        this.setState({isOpen: true, roomsList: null, filter: null}, () => {
             // get names of all joinable rooms 
             WSClient.fetchRoomList();
         });
@@ -103,8 +105,23 @@ export class ModalJoinRoom extends React.Component{
         WSClient.unregister(this.wsCallbackId);
     }
 
-    renderRoomsListInput(){
+    renderFilterInput(){
         let {roomsList=null} = this.state;
+
+        return (roomsList && roomsList.length) ? (
+            <>
+            <Input
+                innerRef={input => this.filterInput = input}
+                onChange={evt => this.setState({filter: evt.target.value})}
+                placeholder="Optional filter"
+            />
+            <br/>
+            </>
+        ) : null;
+    }
+
+    renderRoomsListInput(){
+        let {roomsList=null, filter=null} = this.state;
 
         // rooms are loading still
         if(!roomsList){
@@ -116,22 +133,31 @@ export class ModalJoinRoom extends React.Component{
             return <div className="text-center">No available rooms found.</div>
         }
 
-        // rooms found - show selection 
-        //let publicRooms = roomsList.filter(room => room.accessType === "public");
+        // rooms found - apply optional filter
+        let filteredRooms = roomsList;
+        if(filter){
+            filteredRooms = roomsList.filter(({name, size, accessType}) => {
+                return name.includes(filter);
+            });
+        }
         
-        let options = roomsList.map(({name='test', size}) => {
+        // create room option elements
+        let options = filteredRooms.map(({name, size, accessType}) => {
+            
             return (
                 <option key={name} value={name}>
-                    {name} ({size} {size > 1 ? "people" : "person"})
+                    {name}&nbsp;
+                    ({size} {size > 1 ? "people" : "person"})&nbsp;
                 </option>
             );
         });
 
-        return (
+        // show filtered list or no match text 
+        return options.length ? (
             <Input type="select" innerRef={elem => this.roomNameInput = elem} disabled={this.state.locked}>
                 {options}
             </Input>
-        )
+        ) : <div>Nothing matches your search.</div>
     }
 
     render(){
@@ -144,18 +170,26 @@ export class ModalJoinRoom extends React.Component{
                     <Form onSubmit={this.onSubmit}>
                         <FormGroup>
                             <Label>Your Name</Label>
-                            <Input
-                                innerRef={elem => this.userNameInput = elem}
-                                type="text"
-                                maxLength={16}
-                                disabled={this.state.locked}
-                                required
-                            />
+                            <InputGroup>
+                                <Input
+                                    innerRef={elem => this.userNameInput = elem}
+                                    type="text"
+                                    maxLength={16}
+                                    disabled={this.state.locked}
+                                    required
+                                />
+                                <InputGroupAddon addonType="append">
+                                    {WSClient.id}
+                                </InputGroupAddon>
+                            </InputGroup>
                         </FormGroup>
                         <FormGroup>
                             <Label>Available Rooms</Label>
                             {this.renderRoomsListInput()}
                         </FormGroup>
+                        <div>
+                            {this.renderFilterInput()}
+                        </div>
                         <div>
                             <Button disabled={this.state.locked}>Join</Button>
                         </div>
