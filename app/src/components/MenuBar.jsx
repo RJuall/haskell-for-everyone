@@ -139,7 +139,7 @@ export class MenuBar extends React.Component {
                         <DropdownItem>Editor Layout</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
-                <Dropdown nav isOpen={this.state.online} toggle={this.toggleOnline.bind(this)}>
+                {/*<Dropdown nav isOpen={this.state.online} toggle={this.toggleOnline.bind(this)}>
                     <DropdownToggle nav className="menuItem">
                         Online
                     </DropdownToggle>
@@ -151,7 +151,7 @@ export class MenuBar extends React.Component {
                             Create Room
                         </DropdownItem>
                     </DropdownMenu>
-                </Dropdown>
+                </Dropdown>*/}
             </div>
         );
     }
