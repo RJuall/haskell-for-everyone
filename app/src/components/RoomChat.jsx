@@ -10,13 +10,16 @@ export class RoomChat extends React.Component{
     }
 
     componentDidMount(){
-        this.wsCallbackId = WSClient.register(({type, chat, from, err}) => {
-            if(type === CHAT && !err){
+        this.wsCallbackId = WSClient.register(({type, data}) => {
+            if(type === CHAT && !data.err){
+                // extract chat info from payload
+                let {chat, from} = data;
+
                 // get element
                 let textarea = this.chatOutRef.current;
 
                 // figure out new text
-                let appendText = from ? `${chat}: ${from}` : chat; 
+                let appendText = from ? `${from}: ${chat}` : chat; 
 
                 // append text to element 
                 textarea.value += (textarea.value ? `\n${appendText}` : appendText);
@@ -35,19 +38,27 @@ export class RoomChat extends React.Component{
     onChatInput = evt => {
         // enter key? 
         if(evt.keyCode === 13){
-            let input = this.chatInRef.current;
+            let input = this.chatInRef.current,
+                chat =  input.value;
 
-            // submit chat
-            WSClient.sendChat(input.value);
+            // must have > 0 characters
+            if(chat){
+                // submit chat
+                WSClient.sendChat(chat);
 
-            // clear element
-            input.value = "";
+                // clear element
+                input.value = "";
+            }
         }
     }
 
     render(){
         return (
             <div className="room-chat-container">
+                <br/>
+                <div className="text-center">
+                    {this.props.roomName}
+                </div>
                 <br/>
                 <textarea
                     className="room-chat-textarea"
