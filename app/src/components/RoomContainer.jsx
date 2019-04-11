@@ -1,6 +1,6 @@
 import React from "react";
 import { RoomChat } from "./RoomChat";
-import { RoomEmpty } from "./RoomEmpty";
+import { RoomSetup } from "./RoomSetup";
 import WSClient, { ROOM_LEAVE, ROOM_JOIN } from "../utils/WSClient";
 import "./RoomContainer.css";
 
@@ -9,55 +9,58 @@ export class RoomContainer extends React.Component{
         super(props);
 
         this.state = {
-            inRoom: false
+            isConnected:    false,  // connected to server?
+            roomName:       null    // name of room (null or "" means no room)
         };
 
         this.wsCallbackId = -1;
-
-        
-        // '1' key to toggle state for testing, **** REMOVE THIS LATER ****
-        /*window.addEventListener("keyup", evt => {
-            if(evt.key === "1"){
-                this.setState({inRoom: !this.state.inRoom});
-            }
-        })*/
     }
 
-    handleRoomLeave = ({err}) => {
+    handleRoomLeave = ({err, name}) => {
         if(err) return;
 
-        this.setState({inRoom: false});
+        this.setState({roomName: null});
     }
 
-    handleRoomJoin = ({err}) => {
-        if(err) return;
-
-        this.setState({inRoom: true});
+    handleRoomJoin = ({err, name}) => {
+        if(name){
+            this.setState({roomName: name});
+        }
     }
 
     // this happens when disconnection occurs 
     handleSocketClose = () => {
-        this.setState({inRoom: false});
+        this.setState({inRoom: false, isConnected: false});
     }
 
-    handleWsClientUpdate = payload => {
-        switch(payload.type){
+    handleSocketConnect = () => {
+        this.setState({isConnected: true});
+    }
+
+    handleWsClientUpdate = ({type, data}) => {
+        switch(type){
             case ROOM_LEAVE:
-                this.handleRoomLeave(payload);
+                this.handleRoomLeave(data);
                 break;
 
             case ROOM_JOIN:
-                this.handleRoomJoin(payload);
+                this.handleRoomJoin(data);
                 break;
 
             case "close":
                 this.handleSocketClose();
+                break;
+
+            case "open":
+                this.handleSocketConnect();
                 break;
         }
     }
 
     componentDidMount(){
         this.wsCallbackId = WSClient.register(this.handleWsClientUpdate);
+
+        WSClient.connect();
     }
 
     componentWillUnmount(){
@@ -67,7 +70,7 @@ export class RoomContainer extends React.Component{
     render(){
         return (
             <div className="room-container">
-                { this.state.inRoom ? <RoomChat/> : <RoomEmpty/> }
+                { this.state.roomName ? <RoomChat roomName={this.state.roomName}/> : <RoomSetup isConnected={this.state.isConnected}/> }
             </div>
         );
     }

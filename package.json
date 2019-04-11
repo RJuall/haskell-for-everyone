@@ -4,7 +4,7 @@
   "description": "Server for the haskell for everyone editor",
   "main": "server/build/Server.js",
   "scripts": {
-    "start": "node .",
+    "start": "cd server && tsc && cd .. && node .",
     "dev": "nodemon .",
     "dev-ts": "cd server && tsc -w"
   },

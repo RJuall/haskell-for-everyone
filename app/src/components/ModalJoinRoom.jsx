@@ -32,10 +32,10 @@ export class ModalJoinRoom extends React.Component{
     }
 
     // handler for response to room join request 
-    handleRoomJoinResponse = ({err=null}) => {
+    handleRoomJoinResponse = ({err=null, name=null}) => {
         if(!err){
             // room created! 
-            ModalDispatcher.alertModal("Room Joined", "You are in an online room.");
+            ModalDispatcher.alertModal("Room Joined", `You are in room "${name}".`);
         }
         else{
             // error creating room
@@ -47,10 +47,10 @@ export class ModalJoinRoom extends React.Component{
     }
 
     // handler for rooms list response
-    handleRoomListResponse = ({err=null, roomsList=[]}) => {
+    handleRoomListResponse = ({err=null, rooms=[]}) => {
         if(this.state.isOpen){
             if(!err){
-                this.setState({roomsList});
+                this.setState({roomsList: rooms});
             }
             else{
                 this.setState({roomsList: []});
@@ -60,14 +60,14 @@ export class ModalJoinRoom extends React.Component{
     }
 
     // handler for websocket update 
-    handleWsClientUpdate = payload => {
-        switch(payload.type){
+    handleWsClientUpdate = ({type, data}) => {
+        switch(type){
             case ROOM_JOIN:
-                this.handleRoomJoinResponse(payload);
+                this.handleRoomJoinResponse(data);
                 break;
 
             case ROOM_LIST:
-                this.handleRoomListResponse(payload);
+                this.handleRoomListResponse(data);
                 break;
         }
     }
@@ -117,9 +117,19 @@ export class ModalJoinRoom extends React.Component{
         }
 
         // rooms found - show selection 
+        //let publicRooms = roomsList.filter(room => room.accessType === "public");
+        
+        let options = roomsList.map(({name='test', size}) => {
+            return (
+                <option key={name} value={name}>
+                    {name} ({size} {size > 1 ? "people" : "person"})
+                </option>
+            );
+        });
+
         return (
             <Input type="select" innerRef={elem => this.roomNameInput = elem} disabled={this.state.locked}>
-                {roomsList}
+                {options}
             </Input>
         )
     }
