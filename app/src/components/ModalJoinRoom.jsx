@@ -114,6 +114,7 @@ export class ModalJoinRoom extends React.Component{
                 innerRef={input => this.filterInput = input}
                 onChange={evt => this.setState({filter: evt.target.value})}
                 placeholder="Optional filter"
+                maxLength={25}
             />
             <br/>
             </>
@@ -136,13 +137,13 @@ export class ModalJoinRoom extends React.Component{
         // rooms found - apply optional filter
         let filteredRooms = roomsList;
         if(filter){
-            filteredRooms = roomsList.filter(({name, size, accessType}) => {
+            filteredRooms = roomsList.filter(({name, size, accessType, editType}) => {
                 return name.includes(filter);
             });
         }
         
         // create room option elements
-        let options = filteredRooms.map(({name, size, accessType}) => {
+        let options = filteredRooms.map(({name, size, accessType, editType}) => {
             
             return (
                 <option key={name} value={name}>
@@ -174,6 +175,7 @@ export class ModalJoinRoom extends React.Component{
                                 <Input
                                     innerRef={elem => this.userNameInput = elem}
                                     type="text"
+                                    minLength={3}
                                     maxLength={16}
                                     disabled={this.state.locked}
                                     required
