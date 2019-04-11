@@ -1,5 +1,6 @@
 import { SERVER_ORIGIN } from "./VersionAPI";
 import { Dispatcher } from "./Dispatcher";
+import { VERSION } from './../components/App';
 
 // message delimiter
 export const MSG_DELIM = "*!*";
@@ -10,13 +11,15 @@ export const ROOM_CREATE =  "room-create",
     ROOM_LEAVE =            "room-leave",
     ROOM_LIST =             "room-list",
     CHAT =                  "chat",
-    CODE =                  "code";
+    CODE =                  "code",
+    ID =                    "id";
 
 export class WSClient extends Dispatcher{
     constructor(){
         super();
 
         this._socket = null;    // websocket
+        this._id =     null;    // socket id 
     }
 
     // connects the socket 
@@ -26,9 +29,24 @@ export class WSClient extends Dispatcher{
             this._socket = new WebSocket(this.getSocketURL());
 
             // forward events 
-            this._socket.addEventListener("open", () => this.dispatch("open"));
-            this._socket.addEventListener("errot", () => this.dispatch("error"));
-            this._socket.addEventListener("close", () => this.dispatch("close"));
+            this._socket.addEventListener("open", () => {
+                // request id (requires version check)
+                this.send("id", {version: VERSION});
+
+                // signal connection happened
+                this.dispatch("open");
+            });
+
+            this._socket.addEventListener("close", evt => {
+                // destroy id
+                this._id = null;
+
+                // signal socket closed 
+                this.dispatch("close", evt);
+            });
+
+            // handle errors
+            this._socket.addEventListener("error", evt => this.dispatch("error"));
 
             // handle socket data
             this._socket.addEventListener("message", this.handleSocketData);
@@ -78,6 +96,11 @@ export class WSClient extends Dispatcher{
     processSocketData(type, data){
         // emit updates 
         this.dispatch({type, data});
+
+        if(type === ID){
+            this._id = data.id;
+            console.log(`I'm socket id ${data.id}`);
+        }
     }
 
     // requests a room to be created for user
@@ -124,7 +147,7 @@ export class WSClient extends Dispatcher{
     // @param data      message data
     send(type, data=null){
         if(!this.isConnected){
-            this.dispatch({type, err: "Not connected to server."});
+            this.dispatch({type, data: {err: "Not connected to server."}});
             return;
         }
 
@@ -149,6 +172,11 @@ export class WSClient extends Dispatcher{
     // getter for is connected to server
     get isConnected(){
         return this._socket && this._socket.readyState === 1;
+    }
+
+    // getter for server-assigned socket id 
+    get id(){
+        return this._id
     }
 }
 
