@@ -8,13 +8,17 @@ export class ModalCreateRoom extends React.Component{
         super(props);
 
         this.state = {
-            isOpen: false,           // modal visibility 
-            locked: false            // UI input lock 
+            isOpen: false,          // modal visibility 
+            locked: false,          // UI input lock 
+            access: "public",       // public/private access
+            edit:   "owner-only"    // owner-only/anyone editing
         };
 
         this.roomNameInput = null;  // room name <input>
-        this.userNameInput = null;  // user name <input
-
+        this.userNameInput = null;  // user name <input>
+        this.accessInput =   null;  // access type <input> 
+        this.passwordInput = null;  // room passowrd <input>
+        this.editInput =     null;  // edit type <input>
         this.wsCallbackId = -1;     // wsclient callback id 
     }
 
@@ -63,11 +67,14 @@ export class ModalCreateRoom extends React.Component{
         this.setState({locked: true});
 
         // get string values from html 
-        let roomName = this.roomNameInput.value,
-            userName = this.userNameInput.value;
+        let roomName =      this.roomNameInput.value,
+            userName =      this.userNameInput.value,
+            password =      this.passwordInput ? this.passwordInput.value : null,
+            accessType =    this.accessInput.value,
+            editType =      this.editInput.value;
 
         // send request 
-        WSClient.createRoom(roomName, userName);
+        WSClient.createRoom(roomName, userName, {password, accessType, editType});
     }
 
     componentDidMount(){
@@ -86,6 +93,20 @@ export class ModalCreateRoom extends React.Component{
         WSClient.unregister(this.wsCallbackId);
     }
 
+    renderPasswordInput(){
+        return this.state.access !== "public" ? (
+            <>
+            <br/>
+            <Input
+                type="text"
+                placeholder="Enter passcode"
+                maxLength={16}
+                required
+            />
+            </>
+        ) : null;
+    }
+
     render(){
         return (
             <Modal isOpen={this.state.isOpen} toggle={this.toggle}>
@@ -99,6 +120,7 @@ export class ModalCreateRoom extends React.Component{
                             <Input
                                 innerRef={elem => this.roomNameInput = elem}
                                 type="text"
+                                minLength={3}
                                 maxLength={16}
                                 disabled={this.state.locked}
                                 required
@@ -110,6 +132,7 @@ export class ModalCreateRoom extends React.Component{
                                 <Input
                                     innerRef={elem => this.userNameInput = elem}
                                     type="text"
+                                    minLength={3}
                                     maxLength={16}
                                     disabled={this.state.locked}
                                     required
@@ -118,6 +141,25 @@ export class ModalCreateRoom extends React.Component{
                                     {WSClient.id}
                                 </InputGroupAddon>
                             </InputGroup>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label>Editing</Label>
+                            <Input type="select" innerRef={input => this.editInput = input}>
+                                <option value="owner-only">Only owner can edit</option>
+                                <option value="anyone">Anyone can edit</option>
+                            </Input>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label>Access</Label>
+                            <Input
+                                type="select"
+                                innerRef={input => this.accessInput = input}
+                                onChange={evt => this.setState({access: evt.target.value})}
+                            >
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </Input>
+                            {this.renderPasswordInput()}
                         </FormGroup>
                         <div>
                             <Button disabled={this.state.locked}>Create</Button>
