@@ -23,9 +23,9 @@ import { terminalStore } from '../stores/TerminalStore';
 import { fileStore } from '../stores/FileStore';
 import { windowStore } from '../stores/WindowStore';
 import FileDispatcher from "../dispatchers/FileDispatcher";
+import { RoomContainer } from "./RoomContainer";
 
 import "./App.css";
-import { RoomContainer } from "./RoomContainer";
 
 export const VERSION = "0.1.0"; // remove hard coding in future
 

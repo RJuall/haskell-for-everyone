@@ -28,14 +28,17 @@ export class ModalCreateRoom extends React.Component{
     }
 
     // handles server response for creating the room 
-    handleRoomCreateResponse = ({err}) => {
+    handleRoomCreateResponse = ({err, name}) => {
         if(!err){
             // room created! 
-            ModalDispatcher.alertModal("Room Created", "You online room is now live.");
+            // (no alert since you immediately get joined modal!)
+            // ModalDispatcher.alertModal("Room Created", `Your online room "${name}" has been created.`);
+            this.setState({isOpen: false, locked: false});
         }
         else{
             // error creating room
             ModalDispatcher.alertModal("Create Room Error", err);
+            this.setState({isOpen: false, locked: false});
         }
 
         // unlock UI 
@@ -43,10 +46,10 @@ export class ModalCreateRoom extends React.Component{
     }
 
     // handle websocket client update
-    handleWsClientUpdate = payload => {
-        switch(payload.type){
+    handleWsClientUpdate = ({type, data}) => {
+        switch(type){
             case ROOM_CREATE:
-                this.handleRoomCreateResponse(payload);
+                this.handleRoomCreateResponse(data);
                 break;
         }
     }
