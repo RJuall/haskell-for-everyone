@@ -79,3 +79,6 @@ app_hs
 # don't save builds in repository
 app/build/
 app/dist/
+
+# ignore typescript builds (builds on start)
+server/build/
