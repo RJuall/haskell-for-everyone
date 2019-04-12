@@ -1,10 +1,13 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { action } from 'mobx';
+import { action, intercept } from 'mobx';
 
 export const UIChooser = inject("windowStore") (observer ( class UIChooser extends React.Component {
     constructor(props) {
         super(props);
+
+        this.selectRef = React.createRef();
+
         this.state = {
             value: 'theme--dark'
         };
@@ -25,10 +28,19 @@ export const UIChooser = inject("windowStore") (observer ( class UIChooser exten
         }
     }
 
+    componentDidMount(){
+        // listen for theme change 
+        intercept(this.props.windowStore.windowSettings, "theme", change => {
+            // update <select>
+            let index = this.selectRef.current.selectedIndex;
+            this.selectRef.current.selectedIndex = index === 0 ? 1 : 0;
+        });
+    }
+
     render() {
         return(
             <div className="icon-bar-chooser">
-                <select name="ui-chooser" value={this.state.value} onChange={this.selectUI}>
+                <select ref={this.selectRef} name="ui-chooser" value={this.state.value} onChange={this.selectUI}>
                     <option value="theme--dark">Dark</option>
                     <option value="theme--light">Light</option>
                 </select>
