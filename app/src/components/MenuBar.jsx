@@ -22,7 +22,6 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
             background: false,
             online:     false,
             value: false,   //True = Light  False = Dark
-            bc: "Toggle "+this.props.windowStore.windowSettings.theme+" Background", // State value for text in the toggle dropdown button in menubar
             hideGHCI: false, // state for whether the GHCI console is shown or not
             hideFile: false // state for whether the file list is shown or not
         };
@@ -56,20 +55,23 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
 
     toggleBackgroundColor(){
         this.setState({value: !this.state.value});
-            if(!this.state.value){
-                document.body.classList.remove('theme--dark');
-                document.body.classList.add('theme--light');
-                this.setState({bc: "Toggle Dark Background"});
-                Object.assign(this.props.windowStore.windowSettings,{theme: "light"});
-                console.log(this.props.windowStore.windowSettings.theme);
-            } else {
-                document.body.classList.add('theme--dark');
-                document.body.classList.remove('theme--light');
-                this.setState({bc: "Toggle Light Background"});
-                Object.assign(this.props.windowStore.windowSettings,{theme: "dark"});
-                console.log(this.props.windowStore.windowSettings.theme);
+        if(!this.state.value){
+            document.body.classList.remove('theme--dark');
+            document.body.classList.add('theme--light');
+            
+            Object.assign(this.props.windowStore.windowSettings,{theme: "light"});
+            console.log(this.props.windowStore.windowSettings.theme);
+        } else {
+            document.body.classList.add('theme--dark');
+            document.body.classList.remove('theme--light');
+        
+            Object.assign(this.props.windowStore.windowSettings,{theme: "dark"});
+            console.log(this.props.windowStore.windowSettings.theme);
 
-            }
+        }
+
+        // switch text so its like Toggle (Light/dark) background
+        this.props.windowStore.updateThemeText();
     }
 
     toggleGhciConsole(){
@@ -91,6 +93,8 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
     }
 
     render() {
+        let toggleBgColor = this.props.windowStore.windowSettings.themeText;
+
         return(
             <div className="nav">					
                 <Dropdown nav isOpen={this.state.file} toggle={this.toggleFile.bind(this)}>
@@ -131,7 +135,7 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
                     <DropdownMenu>
                         <DropdownItem onClick={this.toggleGhciConsole.bind(this)}>Toggle GHCI Console</DropdownItem>
                         <DropdownItem onClick={this.toggleFileList.bind(this)}>Toggle File List</DropdownItem>
-                        <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{this.state.bc}</DropdownItem>
+                        <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{toggleBgColor}</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
                 {/*<Dropdown nav isOpen={this.state.online} toggle={this.toggleOnline.bind(this)}>

@@ -9,7 +9,8 @@ class WindowStore {
         this.globalWindowSettings = {};
  
         this.windowSettings = {
-            theme: "light"
+            theme: "light",
+            themeText: "Toggle Light Background"
         };
 
         this.sessionWindowStore = {
@@ -20,6 +21,14 @@ class WindowStore {
             this.globalWindowSettings = settings.windowSettings;
             Object.assign(this.windowSettings, this.globalWindowSettings);
         } )
+    }
+
+    updateThemeText(){
+        let isDark = this.windowSettings.theme === "dark";
+
+        let text = isDark ? "Light" : "Dark";
+
+        this.windowSettings.themeText = `Toggle ${text} Background`;
     }
 
     windowSettingsDisposer = action( autorun( () => {
