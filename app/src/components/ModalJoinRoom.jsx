@@ -148,7 +148,7 @@ export class ModalJoinRoom extends React.Component{
             return (
                 <option key={name} value={name}>
                     {name}&nbsp;
-                    ({size} {size > 1 ? "people" : "person"})&nbsp;
+                    ({size} {size !== 1 ? "people" : "person"})&nbsp;
                 </option>
             );
         });
