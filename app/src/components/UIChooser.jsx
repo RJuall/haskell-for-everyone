@@ -1,6 +1,8 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
+import { action } from 'mobx';
 
-export class UIChooser extends React.Component {
+export const UIChooser = inject("windowStore") (observer ( class UIChooser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,9 +14,13 @@ export class UIChooser extends React.Component {
             if(event.target.value == 'theme--light'){
                 document.body.classList.remove('theme--dark');
                 document.body.classList.add('theme--light');
+                Object.assign(this.props.windowStore.windowSettings, {theme: "light"});
+                console.log(this.props.windowStore.windowSettings.theme);
             } else {
                 document.body.classList.add('theme--dark');
                 document.body.classList.remove('theme--light');
+                Object.assign(this.props.windowStore.windowSettings, {theme: "dark"});
+                console.log(this.props.windowStore.windowSettings.theme);
             }
         }
     }
@@ -29,4 +35,4 @@ export class UIChooser extends React.Component {
             </div>
         )
     }
-}
+}));

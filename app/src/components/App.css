@@ -2,7 +2,7 @@
 
 body{
     font: caption !important;
-    overflow-y: scroll;
+    overflow: hidden;
     background-color: #000000 !important;
 }
 

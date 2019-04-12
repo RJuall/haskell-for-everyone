@@ -1,7 +1,10 @@
 import React from "react";
+import { Button } from "reactstrap";
+import { observer, inject } from 'mobx-react';
 import WSClient, { CHAT } from "../utils/WSClient";
+import EditorDispatcher from "../dispatchers/EditorDispatcher";
 
-export class RoomChat extends React.Component{
+export const RoomChat = inject("fileStore")(observer(class RoomChat extends React.Component{
     constructor(props){
         super(props);
 
@@ -10,6 +13,7 @@ export class RoomChat extends React.Component{
     }
 
     componentDidMount(){
+        // listen for websocket updates
         this.wsCallbackId = WSClient.register(({type, data}) => {
             if(type === CHAT && !data.err){
                 // extract chat info from payload
@@ -29,9 +33,13 @@ export class RoomChat extends React.Component{
                 textarea.scrollTop = textarea.scrollHeight;
             }
         });
+
+        // open 'online' editor automatically 
+        EditorDispatcher.openOnlineFile();
     }
 
     componentWillUnmount(){
+        // stop listening for websocket updates
         WSClient.unregister(this.wsCallbackId);
     }
 
@@ -50,6 +58,20 @@ export class RoomChat extends React.Component{
                 input.value = "";
             }
         }
+    }
+
+    renderEditorButton(){
+        return !this.props.fileStore.fileSettings.onlineFileActive ? (
+            <>
+            <br/>
+            <br/>
+            <div>
+                <Button onClick={() => EditorDispatcher.openOnlineFile()}>
+                    Open Room Editor
+                </Button>
+            </div>
+            </>
+        ) : null;
     }
 
     render(){
@@ -72,7 +94,8 @@ export class RoomChat extends React.Component{
                     onKeyUp={this.onChatInput}
                     maxLength={100}
                 />
+                {this.renderEditorButton()}
             </div>
         );
     }
-}
+}));

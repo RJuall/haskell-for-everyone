@@ -9,7 +9,7 @@ class WindowStore {
         this.globalWindowSettings = {};
  
         this.windowSettings = {
-            
+            theme: "light"
         };
 
         this.sessionWindowStore = {
@@ -25,6 +25,7 @@ class WindowStore {
     windowSettingsDisposer = action( autorun( () => {
         let windowSettings = {
             // all windowSettings fields go here
+            theme: this.windowSettings.theme
         };
         settingsStore.updateSettings(windowSettings);
     }))

@@ -98,6 +98,7 @@ export class ModalCreateRoom extends React.Component{
             <>
             <br/>
             <Input
+                innerRef={input => this.passwordInput = input}
                 type="text"
                 placeholder="Enter passcode"
                 maxLength={16}
