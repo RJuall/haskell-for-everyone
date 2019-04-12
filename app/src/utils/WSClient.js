@@ -18,8 +18,9 @@ export class WSClient extends Dispatcher{
     constructor(){
         super();
 
-        this._socket = null;    // websocket
-        this._id =     null;    // socket id 
+        this._socket =  null;   // websocket
+        this._id =      null;   // socket id 
+        this._room =    null;   // room data
     }
 
     // connects the socket 
@@ -97,9 +98,20 @@ export class WSClient extends Dispatcher{
         // emit updates 
         this.dispatch({type, data});
 
-        if(type === ID){
-            this._id = data.id;
-            console.log(`I'm socket id ${data.id}`);
+        // some updates includes state updates about the connection 
+        switch(type){
+            case ID:
+                this._id = data.id;
+                console.log(`I'm socket id ${data.id}`);
+                break;
+
+            case ROOM_JOIN:
+                this._room = {...data};
+                break;
+
+            case ROOM_LEAVE:
+                this._room = null;
+                break;
         }
     }
 
@@ -137,9 +149,14 @@ export class WSClient extends Dispatcher{
 
     // sends code update
     // @param code      code to send
-    sendCode(code){
-        // do we need filename? 
-        this.send(CODE, {code});
+    // @param row       insertion row
+    // @param col       insertion col 
+    sendCode(code, row, col){
+        if(this._room){
+            if(this._room.editType === "anyone" || this._room.owner === this.id){
+                this.send(CODE, {code, row, col});
+            }
+        }
     }
 
     // sends formatted json message
