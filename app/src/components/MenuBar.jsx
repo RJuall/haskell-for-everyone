@@ -17,7 +17,6 @@ export class MenuBar extends React.Component {
             file: false,
             edit: false,
             preference: false,
-            appearance: false,
             background: false,
             online:     false,
             value: false,   //True = Light  False = Dark
@@ -41,11 +40,6 @@ export class MenuBar extends React.Component {
     // Toggle for preferences dropdown
     togglePreferences(){
         this.setState({preference: !this.state.preference});
-    }
-
-    // Toggle appearence when selected
-    toggleAppearance(){
-        this.setState({appearance: !this.state.appearance})
     }
 
     // Toggle Dropdown for background color
@@ -85,7 +79,7 @@ export class MenuBar extends React.Component {
         if(!this.state.hideFile){
             console.log("Show File List");
         }else{
-            console.log("Show File List");
+            console.log("Hide File List");
         }
     }
 
@@ -128,15 +122,9 @@ export class MenuBar extends React.Component {
                         Preferences 
                     </DropdownToggle>
                     <DropdownMenu>
-                        <Dropdown nav isOpen={this.state.appearance} toggle={this.toggleAppearance.bind(this)}>
-                             <DropdownToggle nav className="menuItem">Appearance <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon></DropdownToggle>
-                                <DropdownMenu>
-                                    <DropdownItem onClick={this.toggleGhciConsole.bind(this)}>Toggle GHCI Console</DropdownItem>
-                                    <DropdownItem onClick={this.toggleFileList.bind(this)}>Toggle File List</DropdownItem>
-                                    <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{this.state.bc}</DropdownItem>
-                                </DropdownMenu>
-                        </Dropdown>
-                        <DropdownItem>Editor Layout</DropdownItem>
+                        <DropdownItem onClick={this.toggleGhciConsole.bind(this)}>Toggle GHCI Console</DropdownItem>
+                        <DropdownItem onClick={this.toggleFileList.bind(this)}>Toggle File List</DropdownItem>
+                        <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{this.state.bc}</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
                 {/*<Dropdown nav isOpen={this.state.online} toggle={this.toggleOnline.bind(this)}>
