@@ -2,6 +2,8 @@ import { SERVER_ORIGIN } from "./VersionAPI";
 import { Dispatcher } from "./Dispatcher";
 import { VERSION } from './../components/App';
 
+const electron = window.require("electron");
+
 // message delimiter
 export const MSG_DELIM = "*!*";
 
@@ -180,6 +182,12 @@ export class WSClient extends Dispatcher{
 
     // getter for websocket connection url 
     getSocketURL(){
+        let env = electron.remote.process.env;
+
+        if(typeof env.WS_URI === "string"){
+            return env.WS_URI;
+        }
+
         if(window.location.origin.includes("localhost")){
             return "ws://localhost:8080";
         }
