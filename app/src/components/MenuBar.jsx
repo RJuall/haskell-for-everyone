@@ -8,9 +8,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/pro-regular-svg-icons';
 import { SelectFileFolder } from '../utils/SelectFileFolder';
 import { RecentFiles } from './RecentFiles';
+import { observer, inject } from 'mobx-react';
+import { action } from 'mobx';
 
 
-export class MenuBar extends React.Component {
+export const MenuBar = inject("windowStore")(observer (class MenuBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,7 +22,7 @@ export class MenuBar extends React.Component {
             background: false,
             online:     false,
             value: false,   //True = Light  False = Dark
-            bc: "Toggle Light Background", // State value for text in the toggle dropdown button in menubar
+            bc: "Toggle "+this.props.windowStore.windowSettings.theme+" Background", // State value for text in the toggle dropdown button in menubar
             hideGHCI: false, // state for whether the GHCI console is shown or not
             hideFile: false // state for whether the file list is shown or not
         };
@@ -58,10 +60,15 @@ export class MenuBar extends React.Component {
                 document.body.classList.remove('theme--dark');
                 document.body.classList.add('theme--light');
                 this.setState({bc: "Toggle Dark Background"});
+                Object.assign(this.props.windowStore.windowSettings,{theme: "light"});
+                console.log(this.props.windowStore.windowSettings.theme);
             } else {
                 document.body.classList.add('theme--dark');
                 document.body.classList.remove('theme--light');
                 this.setState({bc: "Toggle Light Background"});
+                Object.assign(this.props.windowStore.windowSettings,{theme: "dark"});
+                console.log(this.props.windowStore.windowSettings.theme);
+
             }
     }
 
@@ -143,5 +150,5 @@ export class MenuBar extends React.Component {
             </div>
         );
     }
-}
+}));
 
