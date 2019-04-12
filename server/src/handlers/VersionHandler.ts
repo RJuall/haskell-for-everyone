@@ -5,7 +5,12 @@ import { JsonUtils } from './../utils/JsonUtils';
 
 export class VersionHandler{
     // cached copy of current version 
-    private static version:string = null;
+    private static _version:string = null;
+
+    // getter for the discovered version 
+    public static get version():string{
+        return this._version;
+    }
 
     // finds version and caches 
     public static findVersion():void{
@@ -16,7 +21,7 @@ export class VersionHandler{
                 JsonUtils.parse(buf.toString(), (err, obj) => {
                     if(!err && obj.version){
                         // parse complete and version found - set the version
-                        this.version = obj.version;
+                        this._version = obj.version;
                     }
                 });
             }
