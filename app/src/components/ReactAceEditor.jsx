@@ -1,10 +1,12 @@
 import React from 'react';
 import AceEditor from 'react-ace';
-import EditorDispatcher from '../dispatchers/EditorDispatcher';
-import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
-import GhciDispatcher from '../dispatchers/GhciDispatcher';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
+import EditorDispatcher from '../dispatchers/EditorDispatcher';
+import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
+import ModalDispatcher from '../dispatchers/ModalDispatcher';
+import GhciDispatcher from '../dispatchers/GhciDispatcher';
+import WSClient, { CODE } from "../utils/WSClient";
 
 // import syntax highlighting modes
 import 'brace/mode/haskell';
@@ -27,7 +29,6 @@ import 'brace/theme/twilight';
 
 // allows code completion
 import 'brace/ext/language_tools';
-import ModalDispatcher from '../dispatchers/ModalDispatcher';
 
 export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class ReactAceEditor extends React.Component {
     constructor(props) {
@@ -41,10 +42,12 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         // editor ref
         this.editorRef = React.createRef();
 
+        // websocket client listener id for removal on unmount 
+        this.wsCallbackId = -1;
+
         this.state = {
             value: '',
         };
-
     }
 
     // handler when a file is read
@@ -60,8 +63,15 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
         // update current file name
         this.props.fileStore.fileSettings.lastFilePath = evt.path;
+
+        // update recent files 
         this.props.fileStore.recentPathUpdate(evt.path);
+
+        // saved so not altered
         this.props.fileStore.fileSettings.currFileAltered = false;
+
+        // opening a file switches to 'offline' editor
+        this.props.fileStore.fileSettings.onlineFileActive = false;
 
         // set the editor mode
         this.setEditorMode(evt.path);
@@ -117,12 +127,54 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.setState({value: ""});
     }
 
+    // switch to online mode 
+    handleOnlineFile = () => {
+        this.props.fileStore.fileSettings.lastFilePath = null;
+        this.props.fileStore.fileSettings.onlineFileActive = true;
+
+        this.resetEditorSession();
+        this.setState({value: ""});
+    }
+
+    // online document's code has changed 
+    handleCodeUpdate = ({code, row=-1, col=-1}) => {
+        // only update if in online editor mode 
+        if(!this.props.fileStore.fileSettings.onlineFileActive){
+            return;
+        }
+
+        // apply the update 
+        if(row > -1 && col > -1){
+            let session = this.editorRef.current.editor.session;
+
+            session.insert({row, column: col}, code);
+        }
+    }
+
+    // got an update from the server 
+    handleWsClientUpdate = ({type, data}) => {
+        switch(type){
+            case CODE:
+                this.handleCodeUpdate(data);
+                break;
+        }
+    }
+
     // when the editor changes... (no longer sync with file)
     onChange = (val, evt) => {
         // mark file as same as the save
         this.props.fileStore.fileSettings.currFileAltered = true;
 
         this.state.value = val;
+        
+        // online?
+        if(this.props.fileStore.fileSettings.onlineFileActive){
+            // send the update 
+            let {start, lines} = evt;
+            // this deals with write permissions 
+            WSClient.sendCode(lines.join(""), start.row, start.column);
+        }
+        
     }
 
     // resets the editor session 
@@ -171,6 +223,13 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         EditorDispatcher.on("save-as", this.handleSaveFileAs);
         EditorDispatcher.on("run-code", this.handleRunCode);
         EditorDispatcher.on("empty-file", this.handleEmptyFile);
+        EditorDispatcher.on("online-file", this.handleOnlineFile);
+
+        // listening for websocket updates
+        this.wsCallbackId = WSClient.register(this.handleWsClientUpdate);
+
+        // automatically focus this component 
+        this.editorRef.current.editor.focus();
     }    
 
     componentWillUnmount() {
@@ -180,6 +239,10 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         EditorDispatcher.removeListener("save-as", this.handleSaveFileAs);
         EditorDispatcher.removeListener("run-code", this.handleRunCode);
         EditorDispatcher.removeListener("empty-file", this.handleEmptyFile);
+        EditorDispatcher.removeListener("online-file", this.handleOnlineFile);
+
+        // stop listening for websocket updates
+        WSClient.unregister(this.wsCallbackId);
     }
 
     render() {

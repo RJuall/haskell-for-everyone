@@ -10,7 +10,8 @@ class FileStore {
             //default settings go here
             recentFilePaths:    [],         // array of recent file paths
             lastFilePath:       null,       // last/current file loaded
-            currFileAltered:    false       // file modified and not saved? 
+            currFileAltered:    false,      // file modified and not saved? 
+            onlineFileActive:   false       // currently viewing the online file?
         };
 
         IpcRequester.on("folder-data-get", this.handleInitialFolderData);
