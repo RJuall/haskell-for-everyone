@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import IpcRequester from "../utils/IpcRequester";
+import { WSClient } from '../utils/WSClient';
 
 class EditorDispatcher extends EventEmitter {
 
@@ -63,6 +64,12 @@ class EditorDispatcher extends EventEmitter {
     // signals to create an empty file 
     emptyFile(){
         this.emit("empty-file");
+    }
+
+    // singals switch editor to online mode 
+    openOnlineFile(){
+        // get file state 
+        this.emit("online-file");
     }
 }
 
