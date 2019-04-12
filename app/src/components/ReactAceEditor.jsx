@@ -35,12 +35,12 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         super(props);
         // ref for ace editor 
         this.editorRef = React.createRef();
-        
-        // the settings json data
-        this.settings = null;
 
         // editor ref
         this.editorRef = React.createRef();
+
+        // use to prevent sending what was just received
+        this.lastCodeInserted = {};
 
         // websocket client listener id for removal on unmount 
         this.wsCallbackId = -1;
@@ -147,6 +147,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         if(row > -1 && col > -1){
             let session = this.editorRef.current.editor.session;
 
+            this.lastCodeInserted = {str: code, row, col};
             session.insert({row, column: col}, code);
         }
     }
@@ -164,19 +165,27 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     onChange = (val, evt) => {
         // mark file as same as the save
         this.props.fileStore.fileSettings.currFileAltered = true;
-
         this.state.value = val;
         
         // online?
         if(this.props.fileStore.fileSettings.onlineFileActive){
-            // send the update 
             let {start, lines} = evt;
+
+            let sameRow = this.lastCodeInserted.row === start.row;
+            let sameCol = this.lastCodeInserted.col === start.col;
+            let sameStr = this.lastCodeInserted.str === lines;
+
+            // exact update that was just sent
+            if(sameRow && sameCol && sameStr){
+                return;
+            }
+
+            // send the update 
             // this deals with write permissions 
             WSClient.sendCode(lines.join(""), start.row, start.column);
         }
         
     }
-
     // resets the editor session 
     resetEditorSession = () => {
         let {editor} = this.editorRef.current;
