@@ -8,20 +8,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/pro-regular-svg-icons';
 import { SelectFileFolder } from '../utils/SelectFileFolder';
 import { RecentFiles } from './RecentFiles';
+import { observer, inject } from 'mobx-react';
+import { action } from 'mobx';
 
 
-export class MenuBar extends React.Component {
+export const MenuBar = inject("windowStore")(observer (class MenuBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             file: false,
             edit: false,
             preference: false,
-            appearance: false,
             background: false,
             online:     false,
             value: false,   //True = Light  False = Dark
-            bc: "Toggle Light Background", // State value for text in the toggle dropdown button in menubar
             hideGHCI: false, // state for whether the GHCI console is shown or not
             hideFile: false // state for whether the file list is shown or not
         };
@@ -43,11 +43,6 @@ export class MenuBar extends React.Component {
         this.setState({preference: !this.state.preference});
     }
 
-    // Toggle appearence when selected
-    toggleAppearance(){
-        this.setState({appearance: !this.state.appearance})
-    }
-
     // Toggle Dropdown for background color
     toggleBackground(){
         this.setState({background: !this.state.background})
@@ -60,15 +55,23 @@ export class MenuBar extends React.Component {
 
     toggleBackgroundColor(){
         this.setState({value: !this.state.value});
-            if(!this.state.value){
-                document.body.classList.remove('theme--dark');
-                document.body.classList.add('theme--light');
-                this.setState({bc: "Toggle Dark Background"});
-            } else {
-                document.body.classList.add('theme--dark');
-                document.body.classList.remove('theme--light');
-                this.setState({bc: "Toggle Light Background"});
-            }
+        if(!this.state.value){
+            document.body.classList.remove('theme--dark');
+            document.body.classList.add('theme--light');
+            
+            Object.assign(this.props.windowStore.windowSettings,{theme: "light"});
+            console.log(this.props.windowStore.windowSettings.theme);
+        } else {
+            document.body.classList.add('theme--dark');
+            document.body.classList.remove('theme--light');
+        
+            Object.assign(this.props.windowStore.windowSettings,{theme: "dark"});
+            console.log(this.props.windowStore.windowSettings.theme);
+
+        }
+
+        // switch text so its like Toggle (Light/dark) background
+        this.props.windowStore.updateThemeText();
     }
 
     toggleGhciConsole(){
@@ -85,11 +88,13 @@ export class MenuBar extends React.Component {
         if(!this.state.hideFile){
             console.log("Show File List");
         }else{
-            console.log("Show File List");
+            console.log("Hide File List");
         }
     }
 
     render() {
+        let toggleBgColor = this.props.windowStore.windowSettings.themeText;
+
         return(
             <div className="nav">					
                 <Dropdown nav isOpen={this.state.file} toggle={this.toggleFile.bind(this)}>
@@ -128,15 +133,9 @@ export class MenuBar extends React.Component {
                         Preferences 
                     </DropdownToggle>
                     <DropdownMenu>
-                        <Dropdown nav isOpen={this.state.appearance} toggle={this.toggleAppearance.bind(this)}>
-                             <DropdownToggle nav className="menuItem">Appearance <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon></DropdownToggle>
-                                <DropdownMenu>
-                                    <DropdownItem onClick={this.toggleGhciConsole.bind(this)}>Toggle GHCI Console</DropdownItem>
-                                    <DropdownItem onClick={this.toggleFileList.bind(this)}>Toggle File List</DropdownItem>
-                                    <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{this.state.bc}</DropdownItem>
-                                </DropdownMenu>
-                        </Dropdown>
-                        <DropdownItem>Editor Layout</DropdownItem>
+                        <DropdownItem onClick={this.toggleGhciConsole.bind(this)}>Toggle GHCI Console</DropdownItem>
+                        <DropdownItem onClick={this.toggleFileList.bind(this)}>Toggle File List</DropdownItem>
+                        <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{toggleBgColor}</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
                 {/*<Dropdown nav isOpen={this.state.online} toggle={this.toggleOnline.bind(this)}>
@@ -155,5 +154,5 @@ export class MenuBar extends React.Component {
             </div>
         );
     }
-}
+}));
 

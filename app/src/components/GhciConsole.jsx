@@ -81,7 +81,7 @@ export class GhciConsole extends React.Component{
         // only send if there is actual code (aka user is not spamming enter)
         if(code.length){
             // display current input in the output 
-            outElem.value += (outElem.value.endsWith("\n")) ? `\n{code}\n` : `${code}\n`;
+            outElem.value += (outElem.value.endsWith("\n")) ? `\n${code}\n` : `${code}\n`;
 
             // clear the input element
             elem.value = "";
