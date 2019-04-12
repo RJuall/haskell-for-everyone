@@ -40,7 +40,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.editorRef = React.createRef();
 
         // use to prevent sending what was just received
-        this.lastCodeInserted = {};
+        this.processingUpdate = false;
 
         // websocket client listener id for removal on unmount 
         this.wsCallbackId = -1;
@@ -147,8 +147,9 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         if(row > -1 && col > -1){
             let session = this.editorRef.current.editor.session;
 
-            this.lastCodeInserted = {str: code, row, col};
+            this.processingUpdate = true;
             session.insert({row, column: col}, code);
+            this.processingUpdate = false;
         }
     }
 
@@ -166,19 +167,10 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         // mark file as same as the save
         this.props.fileStore.fileSettings.currFileAltered = true;
         this.state.value = val;
-        
+
         // online?
-        if(this.props.fileStore.fileSettings.onlineFileActive){
+        if(this.props.fileStore.fileSettings.onlineFileActive && !this.processingUpdate){
             let {start, lines} = evt;
-
-            let sameRow = this.lastCodeInserted.row === start.row;
-            let sameCol = this.lastCodeInserted.col === start.col;
-            let sameStr = this.lastCodeInserted.str === lines;
-
-            // exact update that was just sent
-            if(sameRow && sameCol && sameStr){
-                return;
-            }
 
             // send the update 
             // this deals with write permissions 
@@ -282,6 +274,8 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                     ref={this.editorRef}                 
                     value={this.state.value}
                     onChange={this.onChange}
+                    onKeyDown={this.onKeyDown}
+                    oon
                     commands={[{
                         name: 'save',
                         bindKey: {win: 'Ctrl-s', mac: 'Command-s'},
