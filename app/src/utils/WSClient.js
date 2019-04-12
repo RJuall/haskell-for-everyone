@@ -45,7 +45,7 @@ export class WSClient extends Dispatcher{
                 this._id = null;
 
                 // signal socket closed 
-                this.dispatch("close", evt);
+                this.dispatch("close");
             });
 
             // handle errors
