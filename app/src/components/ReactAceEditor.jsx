@@ -137,18 +137,25 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     }
 
     // online document's code has changed 
-    handleCodeUpdate = ({code, row=-1, col=-1}) => {
+    handleCodeUpdate = ({code, row=-1, col=-1, action=null}) => {
         // only update if in online editor mode 
         if(!this.props.fileStore.fileSettings.onlineFileActive){
             return;
         }
 
         // apply the update 
-        if(row > -1 && col > -1){
+        if(row > -1 && col > -1 && action){
             let session = this.editorRef.current.editor.session;
 
             this.processingUpdate = true;
-            session.insert({row, column: col}, code);
+            
+            if(action === "insert"){
+                session.insert({row, column: col}, code);
+            }
+            else if(action === "remove"){
+                session.remove({row, column: col});
+            }
+
             this.processingUpdate = false;
         }
     }
@@ -170,11 +177,11 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
         // online?
         if(this.props.fileStore.fileSettings.onlineFileActive && !this.processingUpdate){
-            let {start, lines} = evt;
+            let {start, lines, action} = evt;
 
             // send the update 
             // this deals with write permissions 
-            WSClient.sendCode(lines.join(""), start.row, start.column);
+            WSClient.sendCode(lines.join(""), start.row, start.column, action);
         }
         
     }
