@@ -6,6 +6,9 @@ const { GhciWrapper } = require("../utils/GhciWrapper");
 // file path to use if none are provided 
 const TEMP_EXEC_PATH = `${app.getPath("userData")}/temp_run_file.hs`;
 
+// response delimiter 
+const GHCI_DELIM = "*!*"; // ("ghci" responses should include this)
+
 // GHCI process (essentially a private static field)
 let GHCI_PROCESS = new GhciWrapper();
 
@@ -18,7 +21,7 @@ class GhciOps{
         // must have haskell code to execute 
         if(!str){
             let err = "No code provided (str is null or empty.)";
-            IpcResponder.respond(evt, "ghci", {err: err.message});
+            IpcResponder.respond(evt, "ghci", {err: err.message + GHCI_DELIM});
             return;
         }
 
@@ -92,6 +95,7 @@ class GhciOps{
             // get buffer text
             GHCI_PROCESS.init(str => {
                 // send the text ("ghci version...")
+                str += GHCI_DELIM;
                 IpcResponder.respond(evt, "ghci", {str});
             });
         });
@@ -121,14 +125,14 @@ class GhciOps{
     static handleSetupError(evt){
         // tell all windows ghci is broken (there will never a response object at this point)
         webContents.getAllWebContents().forEach(resEvt => {
-            IpcResponder.respond(resEvt, "ghci-error", {err: evt.message || "GHCi setup error."})
+            IpcResponder.respond(resEvt, "ghci-error", {err: evt.message || "GHCi setup error."});
         });
     }
 
     // handles child process output (forwards to renderer)
     static handleOutput(evt){
         // response info includes response event object and output string 
-        IpcResponder.respond(GHCI_PROCESS.responseEvt, "ghci", {str: evt.str});
+        IpcResponder.respond(GHCI_PROCESS.responseEvt, "ghci", {str: evt.str + GHCI_DELIM});
     }
 }
 
