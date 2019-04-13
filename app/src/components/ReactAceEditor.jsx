@@ -6,7 +6,7 @@ import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import ModalDispatcher from '../dispatchers/ModalDispatcher';
 import GhciDispatcher from '../dispatchers/GhciDispatcher';
-import WSClient, { CODE, ROOM_LEAVE } from "../utils/WSClient";
+import WSClient, { CODE, ROOM_LEAVE, ROOM_JOIN } from "../utils/WSClient";
 
 // import syntax highlighting modes
 import 'brace/mode/haskell';
@@ -138,9 +138,11 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
     // switch to online mode 
     handleOnlineFile = () => {
+        // online mode setup 
         this.props.fileStore.fileSettings.lastFilePath = null;
         this.props.fileStore.fileSettings.onlineFileActive = true;
 
+        // switch the code editor value to stale 'online file' text
         this.setState({value: this.onlineEditorCache}, () => {
             // editor is now where it was when it was switched to a different file
             // apply updates that arrived while not viewing online file 
@@ -148,7 +150,32 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
             this.onlineUpdatesToProcess = [];
         });
 
+        // this fixes the undo issues 
         this.resetEditorSession();
+    }
+
+    // when the client connects to a room initially 
+    handleRoomJoin = ({codeLines}) => {
+        // reset room info 
+        this.clearRoomData();
+        
+        // insert each character at corresponding row, col 
+        codeLines.forEach((line, row) => {
+            line.forEach((code, column) => {
+                // generate start end objects from data
+                let start = {row, column};              // row, column is always start
+                let end = {row, column: column + 1};    // always 1 char so it ends 1 col away 
+
+                // append update function to update array
+                // this will be executed when handleOnlineFile is invoked next 
+                this.onlineUpdatesToProcess.push(
+                    () => this.handleCodeUpdate({code, start, end, action: "insert"})
+                );
+            });
+        });
+
+        // switch to online mode and run updaters 
+        this.handleOnlineFile();
     }
 
     // online document's code has changed 
@@ -201,9 +228,11 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                 break;
 
             case ROOM_LEAVE:
-                // forget everything about that room
-                this.onlineEditorCache = "";
-                this.onlineUpdatesToProcess = [];
+                this.clearRoomData();
+                break;
+
+            case ROOM_JOIN:
+                this.handleRoomJoin(data);
                 break;
         }
     }
@@ -221,9 +250,15 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
             // send the update 
             // this deals with write permissions 
             WSClient.sendCode(lines.join(""), start, end, action);
-        }
-        
+        }        
     }
+
+    // destroys information related to current room 
+    clearRoomData(){
+        this.onlineEditorCache = "";
+        this.onlineUpdatesToProcess = [];
+    }
+
     // resets the editor session 
     resetEditorSession = () => {
         let {editor} = this.editorRef.current;
