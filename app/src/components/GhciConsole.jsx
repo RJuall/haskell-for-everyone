@@ -5,12 +5,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./GhciConsole.css";
 import { faBroom } from "@fortawesome/pro-light-svg-icons";
 
+// response delimiter 
+const GHCI_DELIM = "*!*";
+
 export class GhciConsole extends React.Component{
     constructor(props){
         super(props);
 
         this.historyDepth = 0;
         this.commandHistory = [];
+
+        this.responseBuffer = [];
 
         // input <input> element ref
         this.inputRef = React.createRef();
@@ -25,17 +30,32 @@ export class GhciConsole extends React.Component{
         // text update 
         let text = evt.err || evt.str || "";
 
-        // append text to output 
-        if(!elem.value.length){
-            // set text if empty 
-            this.consoleRef.current.value = text;
+        // is this the end of the response stream? 
+        if(text.endsWith(GHCI_DELIM)){
+            // yes because delimiter was found 
+            // append buffered text and display
+            text = this.responseBuffer.join("") + text.replace(GHCI_DELIM, "");
+
+            // clear the buffer
+            this.responseBuffer = [];
+
+            // append text to output 
+            if(!elem.value.length){
+                // set text if empty 
+                this.consoleRef.current.value = text;
+            }
+            else{
+                // append text on bottom 
+                elem.value +=  text;
+                // scroll to bottom
+                elem.scrollTop = elem.scrollHeight;
+            }
         }
         else{
-            // append text on bottom 
-            elem.value +=  text;
-            // scroll to bottom
-            elem.scrollTop = elem.scrollHeight;
-        }
+            // not the end of the stream
+            // place response chunk in the buffer 
+            this.responseBuffer.push(text);
+        }        
     }
 
     // handles ghci error (most likely missing haskell platform)
@@ -146,13 +166,6 @@ export class GhciConsole extends React.Component{
 
             default:
                 break;
-        }
-        // keyboard input 
-        if(evt.keyCode === 13){
-            
-        }
-        else if(evt.keyCode === 38){
-            
         }
     }
 
