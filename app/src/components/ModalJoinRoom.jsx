@@ -8,17 +8,19 @@ export class ModalJoinRoom extends React.Component{
         super(props);
 
         this.state = {
-            isOpen:     false,      // modal visibility 
-            roomsList:  null,       // list of joinable rooms 
-            filter:     null,
-            locked:     false       // UI input lock 
+            isOpen:         false,      // modal visibility 
+            roomsList:      null,       // list of joinable rooms 
+            filter:         null,       // room list filter
+            showPassword:   false,      // show password input (private selection)
+            locked:         false       // UI input lock 
         };
 
-        this.userNameInput = null;  // user name <input> 
-        this.roomNameInput = null;  // room name <input>
-        this.filterInput =  null;   // filter <input>
+        this.userNameInput =    null;   // user name <input> 
+        this.roomNameInput =    null;   // room name <input>
+        this.filterInput =      null;   // filter <input>
+        this.passwordInput =    null;   // password <input>
 
-        this.wsCallbackId = -1;     // wsclient callback id
+        this.wsCallbackId = -1;         // wsclient callback id
     }
 
     toggle = () => {
@@ -27,7 +29,7 @@ export class ModalJoinRoom extends React.Component{
 
     // shows the modal 
     handleJoinRoomModal = () => {
-        this.setState({isOpen: true, roomsList: null, filter: null}, () => {
+        this.setState({isOpen: true, roomsList: null, filter: null, showPassword: false}, () => {
             // get names of all joinable rooms 
             WSClient.fetchRoomList();
         });
@@ -81,13 +83,24 @@ export class ModalJoinRoom extends React.Component{
 
         // get string values from html 
         let roomName = this.roomNameInput.value,
-            userName = this.userNameInput.value;
+            userName = this.userNameInput.value,
+            password = this.passwordInput ? this.passwordInput.value : null;
 
         // send request 
         if(roomName){
             this.setState({locked: true});
-            WSClient.joinRoom(roomName, userName);
+            WSClient.joinRoom(roomName, userName, password);
         }
+    }
+
+    onRoomChange = evt => {
+        let selection = evt.target;
+        let option = selection[selection.selectedIndex];
+        let accessType = option.getAttribute("accesstype");
+
+        let showPassword = (accessType === "private");
+
+        this.setState({showPassword});
     }
 
     componentDidMount(){
@@ -122,6 +135,20 @@ export class ModalJoinRoom extends React.Component{
         ) : null;
     }
 
+    renderPasswordFormGroup(){
+        return this.state.showPassword ? (
+            <FormGroup>
+                <Label>Password</Label>
+                <Input
+                    innerRef={input => this.passwordInput = input}
+                    placeholder="Enter private room password"
+                    maxLength={16}
+                    required
+                />
+            </FormGroup>
+        ) : null;
+    }
+
     renderRoomsListInput(){
         let {roomsList=null, filter=null} = this.state;
 
@@ -145,9 +172,8 @@ export class ModalJoinRoom extends React.Component{
         
         // create room option elements
         let options = filteredRooms.map(({name, size, accessType, editType}) => {
-            
             return (
-                <option key={name} value={name}>
+                <option key={name} value={name} accesstype={accessType}>
                     {name}&nbsp;
                     ({size} {size !== 1 ? "people" : "person"})&nbsp;
                 </option>
@@ -156,7 +182,7 @@ export class ModalJoinRoom extends React.Component{
 
         // show filtered list or no match text 
         return options.length ? (
-            <Input type="select" innerRef={elem => this.roomNameInput = elem} disabled={this.state.locked}>
+            <Input type="select" innerRef={elem => this.roomNameInput = elem} disabled={this.state.locked} onChange={this.onRoomChange}>
                 {options}
             </Input>
         ) : <div>Nothing matches your search.</div>
@@ -193,6 +219,7 @@ export class ModalJoinRoom extends React.Component{
                         <div>
                             {this.renderFilterInput()}
                         </div>
+                        {this.renderPasswordFormGroup()}
                         <div>
                             <Button disabled={this.state.locked}>Join</Button>
                         </div>

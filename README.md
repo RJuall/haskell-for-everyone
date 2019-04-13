@@ -57,6 +57,11 @@ require('electron-react-devtools').install()
 ## Electron App 
 \*\* Must be in __app/__ folder! \*\*
 
+#### App environment variables
+| Env Var | Example                       | Description             |
+|---------|-------------------------------|-------------------------|
+| WS_URI  | WS_URI=ws://192.168.1.25:8080 | Overrides websocket url |
+
 #### App development mode
 ```bash
 # cd app (if in root)
@@ -71,6 +76,12 @@ npm run react
 
 ## Server
 \*\* Must be in __root__ folder! \*\*
+
+#### Server environment variables
+| Env Var      | Example         | Description                         |
+|--------------|-----------------|-------------------------------------|
+| PORT         | PORT=8080       | Server port for http and websockets |
+| ROOM_POP_CAP | ROOM_POP_CAP=20 | Max connections per room            |
 
 #### Server development mode 
 ```bash
