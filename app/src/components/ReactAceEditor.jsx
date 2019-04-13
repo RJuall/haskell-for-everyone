@@ -150,7 +150,22 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
             this.processingUpdate = true;
 
             if(action === "insert"){
-                session.insert(start, code);
+                let rowDiff = start.row + 1 - session.getLength(); // length is off by 1 (starts at 1 not 0)
+
+                if(rowDiff > 0){
+                    // new blank lines have been added
+                    let i = start.row - rowDiff + 1;
+                    while(i < start.row){
+                        // array arg is [[prevLine], [currLine]]
+                        session.doc.insertMergedLines({row: i++, col: 0}, [[''], ['']]);
+                    }
+
+                    // at this point all blank lines added - just add actual code 
+                    session.doc.insertMergedLines({row: i, col: 0}, [[''], code.split("")]);
+                }
+                else{
+                    session.insert(start, code);
+                }
             }
             else if(action === "remove"){
                 session.remove({start, end});
@@ -238,6 +253,8 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
         // automatically focus this component 
         this.editorRef.current.editor.focus();
+
+        setTimeout(() => console.log(this.editorRef.current.editor.session), 1000);
     }    
 
     componentWillUnmount() {
@@ -265,7 +282,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                     fontSize={this.props.editorStore.editorSettings.fontSize}
                     editorProps={
                         {
-                            $blockScrolling: this.props.editorStore.editorSettings.blockScrolling,
+                            $blockScrolling: this.props.editorStore.editorSettings.blockScrolling ? Infinity : false,
                         }
                     }
                     wrapEnabled={this.props.editorStore.editorSettings.wrapEnabled}
