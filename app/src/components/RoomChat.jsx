@@ -33,9 +33,6 @@ export const RoomChat = inject("fileStore")(observer(class RoomChat extends Reac
                 textarea.scrollTop = textarea.scrollHeight;
             }
         });
-
-        // open 'online' editor automatically 
-        EditorDispatcher.openOnlineFile();
     }
 
     componentWillUnmount(){
