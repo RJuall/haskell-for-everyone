@@ -30,7 +30,7 @@ export class RoomContainer extends React.Component{
 
     // this happens when disconnection occurs 
     handleSocketClose = () => {
-        this.setState({inRoom: false, isConnected: false});
+        this.setState({roomName: null, isConnected: false});
     }
 
     handleSocketConnect = () => {

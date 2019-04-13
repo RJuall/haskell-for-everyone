@@ -37,7 +37,8 @@ export class ModalJoinRoom extends React.Component{
     handleRoomJoinResponse = ({err=null, name=null}) => {
         if(!err){
             // room created! 
-            ModalDispatcher.alertModal("Room Joined", `You are in room "${name}".`);
+            // ModalDispatcher.alertModal("Room Joined", `You are in room "${name}".`);
+            this.setState({isOpen: false});
         }
         else{
             // error creating room

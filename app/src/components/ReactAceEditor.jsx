@@ -35,12 +35,12 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         super(props);
         // ref for ace editor 
         this.editorRef = React.createRef();
-        
-        // the settings json data
-        this.settings = null;
 
         // editor ref
         this.editorRef = React.createRef();
+
+        // use to prevent sending what was just received
+        this.processingUpdate = false;
 
         // websocket client listener id for removal on unmount 
         this.wsCallbackId = -1;
@@ -137,17 +137,41 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     }
 
     // online document's code has changed 
-    handleCodeUpdate = ({code, row=-1, col=-1}) => {
+    handleCodeUpdate = ({code, start=null, end=null, action=null}) => {
         // only update if in online editor mode 
         if(!this.props.fileStore.fileSettings.onlineFileActive){
             return;
         }
 
         // apply the update 
-        if(row > -1 && col > -1){
+        if(start && code && action){
             let session = this.editorRef.current.editor.session;
 
-            session.insert({row, column: col}, code);
+            this.processingUpdate = true;
+
+            if(action === "insert"){
+                let rowDiff = start.row + 1 - session.getLength(); // length is off by 1 (starts at 1 not 0)
+
+                if(rowDiff > 0){
+                    // new blank lines have been added
+                    let i = start.row - rowDiff + 1;
+                    while(i < start.row){
+                        // array arg is [[prevLine], [currLine]]
+                        session.doc.insertMergedLines({row: i++, col: 0}, [[''], ['']]);
+                    }
+
+                    // at this point all blank lines added - just add actual code 
+                    session.doc.insertMergedLines({row: i, col: 0}, [[''], code.split("")]);
+                }
+                else{
+                    session.insert(start, code);
+                }
+            }
+            else if(action === "remove"){
+                session.remove({start, end});
+            }
+
+            this.processingUpdate = false;
         }
     }
 
@@ -164,19 +188,18 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     onChange = (val, evt) => {
         // mark file as same as the save
         this.props.fileStore.fileSettings.currFileAltered = true;
-
         this.state.value = val;
-        
+
         // online?
-        if(this.props.fileStore.fileSettings.onlineFileActive){
+        if(this.props.fileStore.fileSettings.onlineFileActive && !this.processingUpdate){
+            let {start, end, lines, action} = evt;
+
             // send the update 
-            let {start, lines} = evt;
             // this deals with write permissions 
-            WSClient.sendCode(lines.join(""), start.row, start.column);
+            WSClient.sendCode(lines.join(""), start, end, action);
         }
         
     }
-
     // resets the editor session 
     resetEditorSession = () => {
         let {editor} = this.editorRef.current;
@@ -230,6 +253,8 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
         // automatically focus this component 
         this.editorRef.current.editor.focus();
+
+        setTimeout(() => console.log(this.editorRef.current.editor.session), 1000);
     }    
 
     componentWillUnmount() {
@@ -257,7 +282,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                     fontSize={this.props.editorStore.editorSettings.fontSize}
                     editorProps={
                         {
-                            $blockScrolling: this.props.editorStore.editorSettings.blockScrolling,
+                            $blockScrolling: this.props.editorStore.editorSettings.blockScrolling ? Infinity : false,
                         }
                     }
                     wrapEnabled={this.props.editorStore.editorSettings.wrapEnabled}
@@ -273,6 +298,8 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                     ref={this.editorRef}                 
                     value={this.state.value}
                     onChange={this.onChange}
+                    onKeyDown={this.onKeyDown}
+                    oon
                     commands={[{
                         name: 'save',
                         bindKey: {win: 'Ctrl-s', mac: 'Command-s'},

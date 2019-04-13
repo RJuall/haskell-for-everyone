@@ -2,6 +2,8 @@ import { SERVER_ORIGIN } from "./VersionAPI";
 import { Dispatcher } from "./Dispatcher";
 import { VERSION } from './../components/App';
 
+const electron = window.require("electron");
+
 // message delimiter
 export const MSG_DELIM = "*!*";
 
@@ -43,7 +45,7 @@ export class WSClient extends Dispatcher{
                 this._id = null;
 
                 // signal socket closed 
-                this.dispatch("close", evt);
+                this.dispatch("close");
             });
 
             // handle errors
@@ -149,12 +151,13 @@ export class WSClient extends Dispatcher{
 
     // sends code update
     // @param code      code to send
-    // @param row       insertion row
-    // @param col       insertion col 
-    sendCode(code, row, col){
+    // @param start     {row, column} start
+    // @param end       {row, column} end
+    // @param action    insert or remove 
+    sendCode(code, start, end, action){
         if(this._room){
             if(this._room.editType === "anyone" || this._room.owner === this.id){
-                this.send(CODE, {code, row, col});
+                this.send(CODE, {code, start, end, action});
             }
         }
     }
@@ -180,6 +183,12 @@ export class WSClient extends Dispatcher{
 
     // getter for websocket connection url 
     getSocketURL(){
+        let env = electron.remote.process.env;
+
+        if(typeof env.WS_URI === "string"){
+            return env.WS_URI;
+        }
+
         if(window.location.origin.includes("localhost")){
             return "ws://localhost:8080";
         }
