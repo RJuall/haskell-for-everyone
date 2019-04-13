@@ -6,7 +6,7 @@ import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import ModalDispatcher from '../dispatchers/ModalDispatcher';
 import GhciDispatcher from '../dispatchers/GhciDispatcher';
-import WSClient, { CODE } from "../utils/WSClient";
+import WSClient, { CODE, ROOM_LEAVE } from "../utils/WSClient";
 
 // import syntax highlighting modes
 import 'brace/mode/haskell';
@@ -41,6 +41,10 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
         // use to prevent sending what was just received
         this.processingUpdate = false;
+        // updates to process when online but not in online editor 
+        this.onlineUpdatesToProcess = [];
+
+        this.onlineEditorCache = "";
 
         // websocket client listener id for removal on unmount 
         this.wsCallbackId = -1;
@@ -69,6 +73,11 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
         // saved so not altered
         this.props.fileStore.fileSettings.currFileAltered = false;
+
+        // if going from online to offline file - cache the edtiro 
+        if(this.props.fileStore.fileSettings.onlineFileActive){
+            this.onlineEditorCache = this.state.value;
+        }
 
         // opening a file switches to 'offline' editor
         this.props.fileStore.fileSettings.onlineFileActive = false;
@@ -132,18 +141,27 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.props.fileStore.fileSettings.lastFilePath = null;
         this.props.fileStore.fileSettings.onlineFileActive = true;
 
+        this.setState({value: this.onlineEditorCache}, () => {
+            // editor is now where it was when it was switched to a different file
+            // apply updates that arrived while not viewing online file 
+            this.onlineUpdatesToProcess.forEach(update => update());
+            this.onlineUpdatesToProcess = [];
+        });
+
         this.resetEditorSession();
-        this.setState({value: ""});
     }
 
     // online document's code has changed 
     handleCodeUpdate = ({code, start=null, end=null, action=null}) => {
         // only update if in online editor mode 
         if(!this.props.fileStore.fileSettings.onlineFileActive){
+            // apply this later
+            this.onlineUpdatesToProcess.push(() => this.handleCodeUpdate({code, start, end, action}));
+
             return;
         }
 
-        // apply the update 
+        // apply the update   
         if(start && code && action){
             let session = this.editorRef.current.editor.session;
 
@@ -180,6 +198,12 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         switch(type){
             case CODE:
                 this.handleCodeUpdate(data);
+                break;
+
+            case ROOM_LEAVE:
+                // forget everything about that room
+                this.onlineEditorCache = "";
+                this.onlineUpdatesToProcess = [];
                 break;
         }
     }
@@ -253,8 +277,6 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
         // automatically focus this component 
         this.editorRef.current.editor.focus();
-
-        setTimeout(() => console.log(this.editorRef.current.editor.session), 1000);
     }    
 
     componentWillUnmount() {
