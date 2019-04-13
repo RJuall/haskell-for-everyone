@@ -143,6 +143,7 @@ export class ModalJoinRoom extends React.Component{
                     innerRef={input => this.passwordInput = input}
                     placeholder="Enter private room password"
                     maxLength={16}
+                    required
                 />
             </FormGroup>
         ) : null;
