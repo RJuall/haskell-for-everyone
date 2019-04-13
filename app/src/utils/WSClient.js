@@ -127,9 +127,10 @@ export class WSClient extends Dispatcher{
     // joins an existing room
     // @param roomName  room to join (by unique name)
     // @param userName  name to assign self in room
-    joinRoom(roomName, userName){
+    // @param password  private room password (optional)
+    joinRoom(roomName, userName, password=null){
         if(this.isConnected){
-            this.send(ROOM_JOIN, {roomName, userName});
+            this.send(ROOM_JOIN, {roomName, userName, password});
         }
     }
 
