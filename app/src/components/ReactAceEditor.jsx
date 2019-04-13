@@ -155,7 +155,9 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     }
 
     // when the client connects to a room initially 
-    handleRoomJoin = ({codeLines}) => {
+    handleRoomJoin = ({err, codeLines}) => {
+        if(err) return;     // failed to join room 
+
         // reset room info 
         this.clearRoomData();
         
