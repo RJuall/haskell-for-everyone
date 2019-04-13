@@ -60,6 +60,10 @@ export const RoomChat = inject("fileStore")(observer(class RoomChat extends Reac
         }
     }
 
+    onLeaveRoomClick = () => {
+        WSClient.leaveRoom();
+    }
+
     renderEditorButton(){
         return !this.props.fileStore.fileSettings.onlineFileActive ? (
             <>
@@ -94,6 +98,11 @@ export const RoomChat = inject("fileStore")(observer(class RoomChat extends Reac
                     onKeyUp={this.onChatInput}
                     maxLength={100}
                 />
+                <br/>
+                <br/>
+                <Button onClick={this.onLeaveRoomClick}>
+                    Leave Room
+                </Button>
                 {this.renderEditorButton()}
             </div>
         );
