@@ -150,7 +150,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
             this.processingUpdate = true;
 
             if(action === "insert"){
-                session.insert(start, end, code);
+                session.insert(start, code);
             }
             else if(action === "remove"){
                 session.remove({start, end});
