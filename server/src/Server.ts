@@ -32,11 +32,16 @@ export class Server{
     // http routing
     private createRoutes():void{
         // serve index page at root  
-        this._app.get("/", (req, res) => res.sendFile("index.html"));
+        //this._app.get("/", (req, res) => res.sendFile("index.html"));
 
         // api for version
         this._app.options("/api/version*", VersionHandler.options);
         this._app.get("/api/version/get", VersionHandler.get);
+
+        // 404 error page
+        this._app.use((req, res) => {
+            res.sendFile("404.html", {root: "./web"});
+        });
     }
 
     // starts the server
