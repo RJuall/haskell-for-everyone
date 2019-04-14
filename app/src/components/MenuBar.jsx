@@ -9,7 +9,6 @@ import { faAngleRight } from '@fortawesome/pro-regular-svg-icons';
 import { SelectFileFolder } from '../utils/SelectFileFolder';
 import { RecentFiles } from './RecentFiles';
 import { observer, inject } from 'mobx-react';
-import { action } from 'mobx';
 
 
 export const MenuBar = inject("windowStore")(observer (class MenuBar extends React.Component {
@@ -21,7 +20,6 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
             preference: false,
             background: false,
             online:     false,
-            value: false,   //True = Light  False = Dark
             hideGHCI: false, // state for whether the GHCI console is shown or not
             hideFile: false // state for whether the file list is shown or not
         };
@@ -54,8 +52,7 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
     }
 
     toggleBackgroundColor(){
-        this.setState({value: !this.state.value});
-        if(!this.state.value){
+        if(this.props.windowStore.windowSettings.theme = "dark"){
             this.props.windowStore.windowSettings.theme = "light";
         } else {
             this.props.windowStore.windowSettings.theme = "dark";
