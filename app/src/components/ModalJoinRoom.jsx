@@ -81,6 +81,9 @@ export class ModalJoinRoom extends React.Component{
         // prevent page refresh
         evt.preventDefault();
 
+        // don't allow submissions while fetching 
+        if(!this.roomNameInput) return;
+
         // get string values from html 
         let roomName = this.roomNameInput.value,
             userName = this.userNameInput.value,
