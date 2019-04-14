@@ -52,7 +52,7 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
     }
 
     toggleBackgroundColor(){
-        if(this.props.windowStore.windowSettings.theme = "dark"){
+        if(this.props.windowStore.windowSettings.theme === "dark"){
             this.props.windowStore.windowSettings.theme = "light";
         } else {
             this.props.windowStore.windowSettings.theme = "dark";
