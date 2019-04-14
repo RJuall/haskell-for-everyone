@@ -54,12 +54,10 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
     }
 
     toggleBackgroundColor(){
-        this.setState({value: !this.state.value});
-        if(!this.state.value){
-            this.props.windowStore.windowSettings.theme = "light";
+        if(this.props.windowStore.windowSettings.theme === "Dark"){
+            this.props.windowStore.windowSettings.theme = "Light";
         } else {
-            this.props.windowStore.windowSettings.theme = "dark";
-
+            this.props.windowStore.windowSettings.theme = "Dark";
         }
     }
 
@@ -82,7 +80,7 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
     }
 
     render() {
-        let toggleBgColor = `Toggle ${this.props.windowStore.windowSettings.theme === "dark" ? "Light" : "Dark"} Background`;
+        let toggleBgColor = `Toggle ${this.props.windowStore.windowSettings.theme === "Dark" ? "Light" : "Dark"} Background`;
 
         return(
             <div className="nav">					

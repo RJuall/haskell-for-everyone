@@ -9,7 +9,7 @@ class WindowStore {
         this.globalWindowSettings = {};
  
         this.windowSettings = {
-            theme: "dark",
+            theme: "Dark",
         };
 
         this.sessionWindowStore = {

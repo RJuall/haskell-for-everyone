@@ -5,14 +5,14 @@ import { action, intercept } from 'mobx';
 export const UIChooser = inject("windowStore") (observer ( class UIChooser extends React.Component {
     selectUI = event => {
         if(event.target.value == 'theme--light'){
-            this.props.windowStore.windowSettings.theme = "light";
+            this.props.windowStore.windowSettings.theme = "Light";
         } else {
-            this.props.windowStore.windowSettings.theme = "dark";
+            this.props.windowStore.windowSettings.theme = "Dark";
         }
     }
 
     componentDidUpdate(){
-        if(this.props.windowStore.windowSettings.theme === "dark"){
+        if(this.props.windowStore.windowSettings.theme === "Dark"){
             document.body.classList.add('theme--dark');
             document.body.classList.remove('theme--light');
         }
