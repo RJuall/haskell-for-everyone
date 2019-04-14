@@ -32,7 +32,7 @@ export class Server{
     // http routing
     private createRoutes():void{
         // serve index page at root  
-        //this._app.get("/", (req, res) => res.sendFile("index.html"));
+        this._app.get("/", (req, res) => res.sendFile("index.html"));
 
         // api for version
         this._app.options("/api/version*", VersionHandler.options);
