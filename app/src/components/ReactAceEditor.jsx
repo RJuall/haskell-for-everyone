@@ -43,14 +43,17 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.processingUpdate = false;
         // updates to process when online but not in online editor 
         this.onlineUpdatesToProcess = [];
-
+        // text value of online file 
         this.onlineEditorCache = "";
+        // edit permissions 
+        this.onlineEditType = null;
 
         // websocket client listener id for removal on unmount 
         this.wsCallbackId = -1;
 
         this.state = {
             value: '',
+            canEdit: true
         };
     }
 
@@ -86,7 +89,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.setEditorMode(evt.path);
         
         // load in the file's contents 
-        this.setState({value: evt.str}, () => {
+        this.setState({value: evt.str, canEdit: true}, () => {
             this.resetEditorSession();
         });
     }
@@ -133,7 +136,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.props.fileStore.fileSettings.lastFilePath = null;
 
         this.resetEditorSession();
-        this.setState({value: ""});
+        this.setState({value: "", canEdit: true});
     }
 
     // switch to online mode 
@@ -142,8 +145,11 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.props.fileStore.fileSettings.lastFilePath = null;
         this.props.fileStore.fileSettings.onlineFileActive = true;
 
+        // editable?
+        let canEdit = this.onlineEditType === "anyone";
+
         // switch the code editor value to stale 'online file' text
-        this.setState({value: this.onlineEditorCache}, () => {
+        this.setState({value: this.onlineEditorCache, canEdit}, () => {
             // editor is now where it was when it was switched to a different file
             // apply updates that arrived while not viewing online file 
             this.onlineUpdatesToProcess.forEach(update => update());
@@ -155,11 +161,14 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     }
 
     // when the client connects to a room initially 
-    handleRoomJoin = ({err, codeLines}) => {
+    handleRoomJoin = ({err, codeLines, editType}) => {
         if(err) return;     // failed to join room 
 
         // reset room info 
         this.clearRoomData();
+
+        // store edit type
+        this.onlineEditType = editType;
         
         // insert each character at corresponding row, col 
         codeLines.forEach((line, row) => {
@@ -259,6 +268,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     clearRoomData(){
         this.onlineEditorCache = "";
         this.onlineUpdatesToProcess = [];
+        this.onlineEditType = null;
     }
 
     // resets the editor session 
@@ -333,6 +343,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         return(
             <div>
                 <AceEditor
+                    readOnly={!this.state.canEdit}
                     mode={this.props.editorStore.editorSettings.mode}
                     theme={this.props.editorStore.editorSettings.theme}
                     name={this.props.editorStore.editorSettings.name}
