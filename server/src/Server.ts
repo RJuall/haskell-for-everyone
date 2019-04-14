@@ -3,11 +3,13 @@ import * as http from "http";
 import * as https from "https";
 import * as websocket from "websocket";
 import { VersionHandler } from "./handlers/VersionHandler";
+import { RoomsManager } from "./rooms/RoomsManager";
 
 export class Server{
     private _app:express.Application; 
     private _httpServer:http.Server;  
     private _wsServer:websocket.server;
+    private _rooms:RoomsManager;
 
     constructor(){
         // express handles requests - also serves static pages
@@ -16,6 +18,8 @@ export class Server{
         this._httpServer = http.createServer(this._app);
         // websocket server
         this._wsServer = new websocket.server({httpServer: this._httpServer});
+        // create rooms 
+        this._rooms = new RoomsManager();
 
         // when a websocket tries to connect...
         this._wsServer.on("request", this.handleWebSocket.bind(this));
@@ -26,7 +30,11 @@ export class Server{
 
     // handle websocket connections 
     private handleWebSocket(req:websocket.request):void{
+        // accept connection
         let conn:websocket.connection = req.accept(null, "*");
+
+        // enroll connection into rooms system 
+        this._rooms.enrollPerson(conn);
     }
 
     // http routing
