@@ -51,6 +51,7 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
         this.setState({online: !this.state.online});
     }
 
+    //Chnage the background color of window between light and dark
     toggleBackgroundColor(){
         if(this.props.windowStore.windowSettings.theme === "dark"){
             this.props.windowStore.windowSettings.theme = "light";
@@ -60,22 +61,29 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
         }
     }
 
+    // Hide/Show the GHCI terminal column
     toggleGhciConsole(){
         this.setState({hideGHCI: !this.state.hideGHCI});
         if(!this.state.hideGHCI){
-            console.log("Hide Console");
+            Object.assign(this.props.windowStore.windowSettings,{hideGHCI: true});
+            //console.log("Hide Console");
         }else{
-            console.log("Show Console");
+            Object.assign(this.props.windowStore.windowSettings,{hideGHCI: false});
+            //console.log("Show Console");
         }
     }
 
+    // Hide/Show the file list Column
     toggleFileList(){
-        this.setState({hideGHCI: !this.state.hideFile});
+        this.setState({hideFile: !this.state.hideFile});
         if(!this.state.hideFile){
-            console.log("Show File List");
+            Object.assign(this.props.windowStore.windowSettings,{hideFile: true});
+            //console.log("Hide File List");
         }else{
-            console.log("Hide File List");
+            Object.assign(this.props.windowStore.windowSettings,{hideFile: false});
+            //console.log("Show File List");
         }
+        //console.log(this.props.windowStore.windowSettings.hideFile);
     }
 
     render() {

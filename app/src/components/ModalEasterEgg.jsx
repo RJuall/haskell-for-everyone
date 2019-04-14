@@ -40,7 +40,7 @@ export const ModalEasterEgg = inject('windowStore')(observer(class ModalEasterEg
                 </ModalBody>
                 <ModalFooter style={{border: 'none'}}>
                     <p style={{fontSize: '0.85em', padding: '0', margin: '0'}}>
-                        Thanks for trying our app!   --RJ, DR, JTP, RB
+                        Thanks for trying our app!   --RJ, DR, JT, RB
                     </p>
                 </ModalFooter>
             </Modal>
