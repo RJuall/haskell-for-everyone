@@ -28,7 +28,7 @@ export class ModalCreateRoom extends React.Component{
 
     // shows the modal when the UI is triggered
     handleCreateRoomModal = () => {
-        this.setState({isOpen: true});
+        this.setState({isOpen: true, access: "public"});
     }
 
     // handles server response for creating the room 
@@ -101,6 +101,7 @@ export class ModalCreateRoom extends React.Component{
                 innerRef={input => this.passwordInput = input}
                 type="text"
                 placeholder="Enter passcode"
+                minLength={3}
                 maxLength={16}
                 required
             />
@@ -146,8 +147,8 @@ export class ModalCreateRoom extends React.Component{
                         <FormGroup>
                             <Label>Editing</Label>
                             <Input type="select" innerRef={input => this.editInput = input}>
-                                <option value="owner-only">Only owner can edit</option>
                                 <option value="anyone">Anyone can edit</option>
+                                <option value="owner-only">Only owner can edit</option>
                             </Input>
                         </FormGroup>
                         <FormGroup>
