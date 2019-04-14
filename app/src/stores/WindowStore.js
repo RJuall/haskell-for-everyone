@@ -10,6 +10,8 @@ class WindowStore {
  
         this.windowSettings = {
             theme: "dark",
+            hideFile: false,
+            hideGHCI: false
         };
 
         this.sessionWindowStore = {
@@ -25,7 +27,9 @@ class WindowStore {
     windowSettingsDisposer = action( autorun( () => {
         let windowSettings = {
             // all windowSettings fields go here
-            theme: this.windowSettings.theme
+            theme: this.windowSettings.theme,
+            showFile: this.windowSettings.hideFile,
+            showGHCI: this.windowSettings.hideGHCI
         };
         settingsStore.updateSettings(windowSettings);
     }))

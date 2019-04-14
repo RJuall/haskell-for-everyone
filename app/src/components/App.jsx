@@ -42,7 +42,7 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
             setEdColWidth: initialEdColWidth,
             currentFileColWidth: initialFileColWidth,
             currentEdColWidth: initialEdColWidth,
-            windowSize: window.innerWidth
+            windowSize: window.innerWidth,
         };
     }
 
@@ -103,47 +103,36 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
     }
 
     render(){
-        return (
-            <>
+        let toggleFile = this.props.windowStore.windowSettings.hideFile;
+        let toggleGHCI = this.props.windowStore.windowSettings.hideGHCI;
+
+        if(toggleFile){
+            return(
+                <>
                 <div className="iconbar-container">
                     <MenuBar/>
                     <EditorIconBar/>
                 </div>
                 <Container>
                     <Row>
-                        <SplitPane 
-                            split="vertical" 
-                            minSize={175} 
-                            size={this.state.setFileColWidth} 
-                            onDragFinished={size => {this.setState({currentFileColWidth: size})}}
-                        >
-                                <Col className="sidebar-panel">
-                                    <FileList/>
+                        <div>
+                            <SplitPane 
+                                split="vertical" 
+                                minSize={375} 
+                                size={this.state.setEdColWidth}
+                                onDragFinished={size => {console.log(size); this.setState({currentEdColWidth: size})}}
+                            >
+                                <Col className="editor-panel">
+                                    <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
                                 </Col>
-                            <div>
-                                <SplitPane 
-                                    split="vertical" 
-                                    minSize={375} 
-                                    size={this.state.setEdColWidth}
-                                    onDragFinished={size => {console.log(size); this.setState({currentEdColWidth: size})}}
-                                >
-                                    <Col className="editor-panel">
-                                        <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
+                                    <Col className="ghci-panel" hidden={toggleGHCI}>
+                                        <GhciConsole/>
+                                        <RoomContainer/>
+                                        {/* RoomContainer does not appear when outside this <Col>....? */}
                                     </Col>
-                                    {/* <SplitPane
-                                        split="horizontal"
-                                        size={500}
-                                    > */}
-                                        <Col className="ghci-panel">
-                                            <GhciConsole/>
-                                            <RoomContainer/>
-                                            {/* RoomContainer does not appear when outside this <Col>....? */}
-                                        </Col>
-                                        <div></div>
-                                    {/*</SplitPane>*/}
-                                </SplitPane>
-                            </div>
-                        </SplitPane>
+                                    <div></div>
+                            </SplitPane>
+                        </div>
                     </Row>
                 </Container>
                 <ModalCreateFile/>
@@ -153,6 +142,54 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
                 <ModalJoinRoom/>
                 <ModalEasterEgg/>
             </>
-        );
+            );
+        }else{
+            return (
+                <>
+                    <div className="iconbar-container">
+                        <MenuBar/>
+                        <EditorIconBar/>
+                    </div>
+                    <Container>
+                        <Row>
+                            <SplitPane 
+                                split="vertical" 
+                                minSize={175} 
+                                size={this.state.setFileColWidth} 
+                                onDragFinished={size => {this.setState({currentFileColWidth: size})}}
+                            >
+                                    <Col className="sidebar-panel">
+                                        <FileList/>
+                                    </Col>
+                                <div>
+                                    <SplitPane 
+                                        split="vertical" 
+                                        minSize={375} 
+                                        size={this.state.setEdColWidth}
+                                        onDragFinished={size => {console.log(size); this.setState({currentEdColWidth: size})}}
+                                    >
+                                        <Col className="editor-panel">
+                                            <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/>
+                                        </Col>
+                                            <Col className="ghci-panel" hidden={toggleGHCI}>
+                                                <GhciConsole/>
+                                                <RoomContainer/>
+                                                {/* RoomContainer does not appear when outside this <Col>....? */}
+                                            </Col>
+                                            <div></div>
+                                    </SplitPane>
+                                </div>
+                            </SplitPane>
+                        </Row>
+                    </Container>
+                    <ModalCreateFile/>
+                    <ModalSaveFileAs/>
+                    <ModalAlert/>
+                    <ModalCreateRoom/>
+                    <ModalJoinRoom/>
+                    <ModalEasterEgg/>
+                </>
+            );
+        }
     }
 }));
