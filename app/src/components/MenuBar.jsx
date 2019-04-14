@@ -9,7 +9,6 @@ import { faAngleRight } from '@fortawesome/pro-regular-svg-icons';
 import { SelectFileFolder } from '../utils/SelectFileFolder';
 import { RecentFiles } from './RecentFiles';
 import { observer, inject } from 'mobx-react';
-import { action } from 'mobx';
 
 
 export const MenuBar = inject("windowStore")(observer (class MenuBar extends React.Component {
