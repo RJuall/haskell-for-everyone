@@ -45,6 +45,11 @@ export class Server{
         // api for version
         this._app.options("/api/version*", VersionHandler.options);
         this._app.get("/api/version/get", VersionHandler.get);
+
+        // 404 error page
+        this._app.use((req, res) => {
+            res.sendFile("404.html", {root: "./web"});
+        });
     }
 
     // starts the server
