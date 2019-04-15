@@ -23,6 +23,11 @@
                 <div class="bgImage row">
                     <h1> Haskell For Everyone </h1>
                 </div>
+                <nav>
+                    <a href="#downloads" class="button button-clear">Downloads</a>
+                    <a href="#faq" class="button button-clear">FAQ</a>
+                    <a href="#contact" class="button button-clear">Contact</a>
+                </nav>
                 <div class="row">
                     <p class="column column-80 column-offset-10">
                         Haskell For Everyone is an editor that provides many quality of life improvements and an overall environment that feels familiar 
@@ -31,8 +36,8 @@
                  </div>
             </header>
             <main class="container">
-                <div class="dload container">
-                    <h3 class="row">Download Links:</h3>
+                <div class="dload container" id="downloads">
+                    <h3 class="row">Download Links</h3>
                     <div class="row">
                         <div class="dload-link column">
                             <h4 class="OS">Windows:</h4>
@@ -48,8 +53,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="faq container">
-                    <h3 class="row">Faq:</h3>
+                <div class="faq container" id="faq">
+                    <h3 class="row">Faq</h3>
                     <ul class="faq-list">
                         <li class="faq-question">
                             Does the Haskell compiler or runtime environment come with Haskell For Everyone?
@@ -61,6 +66,18 @@
                         </ul>
                     </ul>
                 </div>
+                <form id="contact">
+                    <h3>Contact Us</h3>
+                    <fieldset>
+                        <label for="nameField">Name</label>
+                        <input type="text" placeholder="Jane Doe" id="nameField">
+                        <label for="emailField">Email</label>
+                        <input type="email" placeholder="jane@doe.com" id="emailField">
+                        <label for="commentField">Message</label>
+                        <textarea placeholder="Let us know if you find bugs, want to request specific features, or have anything else to tell the devs!" id="commentField"></textarea>
+                        <input class="button=primary" type="submit" value="Send">
+                    </fieldset>
+                </form>
             </main>
         </div>
             <footer class="container">
