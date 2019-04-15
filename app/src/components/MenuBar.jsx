@@ -63,14 +63,14 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
 
     // Hide/Show the GHCI terminal column
     toggleGhciConsole(){
-        this.setState({hideGHCI: !this.state.hideGHCI});
-        if(!this.state.hideGHCI){
-            Object.assign(this.props.windowStore.windowSettings,{hideGHCI: true});
-            //console.log("Hide Console");
-        }else{
-            Object.assign(this.props.windowStore.windowSettings,{hideGHCI: false});
-            //console.log("Show Console");
-        }
+        // this.setState({hideGHCI: !this.state.hideGHCI});
+        // if(!this.state.hideGHCI){
+        //     Object.assign(this.props.windowStore.windowSettings,{hideGHCI: true});
+        //     //console.log("Hide Console");
+        // }else{
+        //     Object.assign(this.props.windowStore.windowSettings,{hideGHCI: false});
+        //     //console.log("Show Console");
+        // }
     }
 
     // Hide/Show the file list Column
