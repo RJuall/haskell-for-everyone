@@ -7,7 +7,7 @@ export class RoomSetup extends React.Component{
         return (
             <Container className="room-empty-container">
                 <br/>
-                <div className="text-center">
+                <div className="room-name text-center">
                     Online Rooms
                 </div>
                 <br/>
