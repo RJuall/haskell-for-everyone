@@ -1,51 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="index.css">
-
     <head>
+        <meta charset="utf-8">
+
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+        <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">            
+        <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css"> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Bevan" rel="stylesheet"> 
+        <link rel="stylesheet" href="index.css">  
+
         <link rel="shortcut icon" type="image/png" href="images/HaskellLogo.png">
         <title>Haskell For Everyone</title>
+        <meta name="description" content="Haskell For Everyone Project Site">
+        <meta name="author" content="Robert Juall">
     </head>
+
     <body>
-        <div class="jumbotron text-center bgImage">
-                <h1 style="color:aqua;"> Haskell For Everyone </h1>
-        </div>
-        <div class="text-center">
-            Haskell For Everyone is an editor that provides many quality of life improvements and an overall environment that feels familiar 
-            to many current popular editors right now. Ultimately, our goal is to provide a tool to help improve development in Haskell.
-        </div>
-        <div class="container">
-            <h3>Download Links:</h3>
-            <div class="row text-center">
-                <div class="col-sm-4 border">
-                    <b class="OS">Windows:</b> </br>
-                    <a class="dlLink fa fa-windows" style="font-size:60px;" href="downloads\Haskell For Everyone Setup 0.1.0.exe"></a>
+        <div class="site container">
+            <header>
+                <div class="bgImage row">
+                    <h1> Haskell For Everyone </h1>
                 </div>
-                <div class="col-sm-4 border">
-                    <b class="OS">Linux:</b> </br>
-                    <a class="dlLink fa fa-linux" style="font-size:60px;" href="downloads\Haskell For Everyone 0.1.0.AppImage"></a>
+                <div class="row">
+                    <p class="column column-80 column-offset-10">
+                        Haskell For Everyone is an editor that provides many quality of life improvements and an overall environment that feels familiar 
+                        to many current popular editors right now. Ultimately, our goal is to provide a tool to help improve development in Haskell.
+                    </p>
+                 </div>
+            </header>
+            <main class="container">
+                <div class="dload container">
+                    <h3 class="row">Download Links:</h3>
+                    <div class="row">
+                        <div class="dload-link column">
+                            <h4 class="OS">Windows:</h4>
+                            <a class="dlink fa fa-windows" href="downloads\Haskell For Everyone Setup 0.1.0.exe"></a>
+                        </div>
+                        <div class="dload-link column">
+                            <h4 class="OS">Linux:</h4>
+                            <a class="dlink fa fa-linux" href="downloads\Haskell For Everyone Setup 0.1.0.AppImage"></a>
+                        </div>
+                        <div class="dload-link column">
+                            <h4 class="OS">Mac:</h4>
+                            <a class="dlink fa fa-apple" href="downloads\Haskell For Everyone Setup 0.1.0.dmg"></a>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-4 border">
-                    <b class="OS">Mac:</b> </br>
-                    <a class="dlLink fa fa-apple" style="font-size:60px;" href="downloads\Haskell For Everyone-0.1.0.dmg"></a> 
+                <div class="faq container">
+                    <h3 class="row">Faq:</h3>
+                    <ul class="faq-list">
+                        <li class="faq-question">
+                            Does the Haskell compiler or runtime environment come with Haskell For Everyone?
+                        </li>
+                        <ul>
+                            <li class="faq-answer">
+                                No. Haskell must be installed on your computer to use Haskell for Everyone.<br/>Haskell can be found on <a class="dlLink underline" href="https://www.haskell.org/platform/">Haskell's official website</a>.
+                            </li>
+                        </ul>
+                    </ul>
                 </div>
-            </div>
+            </main>
         </div>
-        <div class="container">
-            <h3>Faq:</h3>
-                1. Does Haskell come with Haskell For Everyone?</br>
-                    - No, Haskell must be installed to your computer through Haskell's official website(<a class="dlLink underline" href="https://www.haskell.org/platform/">Download Haskell Here</a>)
-        </div>
-        <footer class="text-center">
-                Juall<a class="link fa fa-github-square" href="https://github.com/rjuall"></a> <a class="link fa fa-linkedin-square" href="https://www.linkedin.com/in/rjuall/"></a> | 
-                Rosenblum <a class="link fa fa-github-square" href="https://github.com/davidrosenblum"></a> <a class="link fa fa-linkedin-square" href=""></a> | 
-                Pojero <a class="link fa fa-github-square" href="https://github.com/jpojero"></a> <a class="link fa fa-linkedin-square" href="https://www.linkedin.com/in/joseph-t-pojero/"></a> | 
-                Bastola <a class="link fa fa-github-square" href="https://github.com/rajeebthegreat"></a> <a class="link fa fa-linkedin-square" href="https://www.linkedin.com/in/rajeebthegreat/"></a> 
-            </br>
-                MIT License  &copy;2019 <a class="link fa fa-legal" href="https://github.com/RJuall/haskell-for-everyone/blob/master/LICENSE"></a>
-        </footer>
+            <footer class="container">
+                    <div class="row">
+                        <div class="foot-info column column-20">
+                            Juall<a class="link fa fa-github-square" href="https://github.com/rjuall"></a> <a class="link fa fa-linkedin-square" href="https://www.linkedin.com/in/rjuall/"></a>
+                        </div>
+                        <div class="foot-info column column-20">
+                            Rosenblum <a class="link fa fa-github-square" href="https://github.com/davidrosenblum"></a> <a class="link fa fa-linkedin-square" href=""></a>
+                        </div>
+                        <div class="foot-info column column-20">
+                            Pojero <a class="link fa fa-github-square" href="https://github.com/jpojero"></a> <a class="link fa fa-linkedin-square" href="https://www.linkedin.com/in/joseph-t-pojero/"></a>
+                        </div>
+                        <div class="foot-info column column-20">
+                            Bastola <a class="link fa fa-github-square" href="https://github.com/rajeebthegreat"></a> <a class="link fa fa-linkedin-square" href="https://www.linkedin.com/in/rajeebthegreat/"></a>
+                        </div>
+                        <div class="foot-info column column-20">                        
+                            &copy;2019<a class="link fa fa-legal" title="MIT License" href="https://github.com/RJuall/haskell-for-everyone/blob/master/LICENSE"></a>
+                        </div>
+                    </div>
+            </footer>
     </body>
 </html>

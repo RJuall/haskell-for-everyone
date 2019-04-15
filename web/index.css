@@ -1,32 +1,130 @@
-.dlLink{
-    color: blue;
+a {
     cursor: pointer;
+    color: #5b197f;
 }
 
-.link{
-    color: black;
-    cursor: pointer;
+a:hover {
+    color: #9228cc;
 }
 
-.border {
-    border-right: 1px solid black;
+a:visited {
+    color: #360d4c;
 }
 
-.OS{
-    font-size: 32px;
+html, body {
+    padding: 0rem;
+    margin: 0rem;
+    min-height: 100vh;
+    position: relative;
 }
 
-.underline{
-    text-decoration: underline;
+body {
+    padding: 0rem;
+    min-width: 50%;
+    max-width: 80%;
+    margin: 0rem auto;
 }
 
-.bgImage{
+.site {
+    padding-bottom: 2.5rem;
+}
+
+.bgImage {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 190px;
     background-image: url('./images/editorBackground.JPG');
-    opacity: 0.5;
+    opacity: 0.9;
+    text-align: center;
+}
+
+.bgImage h1 {
+    margin: auto;
+    color: white;
+    font-family: Bevan;
+    font-size: 7rem;
+    text-shadow: 0.25rem 0.25rem 1.0rem black,
+                 -0.25rem -0.25rem 1.0rem black,
+                 0.25rem -0.25rem 1.0rem black,
+                 -0.25rem 0.25rem 1.0rem black;
+}
+
+header p {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+main {
+    padding-bottom: 2.5rem;
+}
+
+.dload {
+    margin: 2rem;
+}
+
+.dload h3 {
+    font-family: Bevan;
+    margin-bottom: 0;
+}
+
+.dload-link {
+    margin: 2rem;
+    border: 1px solid darkgray;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.dload-link h4 {
+    margin-top: 2rem;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+.dload-link a {
+    font-size: 8rem;
+    margin-bottom: 2rem;
+}
+
+.faq {
+    margin: 2rem;
+}
+
+.faq h3 {
+    font-family: Bevan;
+}
+
+.faq ul {
+    list-style-type: none;
+}
+
+.faq .faq-question {
+    margin: 0;
+    padding: 0;
+    font-size: 2rem;
+}
+
+.faq .faq-answer {
+    margin: 0;
+    padding: 0;
+    font-size: 1.7rem;
 }
 
 footer {
-    width: 100%;
+    position: absolute;
     bottom: 0;
-    position: fixed;
+    width: 100%;
+    height: 2.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+footer .foot-info {
+    padding-left: 2rem;
+}
+
+footer .link {
+    font-size: 2rem;
+    margin-left: 1rem;
 }
