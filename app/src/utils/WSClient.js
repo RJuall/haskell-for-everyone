@@ -99,9 +99,6 @@ export class WSClient extends Dispatcher{
     // @param type      socket message type
     // @param data      socket message data
     processSocketData(type, data){
-        // emit updates 
-        this.dispatch({type, data});
-
         // some updates includes state updates about the connection 
         switch(type){
             case ID:
@@ -117,6 +114,9 @@ export class WSClient extends Dispatcher{
                 this._room = null;
                 break;
         }
+
+        // emit updates 
+        this.dispatch({type, data});
     }
 
     // requests a room to be created for user
@@ -206,6 +206,11 @@ export class WSClient extends Dispatcher{
     // getter for server-assigned socket id 
     get id(){
         return this._id
+    }
+
+    // getter for current room name
+    get roomName(){
+        return this._room ? this._room.name : null;
     }
 }
 

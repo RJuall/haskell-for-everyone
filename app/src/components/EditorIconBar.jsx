@@ -8,7 +8,7 @@ import { ThemeChooser } from './ThemeChooser';
 import { UIChooser } from './UIChooser';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
-
+import WSClient from '../utils/WSClient';
 import './EditorIconBar.css';
 
 export const EditorIconBar = inject("editorStore", "fileStore")(observer(class EditorIconBar extends React.Component {
@@ -49,6 +49,10 @@ export const EditorIconBar = inject("editorStore", "fileStore")(observer(class E
         if(fileName && this.props.fileStore.fileSettings.currFileAltered && !fileName.endsWith("*")){
             fileName += "*";
         }
+
+        // online? 
+        let inOnlineFile = this.props.fileStore.fileSettings.onlineFileActive;
+        fileName = inOnlineFile ? (<><strong>Shared Room:</strong> {WSClient.roomName}</>) : fileName;
 
         return(
             <div className="icon-bar">
