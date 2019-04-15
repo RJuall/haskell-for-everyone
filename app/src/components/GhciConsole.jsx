@@ -3,7 +3,7 @@ import GhciDispatcher, { GHCI, GHCI_ERROR, GHCI_CLEAR } from "../dispatchers/Ghc
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./GhciConsole.css";
-import { faBroom } from "@fortawesome/pro-light-svg-icons";
+import { faBroom, faPlus, faMinus } from "@fortawesome/pro-light-svg-icons";
 
 export class GhciConsole extends React.Component{
     constructor(props){
@@ -16,6 +16,12 @@ export class GhciConsole extends React.Component{
         this.inputRef = React.createRef();
         // output <textarea> element ref
         this.consoleRef = React.createRef();
+
+        this.state ={
+            termStyle:  {
+                fontSize: "16px",
+            },
+        }
     }
 
     // handle ghci data
@@ -158,10 +164,22 @@ export class GhciConsole extends React.Component{
 
     render(){
         return (
-            <div>
+            <div style={this.state.termStyle}>
                 <div className="consoleIcons">
                     <button className="btn btn-link btn-clear" onClick={() => GhciDispatcher.clear()} title="Clear GHCi">
                         <FontAwesomeIcon icon={faBroom}/>
+                    </button>
+                    <button className="btn btn-link btn-plus" onClick={() => {
+                        if (parseInt(this.state.termStyle.fontSize) < 60)
+                            this.setState({termStyle: {fontSize: (parseInt(this.state.termStyle.fontSize) + 2).toString() + 'px'}});
+                    }} title="Increase Font Size">
+                        <FontAwesomeIcon icon={faPlus}/>
+                    </button>
+                    <button className="btn btn-link btn-minus"onClick={() => {
+                        if(parseInt(this.state.termStyle.fontSize) > 8)
+                            this.setState({termStyle: {fontSize: (parseInt(this.state.termStyle.fontSize) - 2).toString() + 'px'}});
+                    }} title="Decrease Font Size">
+                        <FontAwesomeIcon icon={faMinus}/>
                     </button>
                 </div>
                 <textarea
