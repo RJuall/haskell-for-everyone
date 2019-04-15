@@ -4,6 +4,8 @@ import { VERSION } from './../components/App';
 
 const electron = window.require("electron");
 
+export const WS_SERVER_ORIGIN = "ws://haskell-for-everyone.herokuapp.com/";
+
 // message delimiter
 export const MSG_DELIM = "*!*";
 
@@ -193,7 +195,7 @@ export class WSClient extends Dispatcher{
         if(window.location.origin.includes("localhost")){
             return "ws://localhost:8080";
         }
-        return SERVER_ORIGIN;
+        return WS_SERVER_ORIGIN;
     }
 
     // getter for is connected to server
