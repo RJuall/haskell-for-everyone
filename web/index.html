@@ -9,12 +9,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css"> 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="https://fonts.googleapis.com/css?family=Bevan" rel="stylesheet"> 
-        <link rel="stylesheet" href="index.css">  
 
         <link rel="shortcut icon" type="image/png" href="images/HaskellLogo.png">
         <title>Haskell For Everyone</title>
         <meta name="description" content="Haskell For Everyone Project Site">
         <meta name="author" content="Robert Juall">
+
+        <link rel="stylesheet" href="https://unpkg.com/accordion-js@2.7.1/dist/accordion.min.css">
+        <script src="https://unpkg.com/accordion-js@2.7.1/dist/accordion.min.js"></script>
+        <link rel="stylesheet" href="index.css">  
     </head>
 
     <body>
@@ -57,16 +60,26 @@
                 <hr/>
                 <div class="faq container" id="faq">
                     <h3 class="row">Faq</h3>
-                    <ul class="faq-list">
-                        <li class="faq-question">
-                            Does the Haskell compiler or runtime environment come with Haskell For Everyone?
-                        </li>
-                        <ul>
-                            <li class="faq-answer">
-                                No. Haskell must be installed on your computer to use Haskell for Everyone.<br/>Haskell can be found on <a class="dlLink underline" href="https://www.haskell.org/platform/">Haskell's official website</a>.
-                            </li>
-                        </ul>
-                    </ul>
+                    <div class="accordion-container">
+                        <div class="ac">
+                            <h4 class="ac-q faq-question" tabindex="O">
+                                Does the Haskell compiler or runtime environment come with Haskell For Everyone?
+                            </h4>
+                            <div class="ac-a faq-answer">
+                                <p>No. Haskell must be installed on your computer to use Haskell for Everyone. Haskell can be found on Haskell's <a href="https://www.haskell.org/platform/">official website.</a></p>
+                            </div>                            
+                        </div>
+                        <!--
+                        <div class="ac">
+                            <h4 class="ac-q faq-question" tabindex="0">
+                                Heading
+                            </h4>
+                            <div class="ac-a">
+                                <p>Content</p>
+                            </div>
+                        </div>
+                        -->  
+                    </div>
                 </div>
                 <hr/>
                 <form id="contact">
@@ -102,5 +115,11 @@
                         </div>
                     </div>
             </footer>
+        <script>
+           var accordion = new Accordion('.accordion-container', {
+               duration: 600,
+               closeOthers: false,
+           });
+        </script>
     </body>
 </html>
