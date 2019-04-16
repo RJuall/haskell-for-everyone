@@ -145,6 +145,7 @@ export class ModalJoinRoom extends React.Component{
                 <Input
                     innerRef={input => this.passwordInput = input}
                     placeholder="Enter private room password"
+                    minLength={1}
                     maxLength={16}
                     required
                 />
@@ -205,7 +206,7 @@ export class ModalJoinRoom extends React.Component{
                                 <Input
                                     innerRef={elem => this.userNameInput = elem}
                                     type="text"
-                                    minLength={3}
+                                    minLength={2}
                                     maxLength={16}
                                     disabled={this.state.locked}
                                     required

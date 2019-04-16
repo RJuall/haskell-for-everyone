@@ -134,7 +134,7 @@ export class ModalCreateRoom extends React.Component{
                                 <Input
                                     innerRef={elem => this.userNameInput = elem}
                                     type="text"
-                                    minLength={3}
+                                    minLength={2}
                                     maxLength={16}
                                     disabled={this.state.locked}
                                     required
