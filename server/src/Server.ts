@@ -3,7 +3,8 @@ import * as http from "http";
 import * as https from "https";
 import { MongoClient } from "mongodb";
 import * as websocket from "websocket";
-import { ContactUsHandler } from "./handlers/ContactUsHandler";
+import { ContactUsGetHandler } from "./handlers/ContactUsGetHandler";
+import { ContactUsSubmitHandler } from "./handlers/ContactUsSubmitHandler";
 import { VersionHandler } from "./handlers/VersionHandler";
 import { DatabaseManager } from "./database/DatabaseManager";
 import { RoomsManager } from "./rooms/RoomsManager";
@@ -16,8 +17,8 @@ export class Server{
     private _dbManager:DatabaseManager;
 
     constructor(){
-        // express handles requests - also serves static pages and accept json 
-        this._app = express().use(express.static(`${__dirname}/../../web`)).use(express.json());
+        // express handles requests
+        this._app = express();
         // http server - express app handles 
         this._httpServer = http.createServer(this._app);
         // websocket server
@@ -29,6 +30,13 @@ export class Server{
 
         // when a websocket tries to connect...
         this._wsServer.on("request", this.handleWebSocket.bind(this));
+
+        // app serves static files and accepts json
+        this._app.use(express.static(`${__dirname}/../../web`)).use(express.json());
+
+        // templates 
+        this._app.set("view engine", "pug");
+        this._app.set("views", `${__dirname}/../views`);
 
         this.createRoutes();
         this.init();
@@ -49,7 +57,10 @@ export class Server{
         this._app.get("/", (req, res) => res.sendFile("index.html"));
         
         // contact us form submission
-        this._app.post("/contact/submit", ContactUsHandler.post);
+        this._app.post("/contact/submit", ContactUsSubmitHandler.post);
+
+        // view form submissions 
+        this._app.get("/contact/get", ContactUsGetHandler.get);
 
         // api for version
         this._app.options("/api/version*", VersionHandler.options);
@@ -72,7 +83,8 @@ export class Server{
             if(!err){
                 // connected
                 this._dbManager = new DatabaseManager(client);
-                ContactUsHandler.dbManager = this._dbManager;
+                ContactUsSubmitHandler.dbManager = this._dbManager;
+                ContactUsGetHandler.dbManager = this._dbManager;
                 console.log("Connected to MongoDB.\n");
             }
             else{

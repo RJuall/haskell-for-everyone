@@ -1,0 +1,32 @@
+doctype html
+html(lang='en')
+    head
+        link(rel="icon" type="image/png" href="/images/HaskellLogo.png")
+        link(rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css")            
+        link(rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css")
+        link(rel="stylesheet" href="/index.css")
+        title Contact Us Responses
+    body
+        h1(style="text-align: center") Haskell For Everyone
+        h3(style="text-align: center") Contact Us Responses
+
+        div
+            table
+                thead
+                    tr
+                        th Email
+                        th Name
+                        th Comment
+                        th Viewed Before
+                tbody
+                    for response in results
+                        tr
+                            td #{response.email}
+                            td #{response.name}
+                            td #{response.comment}
+                            if !response.viewed
+                                td No
+                            else
+                                td Yes
+        
