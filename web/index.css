@@ -102,8 +102,18 @@ main {
     font-family: Bevan;
 }
 
-.faq ul {
-    list-style-type: none;
+.ac {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px dotted #606c76;
+    padding-bottom: 1rem;
+}
+
+.ac-q {
+    font-family: Roboto;
+    font-size: 2rem   !important;
+    color: #606c76  !important;
 }
 
 .faq .faq-question {
@@ -119,7 +129,7 @@ main {
 }
 
 form {
-    margin-left: 3.5rem;
+    margin-left: 3rem;
     max-width: 75%;
 }
 
@@ -136,7 +146,7 @@ footer {
     bottom: 0;
     width: 100%;
     height: 2.5rem;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     text-align: center;
 }
 
@@ -147,4 +157,12 @@ footer .foot-info {
 footer .link {
     font-size: 2rem;
     margin-left: 1rem;
+}
+
+footer i {
+    color: rgb(90, 90, 90);
+    padding: 0.3rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    font-size: 2rem;
 }

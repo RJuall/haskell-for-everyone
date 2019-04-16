@@ -23,12 +23,15 @@
   },
   "dependencies": {
     "@types/express": "^4.16.1",
+    "@types/mongodb": "^3.1.23",
     "@types/websocket": "0.0.40",
     "events": "^3.0.0",
     "express": "^4.16.4",
     "http": "0.0.0",
     "https": "^1.0.0",
+    "mongodb": "^3.2.3",
     "typescript": "^3.3.3",
-    "websocket": "^1.0.28"
+    "websocket": "^1.0.28",
+    "xss": "^1.0.6"
   }
 }
