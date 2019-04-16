@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { filterXSS } from "xss";
 import { DatabaseManager } from "../database/DatabaseManager";
 
 export class ContactUsHandler{
@@ -17,6 +18,11 @@ export class ContactUsHandler{
                 res.status(400).end("Bad json request - missing something.");
                 return;
             }
+
+            // xss prevention 
+            name = filterXSS(name);
+            email = filterXSS(email);
+            comment = filterXSS(comment);
 
             // insert into database 
             ContactUsHandler.dbManager.insert(name, email, comment)

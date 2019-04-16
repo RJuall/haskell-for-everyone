@@ -4,6 +4,17 @@
         nameElem = null,
         emailElem = null;
 
+    // help prevent xss
+    let sanitize = str => {
+        return str
+            .replace(/</gi, "&lt;")
+            .replace(/>/gi, "&gt;")
+            .replace(/&/gi, "&amp;")
+            .replace(/"/gi, "&quot;")
+            .replace(/'/gi, "&#x27;")
+            .replace(/\//gi, "&#x2F;");
+    };
+
     // form on submit 
     let onSubmit = evt => {
         // don't load new page, use ajax
@@ -13,6 +24,11 @@
         let name = nameElem.value,
             email = emailElem.value,
             comment = commentElem.value;
+
+        // some xss prevention
+        name = sanitize(name);
+        email = sanitize(email);
+        comment = sanitize(comment);
 
         // ajax post url
         let postUrl = window.location.origin + "/contact/submit";
