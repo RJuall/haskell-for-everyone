@@ -1,8 +1,11 @@
 import * as express from "express";
 import * as http from "http";
 import * as https from "https";
+import { MongoClient } from "mongodb";
 import * as websocket from "websocket";
+import { ContactUsHandler } from "./handlers/ContactUsHandler";
 import { VersionHandler } from "./handlers/VersionHandler";
+import { DatabaseManager } from "./database/DatabaseManager";
 import { RoomsManager } from "./rooms/RoomsManager";
 
 export class Server{
@@ -10,16 +13,19 @@ export class Server{
     private _httpServer:http.Server;  
     private _wsServer:websocket.server;
     private _rooms:RoomsManager;
+    private _dbManager:DatabaseManager;
 
     constructor(){
-        // express handles requests - also serves static pages
-        this._app = express().use(express.static(`${__dirname}/../../web`));
+        // express handles requests - also serves static pages and accept json 
+        this._app = express().use(express.static(`${__dirname}/../../web`)).use(express.json());
         // http server - express app handles 
         this._httpServer = http.createServer(this._app);
         // websocket server
         this._wsServer = new websocket.server({httpServer: this._httpServer});
         // create rooms 
         this._rooms = new RoomsManager();
+        // database manager
+        this._dbManager = null;
 
         // when a websocket tries to connect...
         this._wsServer.on("request", this.handleWebSocket.bind(this));
@@ -41,6 +47,9 @@ export class Server{
     private createRoutes():void{
         // serve index page at root  
         this._app.get("/", (req, res) => res.sendFile("index.html"));
+        
+        // contact us form submission
+        this._app.post("/contact/submit", ContactUsHandler.post);
 
         // api for version
         this._app.options("/api/version*", VersionHandler.options);
@@ -54,10 +63,31 @@ export class Server{
 
     // starts the server
     private init():void{
-        // listen on PORT environment variable or default 
-        let port:number = parseInt(process.env.PORT) || 8080;
-        this._httpServer.listen(port, () => {
-            console.log(`Server listening on port ${port}.`);
+        // mongodb connection url
+        let mongoUri:string = process.env.MONGODB_URI || "mongodb://localhost:27017/haskell_for_everyone";
+
+        // connect to mongo
+        console.log("Connecting to database...");
+        MongoClient.connect(mongoUri, {useNewUrlParser: true} ,(err, client) => {
+            if(!err){
+                // connected
+                this._dbManager = new DatabaseManager(client);
+                ContactUsHandler.dbManager = this._dbManager;
+                console.log("Connected to MongoDB.\n");
+            }
+            else{
+                // failed to connect
+                console.log("MongoDB ERR: " + err.message);
+                console.log("(Allowing to server to run without database)\n");
+                console.log("Use MONGODB_URI env var to configure.");
+                console.log("Seriously, you don't have mongodb!? :(");
+            }
+
+             // listen on PORT environment variable or default 
+            let port:number = parseInt(process.env.PORT) || 8080;
+            this._httpServer.listen(port, () => {
+                console.log(`Server listening on port ${port}.`);
+            });
         });
     }
 }

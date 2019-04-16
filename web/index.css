@@ -1,13 +1,16 @@
-a {
+a,
+.button {
     cursor: pointer;
     color: #5b197f;
 }
 
-a:hover {
+a:hover,
+.button:hover {
     color: #9228cc;
 }
 
-a:visited {
+a:visited,
+.button:visited {
     color: #360d4c;
 }
 
@@ -54,6 +57,10 @@ header p {
     margin-top: 2rem;
     margin-bottom: 1rem;
     font-size: 2rem;
+}
+
+nav {
+    text-align: center;
 }
 
 main {
@@ -109,6 +116,19 @@ main {
     margin: 0;
     padding: 0;
     font-size: 1.7rem;
+}
+
+form {
+    margin-left: 3.5rem;
+    max-width: 75%;
+}
+
+form h3 {
+    font-family: Bevan;
+}
+
+fieldset {
+    margin-left: 1rem;
 }
 
 footer {
