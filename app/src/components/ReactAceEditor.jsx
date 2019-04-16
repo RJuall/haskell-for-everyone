@@ -146,7 +146,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.props.fileStore.fileSettings.onlineFileActive = true;
 
         // editable?
-        let canEdit = this.onlineEditType === "anyone";
+        let canEdit = this.onlineEditType === "anyone" || WSClient.isRoomOwner;
 
         // switch the code editor value to stale 'online file' text
         this.setState({value: this.onlineEditorCache, canEdit}, () => {

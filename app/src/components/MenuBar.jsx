@@ -19,7 +19,6 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
             edit: false,
             preference: false,
             background: false,
-            online:     false,
             hideGHCI: false, // state for whether the GHCI console is shown or not
             hideFile: false // state for whether the file list is shown or not
         };
@@ -132,19 +131,6 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
                         <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{toggleBgColor}</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
-                {/*<Dropdown nav isOpen={this.state.online} toggle={this.toggleOnline.bind(this)}>
-                    <DropdownToggle nav className="menuItem">
-                        Online
-                    </DropdownToggle>
-                    <DropdownMenu>
-                        <DropdownItem onClick={() => ModalDispatcher.joinRoomModal()}>
-                            Join Room
-                        </DropdownItem>
-                        <DropdownItem onClick={() => ModalDispatcher.createRoomModal()}>
-                            Create Room
-                        </DropdownItem>
-                    </DropdownMenu>
-                </Dropdown>*/}
             </div>
         );
     }

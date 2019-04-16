@@ -212,6 +212,11 @@ export class WSClient extends Dispatcher{
     get roomName(){
         return this._room ? this._room.name : null;
     }
+
+    // getter for is owner of current room (if in one)
+    get isRoomOwner(){
+        return this._room ? (this._room.owner === this.id) : false;
+    }
 }
 
 // export singleton 
