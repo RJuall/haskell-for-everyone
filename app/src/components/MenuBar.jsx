@@ -9,6 +9,7 @@ import { faAngleRight } from '@fortawesome/pro-regular-svg-icons';
 import { SelectFileFolder } from '../utils/SelectFileFolder';
 import { RecentFiles } from './RecentFiles';
 import { observer, inject } from 'mobx-react';
+import { VERSION } from './App';
 
 
 export const MenuBar = inject("windowStore")(observer (class MenuBar extends React.Component {
@@ -18,6 +19,7 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
             file: false,
             edit: false,
             preference: false,
+            about: false,
             background: false,
             hideGHCI: false, // state for whether the GHCI console is shown or not
             hideFile: false // state for whether the file list is shown or not
@@ -45,9 +47,8 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
         this.setState({background: !this.state.background})
     }
 
-    // toggles online dropdown menu 
-    toggleOnline(){
-        this.setState({online: !this.state.online});
+    toggleAbout(){
+        this.setState({about: !this.state.about});
     }
 
     //Chnage the background color of window between light and dark
@@ -129,6 +130,16 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
                         <DropdownItem onClick={this.toggleGhciConsole.bind(this)}>Toggle GHCI Console</DropdownItem>
                         <DropdownItem onClick={this.toggleFileList.bind(this)}>Toggle File List</DropdownItem>
                         <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{toggleBgColor}</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+                <Dropdown nav isOpen={this.state.about} toggle={this.toggleAbout.bind(this)}>
+                    <DropdownToggle nav className="menuItem">
+                        About
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem header>
+                            Version {VERSION}
+                        </DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
             </div>
