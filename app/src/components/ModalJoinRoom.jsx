@@ -169,8 +169,11 @@ export class ModalJoinRoom extends React.Component{
         // rooms found - apply optional filter
         let filteredRooms = roomsList;
         if(filter){
+            // case insensitive
+            filter = filter.toLowerCase();
+
             filteredRooms = roomsList.filter(({name, size, accessType, editType}) => {
-                return name.includes(filter);
+                return name.toLowerCase().includes(filter);
             });
         }
         
