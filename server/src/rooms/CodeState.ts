@@ -19,7 +19,7 @@ export class CodeState{
     // @param start     character(s) start position in the code
     // @param end       character(s) end position in the code
     // @param action    insert or removing code? 
-    public update(code:string, start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
+    public update(code:string[], start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
         let row:number = start.row;
 
         if(row in this._lines === false){
@@ -40,12 +40,14 @@ export class CodeState{
 
         if(action === "insert"){
             // insert the chars
-            this._lines[row] = [...before, code, ...after];
+            this._lines[row] = [...before, ...code, ...after];
         }
         else if(action === "remove"){
             // remove the chars
             this._lines[row] = [...before, ...after];
         }
+
+        if(code.includes("~")) console.log(this._lines);
     }
 
     // getter for cached code state

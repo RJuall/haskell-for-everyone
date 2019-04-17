@@ -154,7 +154,7 @@ export class OnlineRoom extends EventEmitter{
     // updates the code state
     // @param code      new code 
     // @param codeOwner person submitting the code 
-    public updateCode(code:string, start:UpdatePosition, end:UpdatePosition, action:ActionType, codeOwner:OnlinePerson):void{
+    public updateCode(code:string[], start:UpdatePosition, end:UpdatePosition, action:ActionType, codeOwner:OnlinePerson):void{
         // attempt the update
         if(this.hasPerson(codeOwner) && this.editType === "anyone" || codeOwner.id === this.ownerId){
             // update code 

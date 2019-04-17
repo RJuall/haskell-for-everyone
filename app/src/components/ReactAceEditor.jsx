@@ -218,7 +218,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                     }
 
                     // at this point all blank lines added - just add actual code 
-                    session.doc.insertMergedLines({row: i, col: 0}, [[''], code.split("")]);
+                    session.doc.insertMergedLines({row: i, col: 0}, [[''], code]);
                 }
                 else{
                     session.insert(start, code);
@@ -262,7 +262,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
             // send the update 
             // this deals with write permissions 
-            WSClient.sendCode(lines.join(""), start, end, action);
+            WSClient.sendCode(lines, start, end, action);
         }        
     }
 
