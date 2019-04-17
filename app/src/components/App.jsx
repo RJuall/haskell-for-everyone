@@ -24,10 +24,11 @@ import { fileStore } from '../stores/FileStore';
 import { windowStore } from '../stores/WindowStore';
 import FileDispatcher from "../dispatchers/FileDispatcher";
 import { RoomContainer } from "./RoomContainer";
+import WSClient from "../utils/WSClient";
 
 import "./App.css";
 
-export const VERSION = "0.1.0"; // remove hard coding in future
+export const VERSION = "0.1.1"; // remove hard coding in future
 
 export const App = inject("editorStore", "windowStore")(observer(class App extends React.Component{
     constructor(props){
@@ -54,7 +55,13 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
                     "Please visit our website and download the updated Haskell For Everyone."
                 );
             }
-        }).catch(() => console.log("Unable to load version."));
+            else{
+                WSClient.connect();
+            }
+        }).catch(() => {
+            console.log("Unable to load version.");
+            WSClient.connect();
+        })
     }
 
     componentDidMount(){

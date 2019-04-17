@@ -1,8 +1,9 @@
 import React from "react";
 import { RoomChat } from "./RoomChat";
 import { RoomSetup } from "./RoomSetup";
-import WSClient, { ROOM_LEAVE, ROOM_JOIN } from "../utils/WSClient";
+import WSClient, { ROOM_LEAVE, ROOM_JOIN, ID } from "../utils/WSClient";
 import "./RoomContainer.css";
+import ModalDispatcher from "../dispatchers/ModalDispatcher";
 
 export class RoomContainer extends React.Component{
     constructor(props){
@@ -28,6 +29,12 @@ export class RoomContainer extends React.Component{
         }
     }
 
+    handleId = ({err, id}) => {
+        if(err){
+            ModalDispatcher.alertModal("Socket Error", err);
+        }
+    }
+
     // this happens when disconnection occurs 
     handleSocketClose = () => {
         this.setState({roomName: null, isConnected: false});
@@ -47,6 +54,10 @@ export class RoomContainer extends React.Component{
                 this.handleRoomJoin(data);
                 break;
 
+            case ID:
+                this.handleId(data);
+                break;
+
             case "close":
                 this.handleSocketClose();
                 break;
@@ -59,8 +70,6 @@ export class RoomContainer extends React.Component{
 
     componentDidMount(){
         this.wsCallbackId = WSClient.register(this.handleWsClientUpdate);
-
-        WSClient.connect();
     }
 
     componentWillUnmount(){
