@@ -172,18 +172,16 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.onlineEditType = editType;
         
         // insert each character at corresponding row, col 
-        codeLines.forEach((line, row) => {
-            line.forEach((code, column) => {
-                // generate start end objects from data
-                let start = {row, column};              // row, column is always start
-                let end = {row, column: column + 1};    // always 1 char so it ends 1 col away 
+        codeLines.forEach((code, row) => {  // code = string[], codeLines = string[][]
+            // generate start end objects from data
+            let start = {row, column: 0};
+            let end = {row, column: code.length}; 
 
-                // append update function to update array
-                // this will be executed when handleOnlineFile is invoked next 
-                this.onlineUpdatesToProcess.push(
-                    () => this.handleCodeUpdate({code, start, end, action: "insert"})
-                );
-            });
+            // append update function to update array
+            // this will be executed when handleOnlineFile is invoked next 
+            this.onlineUpdatesToProcess.push(
+                () => this.handleCodeUpdate({code, start, end, action: "insert"})
+            );
         });
 
         // switch to online mode and run updaters 
@@ -221,7 +219,16 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                     session.doc.insertMergedLines({row: i, col: 0}, [[''], code]);
                 }
                 else{
-                    session.insert(start, code);
+                    let {row, column} = start;
+
+                    code.forEach(line => {
+                        console.log('line', line)
+                        session.insert({row, column}, line);
+
+                        column = 0;
+                        row++;
+                    });
+                    // session.insert(start, code);
                 }
             }
             else if(action === "remove"){
