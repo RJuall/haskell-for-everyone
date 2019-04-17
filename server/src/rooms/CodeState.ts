@@ -8,12 +8,10 @@ export interface UpdatePosition{
 export type CodeLines = string[][];
 
 export class CodeState{
-    private _lines:Map<number, string[]>;   // row number to line of text 
-    private _codeCache:CodeLines;           // 2d array of code lines 
+    private _lines:CodeLines;
 
     constructor(){
-        this._lines = new Map();
-        this._codeCache = [];
+        this._lines = [];
     }
 
     // updates the current code state
@@ -22,43 +20,41 @@ export class CodeState{
     // @param end       character(s) end position in the code
     // @param action    insert or removing code? 
     public update(code:string, start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
-        // get the line of code, otherwise empty line 
-        let line:string[] = this._lines.get(start.row) || [];
+        let row:number = start.row;
 
-        // prepare to update
-        let updatedLine:string[];
-        
-        // update based on action 
-        if(action === "insert"){
-            // insert the code based on position 
-            updatedLine = [
-                ...line.slice(0, start.column), code, ...line.slice(end.column, line.length)
-            ];
-        } 
-        else if(action === "remove"){
-            // remove the code  based on position
-            updatedLine = line.slice(start.column, end.column);
+        if(row in this._lines === false){
+            // prevents the "empty lines" array
+            // how many new lines to add 
+            let diff:number = row - this.numLines + 1;
+
+            // fill missing lines (could be many rows) with empty strings 
+            for(let i:number = 0; i < diff; i++){
+                this._lines.push([""]);
+            }
         }
 
-        // store the updated line of code
-        this._lines.set(start.row, updatedLine);
+        // chars before insert/remove location
+        let before:string[] = this._lines[row].slice(0, start.column);
+        // chars after insert/remove location
+        let after:string[] = this._lines[row].slice(end.column, this.numLines);
 
-        // update the cache 
-        this.updateCache();
-    }
-
-
-    // updates the code cache 
-    private updateCache():void{
-        this._codeCache = new Array(this._lines.size);
-        
-        for(let entry of this._lines.entries()){
-            this._codeCache[entry[0]] = entry[1];
+        if(action === "insert"){
+            // insert the chars
+            this._lines[row] = [...before, code, ...after];
+        }
+        else if(action === "remove"){
+            // remove the chars
+            this._lines[row] = [...before, ...after];
         }
     }
 
     // getter for cached code state
     public get codeLines():CodeLines{
-        return this._codeCache;
+        return this._lines;
+    }
+
+    // number of code rows 
+    public get numLines():number{
+        return this._lines.length;
     }
 }
