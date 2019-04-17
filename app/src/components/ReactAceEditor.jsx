@@ -134,6 +134,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     // "new" file clicked 
     handleEmptyFile = () => {
         this.props.fileStore.fileSettings.lastFilePath = null;
+        this.props.fileStore.fileSettings.onlineFileActive = false;
 
         this.resetEditorSession();
         this.setState({value: "", canEdit: true});
@@ -239,6 +240,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                 break;
 
             case ROOM_LEAVE:
+                this.props.fileStore.fileSettings.onlineFileActive = false;
                 this.clearRoomData();
                 break;
 
