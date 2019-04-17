@@ -11,7 +11,7 @@ export class CodeState{
     private _lines:CodeLines;
 
     constructor(){
-        this._lines = [];
+        this._lines = [[]];
     }
 
     // updates the current code state
@@ -47,7 +47,7 @@ export class CodeState{
             this._lines[row] = [...before, ...after];
         }
 
-        if(code.includes("~")) console.log(this._lines);
+        // if(code.includes("~")) console.log(this._lines);
     }
 
     // getter for cached code state

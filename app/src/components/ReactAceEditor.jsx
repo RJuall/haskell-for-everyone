@@ -171,41 +171,41 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         // store edit type
         this.onlineEditType = editType;
         
-        // insert each character at corresponding row, col 
-        codeLines.forEach((code, row) => {  // code = string[], codeLines = string[][]
-            // generate start end objects from data
-            let start = {row, column: 0};
-            let end = {row, column: code.length}; 
+        // append update function to update array
+        // this will be executed when handleOnlineFile is invoked next 
+        let lastLine = codeLines.length - 1;
+        let start = {row: 0, column: 0};
+        let end = {row: lastLine, column: codeLines[lastLine].length};
 
-            // append update function to update array
-            // this will be executed when handleOnlineFile is invoked next 
-            this.onlineUpdatesToProcess.push(
-                () => this.handleCodeUpdate({code, start, end, action: "insert"})
-            );
-        });
+        this.onlineUpdatesToProcess.push(
+            () => this.handleCodeUpdate({codeLines, start, end, action: "insert"})
+        );
 
         // switch to online mode and run updaters 
         this.handleOnlineFile();
     }
 
     // online document's code has changed 
-    handleCodeUpdate = ({code, start=null, end=null, action=null}) => {
+    handleCodeUpdate = ({codeLines, start=null, end=null, action=null}) => {
         // only update if in online editor mode 
         if(!this.props.fileStore.fileSettings.onlineFileActive){
             // apply this later
-            this.onlineUpdatesToProcess.push(() => this.handleCodeUpdate({code, start, end, action}));
+            this.onlineUpdatesToProcess.push(() => this.handleCodeUpdate({codeLines, start, end, action}));
 
             return;
         }
 
         // apply the update   
-        if(start && code && action){
+        if(start && codeLines && action){
             let session = this.editorRef.current.editor.session;
 
             this.processingUpdate = true;
 
             if(action === "insert"){
-                session.doc.insertFullLines(start.row, code);
+                codeLines.forEach(line => {
+                    let row = start.row;
+                    session.doc.insertFullLines(row++, line);
+                });
 
             }
             else if(action === "remove"){
@@ -230,6 +230,10 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
             case ROOM_JOIN:
                 this.handleRoomJoin(data);
+                break;
+
+            case "close":
+                this.props.fileStore.fileSettings.onlineFileActive = false;
                 break;
         }
     }

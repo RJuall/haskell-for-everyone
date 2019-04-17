@@ -255,14 +255,14 @@ export class RoomsManager{
     // @param start         start position of code update
     // @param end           end position of code update
     // @param action        insert or remove action 
-    private processCode(person:OnlinePerson, {code=[], start=null, end=null, action=null}):void{
+    private processCode(person:OnlinePerson, {codeLines=[], start=null, end=null, action=null}):void{
         // must be in a room
         if(!person.room) return;
 
         // must be correctly formatted
-        if(!code || !start || !end || !action) return;
+        if(!codeLines || !start || !end || !action) return;
 
         // apply the update 
-        person.room.updateCode(code, start, end, action, person);
+        person.room.updateCode(codeLines, start, end, action, person);
     }
 }

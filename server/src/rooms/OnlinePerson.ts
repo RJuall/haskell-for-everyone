@@ -79,8 +79,8 @@ export class OnlinePerson extends EventEmitter{
 
     // sends code update to the client
     // @param code      new code string
-    public sendCode(code:string[], start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
-        this.send("code", {code, start, end, action});
+    public sendCode(codeLines:string[], start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
+        this.send("code", {codeLines, start, end, action});
     }
 
     // sends the stored socket id to the client
