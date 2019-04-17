@@ -27,10 +27,9 @@
 .room-chat-textarea, .room-chat-input{
     background-color: #e8e8e8;
     width: 95%;
-    border: 1px solid black;
+    border: 1px solid #d6cbcb;
     border-radius: 6px;
     padding: 5px;
-    box-shadow: 1px 1px 1px 1px black;
 }
 
 .room-chat-container .room-chat-textarea:focus, .room-chat-input:focus{

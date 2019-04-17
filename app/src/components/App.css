@@ -178,6 +178,37 @@ body{
     color: #fff;
 }
 
+
+.theme--light .room-empty-container, 
+.theme--light .room-chat-container{
+    background-color: #e8e8e8;
+}
+
+.theme--light .room-container{
+    border: 1px solid #e8e8e8;
+}
+
+.theme--light .room-name{
+    color: rgba(0,0,0,.7);
+}
+
+.theme--light .room-cards .card{
+    background-color: #e8e8e8 !important;
+}
+
+.theme--light .room-cards .card-body{
+    color: rgba(0,0,0,.7) !important;
+}
+
+.theme--dark .modal-content{
+    background-color: #32353D;
+    color: #fff;
+}
+
+.theme--dark .modal-header{
+    border-bottom: 1px solid #424446;
+}
+
 .show-false{
     display: none;
 }
