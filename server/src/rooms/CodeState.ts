@@ -5,10 +5,12 @@ export interface UpdatePosition{
     column:number
 }
 
-export type CodeLines = string[][];
+export type CodeLineChars = string[][];
+
+export type CodeLines = string[];
 
 export class CodeState{
-    private _lines:CodeLines;
+    private _lines:CodeLineChars;
 
     constructor(){
         this._lines = [[]];
@@ -51,8 +53,13 @@ export class CodeState{
     }
 
     // getter for cached code state
-    public get codeLines():CodeLines{
+    public get codeLinesChars():CodeLineChars{
         return this._lines;
+    }
+
+    // code lines as a string array 
+    public get codeLines():CodeLines{
+        return this._lines.map(line => line.join(""));
     }
 
     // number of code rows 

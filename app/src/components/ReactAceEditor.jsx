@@ -204,7 +204,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
             if(action === "insert"){
                 codeLines.forEach(line => {
                     let row = start.row;
-                    session.doc.insertFullLines(row++, line);
+                    session.doc.insertFullLines(row++, [line]);
                 });
 
             }
