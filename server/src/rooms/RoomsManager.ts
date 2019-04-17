@@ -255,7 +255,7 @@ export class RoomsManager{
     // @param start         start position of code update
     // @param end           end position of code update
     // @param action        insert or remove action 
-    private processCode(person:OnlinePerson, {code="", start=null, end=null, action=null}):void{
+    private processCode(person:OnlinePerson, {code=[], start=null, end=null, action=null}):void{
         // must be in a room
         if(!person.room) return;
 
