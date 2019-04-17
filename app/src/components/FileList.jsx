@@ -56,7 +56,7 @@ export class FileList extends React.Component{
             // update the state 
             this.setState({folders});
         }
-        else ModalDispatcher.alertModal("Folder Files Error", evt.err);
+        //else ModalDispatcher.alertModal("Folder Files Error", evt.err);
     }
 
     // handle file create by updating folder
