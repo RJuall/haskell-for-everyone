@@ -202,9 +202,19 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
             this.processingUpdate = true;
 
             if(action === "insert"){
+                let {column, row} = start;
+
                 codeLines.forEach(line => {
-                    let row = start.row;
-                    session.doc.insertFullLines(row++, [line]);
+
+                    if(row >= session.getLength()){
+                        session.doc.insertLines(row, [line]);
+                    }
+                    else{
+                        session.insert({row, column}, line)
+                    }
+
+                    column = 0;
+                    row++;
                 });
 
             }
