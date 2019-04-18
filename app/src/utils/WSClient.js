@@ -153,14 +153,14 @@ export class WSClient extends Dispatcher{
     }
 
     // sends code update
-    // @param code      code to send
+    // @param codeLines      code lines to send
     // @param start     {row, column} start
     // @param end       {row, column} end
     // @param action    insert or remove 
-    sendCode(code, start, end, action){
+    sendCode(codeLines, start, end, action){
         if(this._room){
             if(this._room.editType === "anyone" || this._room.owner === this.id){
-                this.send(CODE, {code, start, end, action});
+                this.send(CODE, {codeLines, start, end, action});
             }
         }
     }

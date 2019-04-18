@@ -134,6 +134,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     // "new" file clicked 
     handleEmptyFile = () => {
         this.props.fileStore.fileSettings.lastFilePath = null;
+        this.props.fileStore.fileSettings.onlineFileActive = false;
 
         this.resetEditorSession();
         this.setState({value: "", canEdit: true});
@@ -170,58 +171,52 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         // store edit type
         this.onlineEditType = editType;
         
-        // insert each character at corresponding row, col 
-        codeLines.forEach((line, row) => {
-            line.forEach((code, column) => {
-                // generate start end objects from data
-                let start = {row, column};              // row, column is always start
-                let end = {row, column: column + 1};    // always 1 char so it ends 1 col away 
+        // append update function to update array
+        // this will be executed when handleOnlineFile is invoked next 
+        let lastLine = codeLines.length - 1;
+        let start = {row: 0, column: 0};
+        let end = {row: lastLine, column: codeLines[lastLine].length};
 
-                // append update function to update array
-                // this will be executed when handleOnlineFile is invoked next 
-                this.onlineUpdatesToProcess.push(
-                    () => this.handleCodeUpdate({code, start, end, action: "insert"})
-                );
-            });
-        });
+        this.onlineUpdatesToProcess.push(
+            () => this.handleCodeUpdate({codeLines, start, end, action: "insert"})
+        );
 
         // switch to online mode and run updaters 
         this.handleOnlineFile();
     }
 
     // online document's code has changed 
-    handleCodeUpdate = ({code, start=null, end=null, action=null}) => {
+    handleCodeUpdate = ({codeLines, start=null, end=null, action=null}) => {
         // only update if in online editor mode 
         if(!this.props.fileStore.fileSettings.onlineFileActive){
             // apply this later
-            this.onlineUpdatesToProcess.push(() => this.handleCodeUpdate({code, start, end, action}));
+            this.onlineUpdatesToProcess.push(() => this.handleCodeUpdate({codeLines, start, end, action}));
 
             return;
         }
 
         // apply the update   
-        if(start && code && action){
+        if(start && codeLines && action){
             let session = this.editorRef.current.editor.session;
 
             this.processingUpdate = true;
 
             if(action === "insert"){
-                let rowDiff = start.row + 1 - session.getLength(); // length is off by 1 (starts at 1 not 0)
+                let {column, row} = start;
 
-                if(rowDiff > 0){
-                    // new blank lines have been added
-                    let i = start.row - rowDiff + 1;
-                    while(i < start.row){
-                        // array arg is [[prevLine], [currLine]]
-                        session.doc.insertMergedLines({row: i++, col: 0}, [[''], ['']]);
+                codeLines.forEach(line => {
+
+                    if(row >= session.getLength()){
+                        session.doc.insertLines(row, [line]);
+                    }
+                    else{
+                        session.insert({row, column}, line)
                     }
 
-                    // at this point all blank lines added - just add actual code 
-                    session.doc.insertMergedLines({row: i, col: 0}, [[''], code.split("")]);
-                }
-                else{
-                    session.insert(start, code);
-                }
+                    column = 0;
+                    row++;
+                });
+
             }
             else if(action === "remove"){
                 session.remove({start, end});
@@ -239,11 +234,16 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                 break;
 
             case ROOM_LEAVE:
+                this.props.fileStore.fileSettings.onlineFileActive = false;
                 this.clearRoomData();
                 break;
 
             case ROOM_JOIN:
                 this.handleRoomJoin(data);
+                break;
+
+            case "close":
+                this.props.fileStore.fileSettings.onlineFileActive = false;
                 break;
         }
     }
@@ -260,7 +260,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
             // send the update 
             // this deals with write permissions 
-            WSClient.sendCode(lines.join(""), start, end, action);
+            WSClient.sendCode(lines, start, end, action);
         }        
     }
 
