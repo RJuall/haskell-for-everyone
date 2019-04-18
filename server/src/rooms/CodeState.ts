@@ -13,7 +13,7 @@ export class CodeState{
     private _lines:CodeLineChars;
 
     constructor(){
-        this._lines = [[]];
+        this._lines = [[""]];
     }
 
     // updates the current code state
@@ -21,35 +21,37 @@ export class CodeState{
     // @param start     character(s) start position in the code
     // @param end       character(s) end position in the code
     // @param action    insert or removing code? 
-    public update(code:string[], start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
-        let row:number = start.row;
+    public update(codeLines:string[], start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
+        codeLines.forEach((line, idx) => {
+            this.updateLine(line, end.row + idx, start.column, end.column, action)
+        });
+    }
 
-        if(row in this._lines === false){
-            // prevents the "empty lines" array
-            // how many new lines to add 
-            let diff:number = row - this.numLines + 1;
-
-            // fill missing lines (could be many rows) with empty strings 
-            for(let i:number = 0; i < diff; i++){
-                this._lines.push([""]);
-            }
+    // updates the individual line 
+    // @param line      line of text to change
+    // @param row       row (line number) to update at
+    // @param startCol  first characters starting column (index)
+    // @param endCol    last character + 1 index
+    // @param action    operation to perform 
+    private updateLine(line:string, row:number, startCol:number, endCol:number, action:ActionType):void{
+        // line must exist 
+        if(!this._lines[row]){
+            this._lines[row] = [""];
         }
-
         // chars before insert/remove location
-        let before:string[] = this._lines[row].slice(0, start.column);
+        let before:string[] = this._lines[row].slice(0, startCol);
+
         // chars after insert/remove location
-        let after:string[] = this._lines[row].slice(end.column, this.numLines);
+        let after:string[] = this._lines[row].slice(endCol, this._lines[row].length);
 
         if(action === "insert"){
             // insert the chars
-            this._lines[row] = [...before, ...code, ...after];
+            this._lines[row] = [...before, ...line, ...after];
         }
         else if(action === "remove"){
             // remove the chars
             this._lines[row] = [...before, ...after];
         }
-
-        // if(code.includes("~")) console.log(this._lines);
     }
 
     // getter for cached code state
