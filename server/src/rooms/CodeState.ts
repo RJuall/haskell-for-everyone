@@ -23,7 +23,7 @@ export class CodeState{
     // @param action    insert or removing code? 
     public update(codeLines:string[], start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
         codeLines.forEach((line, idx) => {
-            this.updateLine(line, end.row + idx, start.column, end.column, action)
+            this.updateLine(line, start.row + idx, start, end, action)
         });
     }
 
@@ -33,16 +33,17 @@ export class CodeState{
     // @param startCol  first characters starting column (index)
     // @param endCol    last character + 1 index
     // @param action    operation to perform 
-    private updateLine(line:string, row:number, startCol:number, endCol:number, action:ActionType):void{
+    private updateLine(line:string, row:number, start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
         // line must exist 
         if(!this._lines[row]){
             this._lines[row] = [""];
         }
+
         // chars before insert/remove location
-        let before:string[] = this._lines[row].slice(0, startCol);
+        let before:string[] = this._lines[row].slice(0, start.column);
 
         // chars after insert/remove location
-        let after:string[] = this._lines[row].slice(endCol, this._lines[row].length);
+        let after:string[] = this._lines[row].slice(end.column, this._lines[row].length);
 
         if(action === "insert"){
             // insert the chars

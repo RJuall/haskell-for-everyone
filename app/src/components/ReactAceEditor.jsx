@@ -235,6 +235,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
             case ROOM_LEAVE:
                 this.props.fileStore.fileSettings.onlineFileActive = false;
+                this.setState({canEdit: true});
                 this.clearRoomData();
                 break;
 
