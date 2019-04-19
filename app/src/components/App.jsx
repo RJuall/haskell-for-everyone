@@ -109,6 +109,18 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
 
     }
 
+    toggleWidthEditor(toggleFile,toggleGHCI){
+        if(toggleFile && toggleGHCI){
+            return window.innerWidth;
+        }else if(!toggleFile && toggleGHCI){
+            return window.innerWidth*2;
+        }else if(toggleFile && !toggleGHCI){
+            return window.innerWidth/2;
+        }else{
+            return this.state.setEdColWidth;
+        }
+    }
+
     render(){
         let toggleFile = this.props.windowStore.windowSettings.hideFile;
         let toggleGHCI = this.props.windowStore.windowSettings.hideGHCI;
@@ -135,7 +147,7 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
                                     <SplitPane 
                                         split="vertical" 
                                         minSize={375} 
-                                        size={toggleFile ? window.innerWidth : this.state.setEdColWidth }
+                                        size={this.toggleWidthEditor(toggleFile,toggleGHCI)}//toggleFile ? window.innerWidth/2 : this.state.setEdColWidth }
                                         onDragFinished={size => {console.log(size); this.setState({currentEdColWidth: size})}}
                                     >
                                         <Col className="editor-panel">
