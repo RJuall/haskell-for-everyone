@@ -5,6 +5,7 @@ import { MongoClient } from "mongodb";
 import * as websocket from "websocket";
 import { ContactUsGetHandler } from "./handlers/ContactUsGetHandler";
 import { ContactUsSubmitHandler } from "./handlers/ContactUsSubmitHandler";
+import { RoomCodeResetHandler } from "./handlers/RoomCodeResetHandler";
 import { VersionHandler } from "./handlers/VersionHandler";
 import { DatabaseManager } from "./database/DatabaseManager";
 import { RoomsManager } from "./rooms/RoomsManager";
@@ -38,6 +39,10 @@ export class Server{
         this._app.set("view engine", "pug");
         this._app.set("views", `${__dirname}/../views`);
 
+        // handlers can access rooms
+        RoomCodeResetHandler.roomsManager = this._rooms;
+
+        // start server
         this.createRoutes();
         this.init();
     }
@@ -61,6 +66,9 @@ export class Server{
 
         // view form submissions 
         this._app.get("/contact/get", ContactUsGetHandler.get);
+
+        // api for room resets
+        this._app.get("/api/room/reset", RoomCodeResetHandler.get);
 
         // api for version
         this._app.options("/api/version*", VersionHandler.options);

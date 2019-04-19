@@ -151,6 +151,11 @@ export class OnlineRoom extends EventEmitter{
         return true;
     }
 
+    // resets the code state 
+    public forceCodeReset():void{
+        this._code.forceReset();
+    }
+
     // updates the code state
     // @param code      new code 
     // @param codeOwner person submitting the code 

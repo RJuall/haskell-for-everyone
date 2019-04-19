@@ -52,6 +52,16 @@ export class RoomsManager{
         this.createRoom(name, null, null, {}, () => {});
     }
 
+    // resets the room code state 
+    public resetRoomCode(roomName:string):boolean{
+        let room:OnlineRoom = this._rooms.get(roomName);
+        if(room){
+            room.forceCodeReset();
+            return true;
+        }
+        return false;
+    }
+
     // enters a person into the room system 
     // @param connection    websocket connection     
     public enrollPerson(connection:ws.connection):void{
