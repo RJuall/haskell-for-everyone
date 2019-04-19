@@ -28,7 +28,7 @@ import WSClient from "../utils/WSClient";
 
 import "./App.css";
 
-export const VERSION = "0.1.1"; // remove hard coding in future
+export const VERSION = "0.1.2"; // remove hard coding in future
 
 export const App = inject("editorStore", "windowStore")(observer(class App extends React.Component{
     constructor(props){

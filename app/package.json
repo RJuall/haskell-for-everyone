@@ -1,6 +1,6 @@
 {
   "name": "haskell-for-everyone",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An easy-to-use educational editor for learning the Haskell programming language",
   "author": "test <test@test.com>",
   "license": "MIT",
