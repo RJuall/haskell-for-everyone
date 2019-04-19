@@ -249,6 +249,14 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         }
     }
 
+    handleUndo = () => {
+        this.editorRef.current.editor.session.getUndoManager().undo();
+    }
+
+    handleRedo = () => {
+        this.editorRef.current.editor.session.getUndoManager().redo();
+    }
+
     // when the editor changes... (no longer sync with file)
     onChange = (val, evt) => {
         // mark file as same as the save
@@ -319,6 +327,8 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         EditorDispatcher.on("run-code", this.handleRunCode);
         EditorDispatcher.on("empty-file", this.handleEmptyFile);
         EditorDispatcher.on("online-file", this.handleOnlineFile);
+        EditorDispatcher.on("undo", this.handleUndo);
+        EditorDispatcher.on("redo", this.handleRedo);
 
         // listening for websocket updates
         this.wsCallbackId = WSClient.register(this.handleWsClientUpdate);
@@ -335,6 +345,8 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         EditorDispatcher.removeListener("run-code", this.handleRunCode);
         EditorDispatcher.removeListener("empty-file", this.handleEmptyFile);
         EditorDispatcher.removeListener("online-file", this.handleOnlineFile);
+        EditorDispatcher.removeListener("undo",this.handleUndo);
+        EditorDispatcher.removeListener("redo", this.handleRedo);
 
         // stop listening for websocket updates
         WSClient.unregister(this.wsCallbackId);
