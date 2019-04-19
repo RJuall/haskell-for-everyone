@@ -65,12 +65,32 @@
                     <h3 class="row">Faq</h3>
                     <div class="accordion-container">
                         <div class="ac">
+                            <h4 class="ac-q faq-question" tabindex="0">
+                                Disclaimer
+                            </h4>
+                            <div class="ac-a">
+                                <p>Haskell For Everyone is currently in Beta. We cannot gaurentee 100% Functionality.</p>
+                            </div>
+                        </div>
+                        <div class="ac">
                             <h4 class="ac-q faq-question" tabindex="O">
                                 Does the Haskell compiler or runtime environment come with Haskell For Everyone?
                             </h4>
                             <div class="ac-a faq-answer">
                                 <p>No. Haskell must be installed on your computer to use Haskell for Everyone. Haskell can be found on Haskell's <a href="https://www.haskell.org/platform/">official website.</a></p>
                             </div>                            
+                        </div>
+                        <div class="ac">
+                                <h4 class="ac-q faq-question" tabindex="O">
+                                    What are rooms?
+                                </h4>
+                                <div class="ac-a faq-answer">
+                                    <p>The rooms feature uses websockets to allow a group of users to perform code sharing during a session. Anyone can create a public or 
+                                        private room, if the room is private there must be a password. The creator of the rooms can also set whether anyone can edit or 
+                                        if it is read only for everyone except the owner. Anyone can join a public room and for a private room the password must be known 
+                                        to join. Once the room is empty, the room is removed from the server.
+                                    </p>
+                                </div>                            
                         </div>
                         <!--
                         <div class="ac">
