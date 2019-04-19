@@ -71,6 +71,14 @@ class EditorDispatcher extends EventEmitter {
         // get file state 
         this.emit("online-file");
     }
+
+    Undo(){
+        this.emit("undo");
+    }
+
+    Redo(){
+        this.emit("redo")
+    }
 }
 
 export default new EditorDispatcher();

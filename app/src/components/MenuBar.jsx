@@ -118,8 +118,8 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
                         <DropdownItem onClick={() => document.execCommand("cut")}>Cut</DropdownItem>
                         {/* <DropdownItem>Find</DropdownItem> */}
                         <DropdownItem divider />
-                        <DropdownItem onClick={() => document.execCommand("redo")}>Redo</DropdownItem>
-                        <DropdownItem onClick={() => document.execCommand("undo")}>Undo</DropdownItem>
+                        <DropdownItem onClick={() => EditorDispatcher.Redo()}>Redo</DropdownItem>
+                        <DropdownItem onClick={() => EditorDispatcher.Undo()}>Undo</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
                 <Dropdown nav isOpen={this.state.preference} toggle={this.togglePreferences.bind(this)}>
