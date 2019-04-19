@@ -55,6 +55,11 @@ export class CodeState{
         }
     }
 
+    // resets the code state
+    public forceReset():void{
+        this._lines = [[""]];
+    }
+
     // getter for cached code state
     public get codeLinesChars():CodeLineChars{
         return this._lines;
