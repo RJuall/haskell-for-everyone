@@ -31,4 +31,16 @@ export class FileExtension{
     static list(){
         return Object.keys(FILE_EXTENSIONS);
     }
+
+    // gets file name from path (./foo/bar/file.txt becomes file.txt)
+    static fileNameFromPath(path){
+        // no file extension
+        if(path.indexOf(".") === -1){
+            return "";
+        }
+
+        let foslashPath = path.replace(/\\/g, "/").split("/");
+
+        return foslashPath.pop();
+    }
 }
