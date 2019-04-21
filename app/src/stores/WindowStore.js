@@ -11,7 +11,8 @@ class WindowStore {
         this.windowSettings = {
             theme: "dark",
             hideFile: false,
-            hideGHCI: false
+            hideGHCI: false,
+            showSearch: false
         };
 
         this.sessionWindowStore = {
@@ -29,7 +30,8 @@ class WindowStore {
             // all windowSettings fields go here
             theme: this.windowSettings.theme,
             showFile: this.windowSettings.hideFile,
-            showGHCI: this.windowSettings.hideGHCI
+            showGHCI: this.windowSettings.hideGHCI,
+            showSearch: this.windowSettings.showSearch
         };
         settingsStore.updateSettings(windowSettings);
     }))

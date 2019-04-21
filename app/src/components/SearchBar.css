@@ -1,0 +1,36 @@
+.search-bar {
+    padding-top: 10px;
+    padding-bottom: 50px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background:  #ffffff;
+}
+
+.search-bar button, .icon-bar div{
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.search-bar .btn-run span,
+.search-bar .btn-save span{
+    margin-left: 5px;
+}
+
+.col{
+    padding: 0 !important;
+}
+
+.escButton{
+    float:right;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}

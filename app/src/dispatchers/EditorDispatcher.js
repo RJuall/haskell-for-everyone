@@ -77,7 +77,12 @@ class EditorDispatcher extends EventEmitter {
     }
 
     Redo(){
-        this.emit("redo")
+        this.emit("redo");
+    }
+
+    find(search){
+        console.log("Whats being searched: "+ search);
+        this.emit("find",{search});
     }
 }
 

@@ -22,7 +22,8 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
             about: false,
             background: false,
             hideGHCI: false, // state for whether the GHCI console is shown or not
-            hideFile: false // state for whether the file list is shown or not
+            hideFile: false, // state for whether the file list is shown or not
+            showSearch: false
         };
 
     }
@@ -86,6 +87,12 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
         //console.log(this.props.windowStore.windowSettings.hideFile);
     }
 
+    toggleSearchBar(){
+        //If true then show the searchbar, else if false then hide the search bar
+        console.log("Called search bar");
+        Object.assign(this.props.windowStore.windowSettings,{showSearch: true});
+    }
+
     render() {
         let toggleBgColor = `Toggle ${this.props.windowStore.windowSettings.theme === "dark" ? "Light" : "Dark"} Background`;
 
@@ -116,7 +123,8 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
                         <DropdownItem onClick={() => document.execCommand("paste")}>Paste</DropdownItem>
                         <DropdownItem onClick={() => document.execCommand("copy")}>Copy</DropdownItem>
                         <DropdownItem onClick={() => document.execCommand("cut")}>Cut</DropdownItem>
-                        {/* <DropdownItem>Find</DropdownItem> */}
+                        <DropdownItem divider />
+                        <DropdownItem onClick={() => this.toggleSearchBar()}>Find</DropdownItem>
                         <DropdownItem divider />
                         <DropdownItem onClick={() => EditorDispatcher.Redo()}>Redo</DropdownItem>
                         <DropdownItem onClick={() => EditorDispatcher.Undo()}>Undo</DropdownItem>

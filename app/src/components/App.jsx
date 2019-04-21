@@ -5,6 +5,7 @@ import Mousetrap from 'mousetrap';
 import { FileList } from "./FileList";
 import { GhciConsole } from "./GhciConsole";
 import { Editor } from './Editor';
+import { SearchBar } from "./SearchBar";
 import { ModalCreateFile } from "./ModalCreateFile";
 import { ModalSaveFileAs } from "./ModalSaveFileAs";
 import { ModalAlert } from "./ModalAlert";
@@ -77,6 +78,10 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
             );
         });
 
+        Mousetrap.bind('ctrl f',() => {
+            Object.assign(this.props.windowStore.windowSettings,{showSearch:true});
+        });
+
         window.onresize = () => {
             let newWindowWidth = window.innerWidth;
             let oldFileColRatio = this.state.currentFileColWidth / this.state.windowSize;
@@ -121,15 +126,23 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
         }
     }
 
+    showSearchBar(){
+        console.log("show search bar");
+        return (
+            <SearchBar/>
+        );
+    }
+
     render(){
         let toggleFile = this.props.windowStore.windowSettings.hideFile;
         let toggleGHCI = this.props.windowStore.windowSettings.hideGHCI;
+        let showSearch = this.props.windowStore.windowSettings.showSearch
         console.log("File list render toggle: "+toggleFile);
         return (
             <>
                 <div className="iconbar-container">
                     <MenuBar/>
-                    <EditorIconBar/>
+                    <EditorIconBar/>                 
                 </div>
                 <div className="three-cols">
                     <Container>
@@ -150,7 +163,11 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
                                         size={this.toggleWidthEditor(toggleFile,toggleGHCI)}//toggleFile ? window.innerWidth/2 : this.state.setEdColWidth }
                                         onDragFinished={size => {console.log(size); this.setState({currentEdColWidth: size})}}
                                     >
+
                                         <Col className="editor-panel">
+                                        <div className="search-contianer">  
+                                            {showSearch ? this.showSearchBar() : null}
+                                        </div>
                                             <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/> 
                                         </Col>
                                             <Col className="ghci-panel" hidden={toggleGHCI}>
