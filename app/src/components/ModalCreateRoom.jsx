@@ -2,22 +2,27 @@ import React from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Button } from "reactstrap";
 import ModalDispatcher, { CREATE_ROOM_MODAL } from "../dispatchers/ModalDispatcher";
 import WSClient, { ROOM_CREATE } from "../utils/WSClient";
+import { SelectFileFolder } from "../utils/SelectFileFolder";
+import { FileExtension } from "../utils/FileExtension";
+import FileDispatcher from "../dispatchers/FileDispatcher";
 
 export class ModalCreateRoom extends React.Component{
     constructor(props){
         super(props);
 
         this.state = {
-            isOpen: false,          // modal visibility 
-            locked: false,          // UI input lock 
-            access: "public",       // public/private access
-            edit:   "owner-only"    // owner-only/anyone editing
+            isOpen:     false,          // modal visibility 
+            locked:     false,          // UI input lock 
+            access:     "public",       // public/private access
+            edit:       "owner-only",   // owner-only/anyone editing
+            filePath:   null            // initial file path (null = none selected)
         };
 
         this.roomNameInput = null;  // room name <input>
         this.userNameInput = null;  // user name <input>
         this.accessInput =   null;  // access type <input> 
         this.passwordInput = null;  // room passowrd <input>
+        this.descInput =     null;  // description <input>
         this.editInput =     null;  // edit type <input>
         this.wsCallbackId = -1;     // wsclient callback id 
     }
@@ -71,10 +76,27 @@ export class ModalCreateRoom extends React.Component{
             userName =      this.userNameInput.value,
             password =      this.passwordInput ? this.passwordInput.value : null,
             accessType =    this.accessInput.value,
-            editType =      this.editInput.value;
+            editType =      this.editInput.value,
+            description =   this.descInput.value,
+            filePath =      this.state.filePath || null;
 
         // send request 
-        WSClient.createRoom(roomName, userName, {password, accessType, editType});
+        if(filePath){
+            // start room with file
+            FileDispatcher.readFileSilently(filePath, str => {
+                WSClient.createRoom(roomName, userName, {password, accessType, editType, description, initialCode: str});
+            });
+            return;
+        }
+
+        // start room with no file 
+        WSClient.createRoom(roomName, userName, {password, accessType, editType, description});
+    }
+
+    onFileClick = () => {
+        SelectFileFolder.selectFileDialog(filePaths => {
+            this.setState({filePath: filePaths[0]});
+        });
     }
 
     componentDidMount(){
@@ -110,24 +132,15 @@ export class ModalCreateRoom extends React.Component{
     }
 
     render(){
+        let {isOpen, locked, filePath} = this.state;
+
         return (
-            <Modal isOpen={this.state.isOpen} toggle={this.toggle}>
+            <Modal isOpen={isOpen} toggle={this.toggle}>
                 <ModalHeader toggle={this.toggle}>
                     Create Room
                 </ModalHeader>
                 <ModalBody>
                     <Form onSubmit={this.onSubmit}>
-                        <FormGroup>
-                            <Label>Room Name</Label>
-                            <Input
-                                innerRef={elem => this.roomNameInput = elem}
-                                type="text"
-                                minLength={3}
-                                maxLength={16}
-                                disabled={this.state.locked}
-                                required
-                            />
-                        </FormGroup>
                         <FormGroup>
                             <Label>Your Name</Label>
                             <InputGroup>
@@ -136,13 +149,41 @@ export class ModalCreateRoom extends React.Component{
                                     type="text"
                                     minLength={2}
                                     maxLength={16}
-                                    disabled={this.state.locked}
+                                    disabled={locked}
                                     required
                                 />
                                 <InputGroupAddon>
                                     {WSClient.id}
                                 </InputGroupAddon>
                             </InputGroup>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label>Room Name</Label>
+                            <Input
+                                innerRef={elem => this.roomNameInput = elem}
+                                type="text"
+                                minLength={3}
+                                maxLength={16}
+                                disabled={locked}
+                                required
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label>Room Description</Label>
+                            <Input
+                                type="text"
+                                maxLength={32}
+                                innerRef={elem => this.descInput = elem}
+                                placeholder="Optional description"
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label>Initial File</Label>
+                            <br/>
+                            <Button type="button" disabled={locked} onClick={this.onFileClick}>
+                                {filePath ? "Change" : "Select"}
+                            </Button>
+                            &nbsp; {filePath ? FileExtension.fileNameFromPath(filePath) : "No file selected (optional)"}
                         </FormGroup>
                         <FormGroup>
                             <Label>Editing</Label>
