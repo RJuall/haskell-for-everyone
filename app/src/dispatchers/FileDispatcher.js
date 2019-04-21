@@ -12,11 +12,27 @@ class FileDispatcher extends EventEmitter{
     constructor(){
         super();
 
+        // loading paths with no emit, just a callback 
+        this._silentPaths = new Map();
+
         // forward events 
-        IpcRequester.on(FILE_READ, evt => this.emit(FILE_READ, evt));
+        IpcRequester.on(FILE_READ, evt => {
+            let {path, pathClean, str} = evt;
+            
+            if(this._silentPaths.has(path)){
+                this._silentPaths.get(path)(str, pathClean);
+                this._silentPaths.delete(path);
+            }
+            else this.emit(FILE_READ, evt);
+        });
         IpcRequester.on(FILE_WRITE, evt => this.emit(FILE_WRITE, evt));
         IpcRequester.on(FILE_CREATE, evt => this.emit(FILE_CREATE, evt));
         IpcRequester.on(FILES_GET, evt => this.emit(FILES_GET, evt));
+    }
+
+    readFileSilently(path, callback){
+        this._silentPaths.set(path, callback);
+        this.readFile(path);
     }
 
     // requests a file to be read (responds by event emitting)

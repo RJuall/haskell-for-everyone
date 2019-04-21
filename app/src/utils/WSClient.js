@@ -122,8 +122,8 @@ export class WSClient extends Dispatcher{
     // requests a room to be created for user
     // @param roomName  room to create
     // @param userName  name to assign self in room 
-    createRoom(roomName, userName, {accessType=null, editType=null, password=null}){
-        this.send(ROOM_CREATE, {roomName, userName, accessType, editType, password});
+    createRoom(roomName, userName, {accessType=null, editType=null, password=null, description=null, initialCode=null}){
+        this.send(ROOM_CREATE, {roomName, userName, accessType, editType, password, description, initialCode});
     }
 
     // joins an existing room
