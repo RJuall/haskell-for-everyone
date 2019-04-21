@@ -35,23 +35,29 @@ export class CodeState{
     // @param action    operation to perform 
     private updateLine(line:string, row:number, start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
         // line must exist 
-        if(!this._lines[row]){
-            this._lines[row] = [""];
-        }
-
-        // chars before insert/remove location
-        let before:string[] = this._lines[row].slice(0, start.column);
-
-        // chars after insert/remove location
-        let after:string[] = this._lines[row].slice(end.column, this._lines[row].length);
+        this.fillMissingRows(row);
 
         if(action === "insert"){
             // insert the chars
-            this._lines[row] = [...before, ...line, ...after];
+            this._lines[row].splice(start.column, 0, ...line);
         }
         else if(action === "remove"){
             // remove the chars
-            this._lines[row] = [...before, ...after];
+            this._lines[row].splice(start.column, end.column - start.column);
+        }
+    }
+
+    // enforces that all rows are not-null and not-undefined
+    // @param row   row being changed (safeguards all subsequent rows)
+    private fillMissingRows(row:number):void{
+        let len:number = this.numLines;
+
+        while(row >= len){
+            if(!this._lines[row]){
+                this._lines[row] = [""];
+            }
+
+            row--;
         }
     }
 
