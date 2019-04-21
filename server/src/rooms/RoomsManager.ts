@@ -195,7 +195,7 @@ export class RoomsManager{
     // @param accessType    public or private room (optional)
     // @param editType      edit permissions (optional)
     // @param password      password for private room (optional)
-    private processRoomCreate(person:OnlinePerson, {roomName="", userName="", accessType=null, editType=null, password=null}):void{
+    private processRoomCreate(person:OnlinePerson, {roomName="", userName="", accessType=null, editType=null, password=null, description=null, initialCode=null}):void{
         // must have room name and display name
         if(!roomName || !userName){
             person.sendError("room-create", "Invalid request parameters (roomName and userName required).");
@@ -213,7 +213,7 @@ export class RoomsManager{
         editType = editType || "anyone";
 
         // attempt to create the room
-        this.createRoom(roomName, person, userName, {accessType, editType, password}, (err, room) => {
+        this.createRoom(roomName, person, userName, {accessType, editType, password, description, initialCode}, (err, room) => {
             if(!err){
                 // room was created
                 //person.changeName(userName);

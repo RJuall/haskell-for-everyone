@@ -14,6 +14,7 @@ export interface RoomSummary{
     accessType:AccessType;
     editType:EditType;
     owner:string;
+    description:string;
 }
 
 export interface RoomState extends RoomSummary{
@@ -25,12 +26,15 @@ export interface OnlineRoomOptions{
     accessType?:AccessType;
     editType?:EditType;
     password?:string;
+    description?:string;
+    initialCode?:string;
 }
 
 export class OnlineRoom extends EventEmitter{
     public static readonly POPULATION_CAP:number = parseInt(process.env.ROOM_POP_CAP) || 20;
 
     private _name:string;
+    private _description:string;
     private _owner:OnlinePerson;
     private _password:string;
     private _accessType:AccessType;
@@ -46,6 +50,7 @@ export class OnlineRoom extends EventEmitter{
         super();
 
         this._name = name
+        this._description = options.description || null;
         this._owner = owner;
         this._password = options.password || null;
         this._accessType = options.accessType || "public";
@@ -56,6 +61,19 @@ export class OnlineRoom extends EventEmitter{
         // can't be public with a password
         if(this._password && this.accessType === "public"){
             this._accessType = "private";
+        }
+
+        // initial code
+        if(options.initialCode){
+            // insert the default code 
+            options.initialCode.split("\n").forEach((line, row) => {
+                this._code.update(
+                    [line],
+                    {row, column: 0},
+                    {row, column: line.length},
+                    "insert"
+                );
+            });
         }
 
         // should always have an owner... but this is here for test rooms 
@@ -192,11 +210,12 @@ export class OnlineRoom extends EventEmitter{
     // gets a summary of the room 
     public getSummary():RoomSummary{
         return {
-            name:       this.name,
-            size:       this.numPeople,
-            accessType: this.accessType,
-            editType:   this.editType,
-            owner:      this.ownerId
+            name:           this.name,
+            size:           this.numPeople,
+            accessType:     this.accessType,
+            editType:       this.editType,
+            owner:          this.ownerId,
+            description:    this.description
         };
     }
 
@@ -210,6 +229,11 @@ export class OnlineRoom extends EventEmitter{
     // getter for the room's unique name
     public get name():string{
         return this._name;
+    }
+
+    // getter for description 
+    public get description():string{
+        return this._description;
     }
 
     // getter for the room's access type (public, private)
