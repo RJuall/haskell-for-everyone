@@ -261,16 +261,30 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         let text = this.state.value;
         let textArr = text.split('\n');
         var indexArray = [];
+        var columnNumber = [];
         console.log(search);
         console.log(textArr);
 
         textArr.forEach((val,i) => {
             if(val.includes(search.search)){
-                indexArray.push(i+1);
+                indexArray.push(i);
             }
         })
 
         console.log(indexArray);
+
+        let filterTextArr = textArr.filter((str, i) => indexArray.indexOf(i) > -1);
+        let correctIndex = indexArray.map(val => val+1);
+
+        console.log(filterTextArr);
+        console.log(correctIndex);
+
+        filterTextArr.forEach((val,i) =>{
+            //console.log(val.indexOf(search.search));
+            columnNumber.push(val.indexOf(search.search))
+        })
+
+        
     }
 
     // when the editor changes... (no longer sync with file)
