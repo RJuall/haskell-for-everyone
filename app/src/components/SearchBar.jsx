@@ -17,7 +17,6 @@ export const SearchBar = inject("editorStore", "fileStore","windowStore")(observ
     }
 
     closeSearch(){
-        console.log("Close search bar");
         Object.assign(this.props.windowStore.windowSettings,{showSearch: false});
     }
 

@@ -259,13 +259,18 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
     handleFind = (search) =>{
         let text = this.state.value;
-        console.log(text);
+        let textArr = text.split('\n');
+        var indexArray = [];
         console.log(search);
-        if(text.includes(search.search)){
-            console.log("Yes");
-        }else{
-            console.log("No");
-        }
+        console.log(textArr);
+
+        textArr.forEach((val,i) => {
+            if(val.includes(search.search)){
+                indexArray.push(i+1);
+            }
+        })
+
+        console.log(indexArray);
     }
 
     // when the editor changes... (no longer sync with file)
