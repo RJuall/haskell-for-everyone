@@ -254,43 +254,38 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     }
 
     handleUndo = () => {
+        // handle the undo event triggered from menubar
         this.editorRef.current.editor.session.getUndoManager().undo();
     }
 
     handleRedo = () => {
+        // handle the redo event triggered from menubar
         this.editorRef.current.editor.session.getUndoManager().redo();
     }
 
     handleFind = (search,iterator) =>{
         let text = this.state.value;
-        let textArr = text.split('\n');
-        var indexArray = [];
-        var columnNumber = [];
-        console.log(search);
-        console.log(textArr);
+        let textArr = text.split('\n'); //split into array hold each line in the file
+        var indexArray = []; //array to store row numbers
+        var columnNumber = []; //array to store column number
 
+        // Loop through array and push line numbers that contain the search paremeters
         textArr.forEach((val,i) => {
             if(val.includes(search.search)){
                 indexArray.push(i);
             }
         })
 
-        console.log(indexArray);
-
+        // filter out so only lines remaining are the lines with only the search paremeters
         let filterTextArr = textArr.filter((str, i) => indexArray.indexOf(i) > -1);
-        let correctRow = indexArray.map(val => val+1);
+        //let correctRow = indexArray.map(val => val+1);
 
-        console.log(filterTextArr);
-        console.log(correctRow);
-
+        // Fill column array with the number in the line that the search paremeter starts at
         filterTextArr.forEach((val,i) =>{
             columnNumber.push(val.indexOf(search.search))
         })
 
-        console.log(iterator);
-
-        console.log(this.editorRef.current);
-
+        // Iterate either forwards or backwards based on what was selected in the search bar
         switch(iterator){
             case "Next":
                 this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
