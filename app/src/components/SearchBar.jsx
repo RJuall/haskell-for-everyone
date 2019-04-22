@@ -4,6 +4,8 @@ import FileDispatcher, { FILE_READ } from '../dispatchers/FileDispatcher';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import "./SearchBar.css";
 
 export const SearchBar = inject("editorStore", "fileStore","windowStore")(observer(class SearchBar extends React.Component {
     constructor(props) {
@@ -25,13 +27,23 @@ export const SearchBar = inject("editorStore", "fileStore","windowStore")(observ
         let fileName = (this.props.fileStore.fileSettings.lastFilePath || "").split("/").pop();
 
         return(
-            <div className="search-bar">
-                <input ref={this.searchInput} placeholder="Find"></input>
-                <button className="btn" onClick={() => EditorDispatcher.find(this.searchInput.current.value)} value={this.state.inputValue}>Search</button>
-                <input ref={this.replaceInput} placeholder="Replace"></input>
-                <button className="btn">Replace</button>
-                <button className="escButton" onClick={() => this.closeSearch()}>&#10005;</button>
-            </div>
+            <>
+            <Form inline className="mt-2 mb-2">
+                <FormGroup>
+                    <Label for="find" className="sr-only">Find</Label>
+                    <Input className="form-control-sm form-control" type="text" name="find" id="find" placeholder="Find" />
+                </FormGroup>
+                <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.find(this.searchInput.current.value)} value={this.state.inputValue}>Find</Button>
+            </Form>
+            <button className="escButton" onClick={() => this.closeSearch()}>&#10005;</button>
+            <Form inline className="mb-2">
+                <FormGroup>
+                    <Label for="replace" className="sr-only">Replace</Label>
+                    <Input className="form-control-sm form-control" type="text" name="replace" id="replace" placeholder="Replace" />
+                </FormGroup>
+                <Button className="btn btn-sm ml-2">Replace</Button>
+            </Form>
+            </>
         );
     }
 }));

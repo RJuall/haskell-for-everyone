@@ -165,7 +165,7 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
                                     >
 
                                         <Col className="editor-panel">
-                                        <div className="search-contianer">  
+                                        <div className="search-bar-container">  
                                             {showSearch ? this.showSearchBar() : null}
                                         </div>
                                             <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/> 

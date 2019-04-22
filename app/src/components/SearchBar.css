@@ -1,3 +1,7 @@
+.search-container{
+    padding-left: 10px;
+}
+
 .search-bar {
     padding-top: 10px;
     padding-bottom: 50px;
@@ -26,11 +30,10 @@
 }
 
 .escButton{
-    float:right;
-    background-color: Transparent;
-    background-repeat:no-repeat;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent;
     border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
 }
