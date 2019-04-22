@@ -59,6 +59,10 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
             value: '',
             canEdit: true
         };
+
+        window.addEventListener("keyup", () => {
+            this.handleReplace("x", "b");
+        })
     }
 
     // handler when a file is read
@@ -322,8 +326,11 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         console.log(this.move);   
     }
 
-    handleReplace = (replace,choice) => {
-        //handle the replace event triggered by the search menu
+    handleReplace = (replace, choice) => {
+        let regex = new RegExp(replace, "g");
+        let value = this.state.value.replace(regex, choice);
+        
+        this.setState({value});
     }
 
     // when the editor changes... (no longer sync with file)
