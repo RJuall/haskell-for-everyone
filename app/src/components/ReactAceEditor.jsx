@@ -51,6 +51,10 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         // websocket client listener id for removal on unmount 
         this.wsCallbackId = -1;
 
+        //to iterate to search arrays
+        this.move = React.createRef();
+        this.move = 0;
+
         this.state = {
             value: '',
             canEdit: true
@@ -285,18 +289,27 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
 
         console.log(iterator);
 
-        var move = 0;
-
         console.log(this.editorRef.current);
 
         switch(iterator){
             case "Next":
-                move += 1;
+                this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+                if(this.move >= correctRow.length){
+                    this.move = 0;
+                    this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+                }else{
+                    this.move += 1;
+                }
                 break;
             case "Previous":
-                move -= 1;
+                this.move -= 1;
+                if(this.move < 0){
+                    this.move = 0;
+                }
+                this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
                 break;
         }
+        console.log(this.move);
         
     }
 
