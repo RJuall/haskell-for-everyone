@@ -12,28 +12,31 @@ export const SearchBar = inject("editorStore", "fileStore","windowStore")(observ
         super(props);
 
         this.state={
-            inputValue : "",
+            findVal : "",
+            replaceVal : ""
         };
 
-        this.searchInput = React.createRef();
+        this.handleChange = this.handleChange.bind(this);
     }
 
     closeSearch(){
         Object.assign(this.props.windowStore.windowSettings,{showSearch: false});
     }
 
-    render() {
-        // file name to display 
-        let fileName = (this.props.fileStore.fileSettings.lastFilePath || "").split("/").pop();
+    handleChange(evt){
+        this.setState({findVal : evt.target.value});
+    }
 
+    render() {
         return(
             <>
             <Form inline className="mt-2 mb-2">
                 <FormGroup>
                     <Label for="find" className="sr-only">Find</Label>
-                    <Input className="form-control-sm form-control" type="text" name="find" id="find" placeholder="Find" />
+                    <Input className="form-control-sm form-control" type="text" name="find" id="find" placeholder="Find" value={this.state.findVal} onChange={this.handleChange}/>
                 </FormGroup>
-                <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.find(this.searchInput.current.value)} value={this.state.inputValue}>Find</Button>
+                <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.find(this.state.findVal,"Next")}>Next</Button>
+                <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.find(this.state.findVal,"Previous")}>Previous</Button>
             </Form>
             <button className="escButton" onClick={() => this.closeSearch()}>&#10005;</button>
             <Form inline className="mb-2">

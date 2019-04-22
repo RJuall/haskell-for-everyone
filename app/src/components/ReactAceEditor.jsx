@@ -257,7 +257,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.editorRef.current.editor.session.getUndoManager().redo();
     }
 
-    handleFind = (search) =>{
+    handleFind = (search,iterator) =>{
         let text = this.state.value;
         let textArr = text.split('\n');
         var indexArray = [];
@@ -274,16 +274,29 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         console.log(indexArray);
 
         let filterTextArr = textArr.filter((str, i) => indexArray.indexOf(i) > -1);
-        let correctIndex = indexArray.map(val => val+1);
+        let correctRow = indexArray.map(val => val+1);
 
         console.log(filterTextArr);
-        console.log(correctIndex);
+        console.log(correctRow);
 
         filterTextArr.forEach((val,i) =>{
-            //console.log(val.indexOf(search.search));
             columnNumber.push(val.indexOf(search.search))
         })
 
+        console.log(iterator);
+
+        var move = 0;
+
+        console.log(this.editorRef.current);
+
+        switch(iterator){
+            case "Next":
+                move += 1;
+                break;
+            case "Previous":
+                move -= 1;
+                break;
+        }
         
     }
 
