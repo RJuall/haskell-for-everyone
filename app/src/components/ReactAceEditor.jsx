@@ -280,7 +280,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         let filterTextArr = textArr.filter((str, i) => indexArray.indexOf(i) > -1);
         //let correctRow = indexArray.map(val => val+1);
 
-        // Fill column array with the number in the line that the search paremeter starts at
+        // Fill column array with the number in the line that the search parameter starts at
         filterTextArr.forEach((val,i) =>{
             columnNumber.push(val.indexOf(search.search))
         })
@@ -289,7 +289,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         switch(iterator){
             case "Next":
                 this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
-                if(this.move >= correctRow.length){
+                if(this.move >= indexArray.length){
                     this.move = 0;
                     this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
                 }else{
