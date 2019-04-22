@@ -31,7 +31,7 @@ export interface OnlineRoomOptions{
 }
 
 export class OnlineRoom extends EventEmitter{
-    public static readonly SUICIDE_INTERVAL:number = 60 * 60 * 1000;
+    public static readonly SUICIDE_INTERVAL:number = 60 * 60 * 1000; // one hour
     public static readonly POPULATION_CAP:number = parseInt(process.env.ROOM_POP_CAP) || 20;
 
     private _name:string;
