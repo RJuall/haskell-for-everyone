@@ -31,6 +31,7 @@ export interface OnlineRoomOptions{
 }
 
 export class OnlineRoom extends EventEmitter{
+    public static readonly SUICIDE_INTERVAL:number = 60 * 60 * 1000;
     public static readonly POPULATION_CAP:number = parseInt(process.env.ROOM_POP_CAP) || 20;
 
     private _name:string;
@@ -41,6 +42,7 @@ export class OnlineRoom extends EventEmitter{
     private _editType:EditType;
     private _code:CodeState;
     private _people:Map<string, OnlinePerson>;
+    private _suicideTimeoutId:NodeJS.Timeout;
 
     // @param name      name for the new room
     // @param owner     owner of hte room
@@ -57,6 +59,7 @@ export class OnlineRoom extends EventEmitter{
         this._editType = options.editType || "anyone";
         this._code = new CodeState();
         this._people = new Map();
+        this._suicideTimeoutId = null;
 
         // can't be public with a password
         if(this._password && this.accessType === "public"){
@@ -111,6 +114,9 @@ export class OnlineRoom extends EventEmitter{
         // success
         callback(null);
 
+        // remove kill interval if neccessary
+        this.stopSuicideTimeout();
+
         // inform users that the person joined 
         this.broadcastChat(`${person.name} connected.`);
     }
@@ -127,6 +133,9 @@ export class OnlineRoom extends EventEmitter{
             // (system to not have accumulating empty rooms)
             if(this.isEmpty){
                 this.emit("empty");
+
+                // start death timer
+                this.startSuicideTimeout();
             }
 
             // successful remove
@@ -205,6 +214,26 @@ export class OnlineRoom extends EventEmitter{
     // @param password  password to verify 
     public checkPassword(password:string):boolean{
         return password === this._password;
+    }
+
+    // starts the emit suicide timeout
+    private startSuicideTimeout():void{
+        // stop any current timeouts
+        this.stopSuicideTimeout();
+
+        // start the new time out (emit suicide when interval expires)
+        this._suicideTimeoutId = setTimeout(() => {
+            this.emit("suicide")
+        }, OnlineRoom.SUICIDE_INTERVAL);
+    }
+
+    // stops the emit suicide timeout
+    private stopSuicideTimeout():void{
+        // if there is a timer, clear it and forget the id data
+        if(this._suicideTimeoutId){
+            clearTimeout(this._suicideTimeoutId);     
+            this._suicideTimeoutId = null;
+        }  
     }
 
     // gets a summary of the room 

@@ -215,11 +215,8 @@ export class RoomsManager{
         // attempt to create the room
         this.createRoom(roomName, person, userName, {accessType, editType, password, description, initialCode}, (err, room) => {
             if(!err){
-                // room was created
-                //person.changeName(userName);
-
-                // kill room when empty 
-                room.on("empty", () => {
+                // kill room when empty after preset interval 
+                room.on("suicide", () => {
                     room.removeAllListeners();
                     this._rooms.delete(room.name);
                     room = null;
