@@ -11,23 +11,23 @@ export const SearchBar = inject("editorStore", "fileStore","windowStore")(observ
     constructor(props) {
         super(props);
 
-        this.state={
-            //findVal : "",
-            replaceVal : ""
-        };
-
         this.findVal = React.createRef();
-        this.handleChange = this.handleChange.bind(this);
+        this.replaceVal = React.createRef();
+        this.handleFindChange = this.handleFindChange.bind(this);
+       // this.handleReplaceChange = this.handleReplaceChange.bind(this);
     }
 
     closeSearch(){
         Object.assign(this.props.windowStore.windowSettings,{showSearch: false});
     }
 
-    handleChange(evt){
-        //this.setState({findVal : evt.target.value});
+    handleFindChange(evt){
         this.findVal = evt.target.value;
     }
+
+    // handleReplaceChange(evt){
+    //     this.replaceVal = evt.target.value;
+    // }
 
     render() {
         return(
@@ -35,7 +35,7 @@ export const SearchBar = inject("editorStore", "fileStore","windowStore")(observ
             <Form inline className="mt-2 mb-2">
                 <FormGroup>
                     <Label for="find" className="sr-only">Find</Label>
-                    <Input className="form-control-sm form-control" type="text" name="find" id="find" placeholder="Find" value={this.state.findVal} onChange={this.handleChange}/>
+                    <Input className="form-control-sm form-control" type="text" name="find" id="find" placeholder="Find" onChange={this.handleFindChange}/>
                 </FormGroup>
                 <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.find(this.findVal,"Next")}>Next</Button>
                 <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.find(this.findVal,"Previous")}>Previous</Button>
@@ -44,9 +44,10 @@ export const SearchBar = inject("editorStore", "fileStore","windowStore")(observ
             <Form inline className="mb-2">
                 <FormGroup>
                     <Label for="replace" className="sr-only">Replace</Label>
-                    <Input className="form-control-sm form-control" type="text" name="replace" id="replace" placeholder="Replace" />
+                    <Input className="form-control-sm form-control" type="text" name="replace" id="replace" placeholder="Replace" onChange={this.handleReplaceChange}/>
                 </FormGroup>
-                <Button className="btn btn-sm ml-2">Replace</Button>
+                <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.replace(this.replaceVal, "one")}>Replace</Button>
+                <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.replace(this.replaceVal, "all")}>Replace All</Button>
             </Form>
             </>
         );

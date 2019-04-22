@@ -264,10 +264,13 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     }
 
     handleFind = (search,iterator) =>{
+        // handle the find event triggered from the search menu
         let text = this.state.value;
-        let textArr = text.split('\n'); //split into array hold each line in the file
+        let textArr = text.split('\n'); //split into array hold each line as an element
         var indexArray = []; //array to store row numbers
         var columnNumber = []; //array to store column number
+
+        console.log(search.search);
 
         // Loop through array and push line numbers that contain the search paremeters
         textArr.forEach((val,i) => {
@@ -286,26 +289,41 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         })
 
         // Iterate either forwards or backwards based on what was selected in the search bar
-        switch(iterator){
-            case "Next":
-                this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
-                if(this.move >= indexArray.length){
-                    this.move = 0;
-                    this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
-                }else{
-                    this.move += 1;
-                }
-                break;
-            case "Previous":
-                this.move -= 1;
-                if(this.move < 0){
-                    this.move = 0;
-                }
-                this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
-                break;
+        // switch(iterator){
+        //     case "Next":
+        //         // this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        //         if(this.move >= indexArray.length){
+        //             this.move = 0;
+        //             // this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        //         }else{
+        //             this.move += 1;
+        //         }
+        //         this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        //         break;
+        //     case "Previous":
+        //         this.move -= 1;
+        //         if(this.move < 0){
+        //             this.move = 0;
+        //         }
+        //         this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        //         break;
+        // }
+        //this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        if(iterator === "Next"){
+            if(++this.move >= indexArray.length){
+                this.move = 0
+            }
+        }else{
+            if(--this.move < 0){
+                this.move = 0
+            }
         }
-        console.log(this.move);
-        
+        this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        console.log(this.move);   
+    }
+
+    handleReplace = (replace,choice) => {
+        //handle the replace event triggered by the search menu
     }
 
     // when the editor changes... (no longer sync with file)
