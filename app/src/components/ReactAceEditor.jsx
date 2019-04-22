@@ -326,10 +326,12 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         console.log(this.move);   
     }
 
-    handleReplace = (replace, choice) => {
-        let regex = new RegExp(replace, "g");
+    // should this be..... handleReplace({replace, choice}) => { 
+    handleReplace = (replace, choice, replaceAll=false) => {
+        let flags = replaceAll ? "g" : "";
+        let regex = new RegExp(replace, flags);
         let value = this.state.value.replace(regex, choice);
-        
+
         this.setState({value});
     }
 
