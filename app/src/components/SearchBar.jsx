@@ -14,7 +14,7 @@ export const SearchBar = inject("editorStore", "fileStore","windowStore")(observ
         this.findVal = React.createRef();
         this.replaceVal = React.createRef();
         this.handleFindChange = this.handleFindChange.bind(this);
-       // this.handleReplaceChange = this.handleReplaceChange.bind(this);
+       this.handleReplaceChange = this.handleReplaceChange.bind(this);
     }
 
     closeSearch(){
@@ -25,9 +25,9 @@ export const SearchBar = inject("editorStore", "fileStore","windowStore")(observ
         this.findVal = evt.target.value;
     }
 
-    // handleReplaceChange(evt){
-    //     this.replaceVal = evt.target.value;
-    // }
+    handleReplaceChange(evt){
+        this.replaceVal = evt.target.value;
+    }
 
     render() {
         return(

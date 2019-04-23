@@ -51,9 +51,25 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         // websocket client listener id for removal on unmount 
         this.wsCallbackId = -1;
 
-        //to iterate to search arrays
+        //to move cursor in editor
         this.move = React.createRef();
-        this.move = 0;
+        this.move = -1;
+
+        //ref to get text as array and filter array
+        this.textArr = React.createRef();
+        this.textArr = [];
+        this.filteredTextArr = React.createRef();
+        this.filteredTextArr = [];
+
+        //arrays to store line numbers and column numbers
+        this.lineNum = React.createRef();
+        this.lineNum = [];
+        this.colNum = React.createRef();
+        this.colNum = [];
+
+        // search value
+        this.searchVal = React.createRef();
+        this.searchVal = "";
 
         this.state = {
             value: '',
@@ -267,54 +283,31 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.editorRef.current.editor.session.getUndoManager().redo();
     }
 
-    handleFind = (search,iterator) =>{
+    handleFind = (search,choice) =>{
         // handle the find event triggered from the search menu
         let text = this.state.value;
-        let textArr = text.split('\n'); //split into array hold each line as an element
-        var indexArray = []; //array to store row numbers
-        var columnNumber = []; //array to store column number
-
-        console.log(search.search);
+        this.textArr = text.split('\n'); //split into array hold each line as an element
+        this.searchVal = search; // set global value for search 
 
         // Loop through array and push line numbers that contain the search paremeters
-        textArr.forEach((val,i) => {
-            if(val.includes(search.search)){
-                indexArray.push(i);
+        this.textArr.forEach((val,i) => {
+            if(val.includes(search)){
+                this.lineNum.push(i);
             }
         })
 
         // filter out so only lines remaining are the lines with only the search paremeters
-        let filterTextArr = textArr.filter((str, i) => indexArray.indexOf(i) > -1);
+        this.filteredTextArr = this.textArr.filter((str, i) => this.lineNum.indexOf(i) > -1);
         //let correctRow = indexArray.map(val => val+1);
 
         // Fill column array with the number in the line that the search parameter starts at
-        filterTextArr.forEach((val,i) =>{
-            columnNumber.push(val.indexOf(search.search))
+        this.filteredTextArr.forEach((val,i) =>{
+            this.colNum.push(val.indexOf(search))
         })
 
-        // Iterate either forwards or backwards based on what was selected in the search bar
-        // switch(iterator){
-        //     case "Next":
-        //         // this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
-        //         if(this.move >= indexArray.length){
-        //             this.move = 0;
-        //             // this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
-        //         }else{
-        //             this.move += 1;
-        //         }
-        //         this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
-        //         break;
-        //     case "Previous":
-        //         this.move -= 1;
-        //         if(this.move < 0){
-        //             this.move = 0;
-        //         }
-        //         this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
-        //         break;
-        // }
-        //this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
-        if(iterator === "Next"){
-            if(++this.move >= indexArray.length){
+        // Go to a line in the editor based on whether next/previous were clicked.
+        if(choice === "Next"){
+            if(++this.move >= this.lineNum.length){
                 this.move = 0
             }
         }else{
@@ -322,17 +315,32 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                 this.move = 0
             }
         }
-        this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
-        console.log(this.move);   
+        this.editorRef.current.editor.selection.moveTo(this.lineNum[this.move],this.colNum[this.move]); 
     }
+ 
+    handleReplace = (replace, choice) => {
+        // Handle Replace event triggered by the search bar
+        // let flags = replaceAll ? "g" : "";
+        // let regex = new RegExp(replace, flags);
+        // let value = this.state.value.replace(regex, choice);
 
-    // should this be..... handleReplace({replace, choice}) => { 
-    handleReplace = (replace, choice, replaceAll=false) => {
-        let flags = replaceAll ? "g" : "";
-        let regex = new RegExp(replace, flags);
-        let value = this.state.value.replace(regex, choice);
-
-        this.setState({value});
+        // this.setState({value});
+        // console.log(this.searchVal);
+        //console.log(replace);
+        var text = this.textArr
+        if(choice === "one"){
+            if(this.move != -1){
+                this.textArr[this.lineNum[this.move]] = this.textArr[this.lineNum[this.move]].replace(this.searchVal,replace);
+            }
+            let textStringOne = this.textArr.join('\n');
+            this.setState({value: textStringOne});
+        }else if(choice ==="all"){
+            this.lineNum.forEach((line,row) =>{
+                this.textArr[line] = this.textArr[line].replace(this.searchVal,replace);
+            });
+            let textStringAll = this.textArr.join('\n');
+            this.setState({value: textStringAll});
+        }
     }
 
     // when the editor changes... (no longer sync with file)
@@ -408,6 +416,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         EditorDispatcher.on("undo", this.handleUndo);
         EditorDispatcher.on("redo", this.handleRedo);
         EditorDispatcher.on("find", this.handleFind);
+        EditorDispatcher.on("replace",this.handleReplace);
 
         // listening for websocket updates
         this.wsCallbackId = WSClient.register(this.handleWsClientUpdate);
@@ -427,6 +436,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         EditorDispatcher.removeListener("undo",this.handleUndo);
         EditorDispatcher.removeListener("redo", this.handleRedo);
         EditorDispatcher.removeListener("find", this.handleFind);
+        EditorDispatcher.removeListener("replace",this.handleReplace);
 
         // stop listening for websocket updates
         WSClient.unregister(this.wsCallbackId);
