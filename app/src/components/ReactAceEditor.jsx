@@ -320,14 +320,6 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
  
     handleReplace = (replace, choice) => {
         // Handle Replace event triggered by the search bar
-        // let flags = replaceAll ? "g" : "";
-        // let regex = new RegExp(replace, flags);
-        // let value = this.state.value.replace(regex, choice);
-
-        // this.setState({value});
-        // console.log(this.searchVal);
-        //console.log(replace);
-        var text = this.textArr
         if(choice === "one"){
             if(this.move != -1){
                 this.textArr[this.lineNum[this.move]] = this.textArr[this.lineNum[this.move]].replace(this.searchVal,replace);
