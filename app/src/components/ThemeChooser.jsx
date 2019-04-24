@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
 
-export const ThemeChooser = inject("editorStore")(observer(class ThemeChooser extends React.Component {
+export const ThemeChooser = inject("editorStore","windowStore")(observer(class ThemeChooser extends React.Component {
     constructor(props) {
         super(props);
 
@@ -10,6 +10,14 @@ export const ThemeChooser = inject("editorStore")(observer(class ThemeChooser ex
         //    a theme change event
         this.selectTheme = action( event => {
             this.props.editorStore.editorSettings.theme = event.target.value;
+            if(this.props.editorStore.editorSettings.theme === "github" || this.props.editorStore.editorSettings.theme === "Tomorrow" || 
+                this.props.editorStore.editorSettings.theme === "kuroir" || this.props.editorStore.editorSettings.theme === "xcode" ||
+                this.props.editorStore.editorSettings.theme === "textmate" || this.props.editorStore.editorSettings.theme === "solarized_light" ||
+                this.props.editorStore.editorSettings.theme === "eclipse"){
+                    Object.assign(this.props.windowStore.windowSettings,{theme : "light"});
+                }else{
+                    Object.assign(this.props.windowStore.windowSettings,{theme : "dark"});
+                }
         })
 }
 
