@@ -289,20 +289,28 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         this.textArr = text.split('\n'); //split into array hold each line as an element
         this.searchVal = search; // set global value for search 
 
+        var idx = 0;
         // Loop through array and push line numbers that contain the search paremeters
         this.textArr.forEach((val,i) => {
             if(val.includes(search)){
-                this.lineNum.push(i);
+                for(idx; (idx = val.indexOf(search,idx)) >= 0; idx++){
+                    this.lineNum.push(i);
+                }
             }
         })
 
         // filter out so only lines remaining are the lines with only the search paremeters
         this.filteredTextArr = this.textArr.filter((str, i) => this.lineNum.indexOf(i) > -1);
         //let correctRow = indexArray.map(val => val+1);
-
+        var index = -1;
         // Fill column array with the number in the line that the search parameter starts at
         this.filteredTextArr.forEach((val,i) =>{
-            this.colNum.push(val.indexOf(search))
+            do{
+                index = val.indexOf(search, index+1);
+                if(index >= 0){
+                    this.colNum.push(index);
+                }
+            }while(index >= 0);          
         })
 
         // Go to a line in the editor based on whether next/previous were clicked.
