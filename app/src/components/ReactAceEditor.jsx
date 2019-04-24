@@ -53,6 +53,10 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         // websocket client listener id for removal on unmount 
         this.wsCallbackId = -1;
 
+        //to iterate to search arrays
+        this.move = React.createRef();
+        this.move = 0;
+
         this.state = {
             value: '',
             canEdit: true
@@ -252,11 +256,76 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     }
 
     handleUndo = () => {
+        // handle the undo event triggered from menubar
         this.editorRef.current.editor.session.getUndoManager().undo();
     }
 
     handleRedo = () => {
+        // handle the redo event triggered from menubar
         this.editorRef.current.editor.session.getUndoManager().redo();
+    }
+
+    handleFind = (search,iterator) =>{
+        // handle the find event triggered from the search menu
+        let text = this.state.value;
+        let textArr = text.split('\n'); //split into array hold each line as an element
+        var indexArray = []; //array to store row numbers
+        var columnNumber = []; //array to store column number
+
+        console.log(search.search);
+
+        // Loop through array and push line numbers that contain the search paremeters
+        textArr.forEach((val,i) => {
+            if(val.includes(search.search)){
+                indexArray.push(i);
+            }
+        })
+
+        // filter out so only lines remaining are the lines with only the search paremeters
+        let filterTextArr = textArr.filter((str, i) => indexArray.indexOf(i) > -1);
+        //let correctRow = indexArray.map(val => val+1);
+
+        // Fill column array with the number in the line that the search parameter starts at
+        filterTextArr.forEach((val,i) =>{
+            columnNumber.push(val.indexOf(search.search))
+        })
+
+        // Iterate either forwards or backwards based on what was selected in the search bar
+        // switch(iterator){
+        //     case "Next":
+        //         // this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        //         if(this.move >= indexArray.length){
+        //             this.move = 0;
+        //             // this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        //         }else{
+        //             this.move += 1;
+        //         }
+        //         this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        //         break;
+        //     case "Previous":
+        //         this.move -= 1;
+        //         if(this.move < 0){
+        //             this.move = 0;
+        //         }
+        //         this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        //         break;
+        // }
+        //this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        if(iterator === "Next"){
+            if(++this.move >= indexArray.length){
+                this.move = 0
+            }
+        }else{
+            if(--this.move < 0){
+                this.move = 0
+            }
+        }
+        this.editorRef.current.editor.selection.moveTo(indexArray[this.move],columnNumber[this.move]);
+        console.log(this.move);   
+    }
+
+    handleReplace = (replace,choice) => {
+        //handle the replace event triggered by the search menu
     }
 
     // when the editor changes... (no longer sync with file)
@@ -331,6 +400,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         EditorDispatcher.on("online-file", this.handleOnlineFile);
         EditorDispatcher.on("undo", this.handleUndo);
         EditorDispatcher.on("redo", this.handleRedo);
+        EditorDispatcher.on("find", this.handleFind);
 
         // listening for websocket updates
         this.wsCallbackId = WSClient.register(this.handleWsClientUpdate);
@@ -349,6 +419,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         EditorDispatcher.removeListener("online-file", this.handleOnlineFile);
         EditorDispatcher.removeListener("undo",this.handleUndo);
         EditorDispatcher.removeListener("redo", this.handleRedo);
+        EditorDispatcher.removeListener("find", this.handleFind);
 
         // stop listening for websocket updates
         WSClient.unregister(this.wsCallbackId);
@@ -357,6 +428,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
     render() {
         return(
             <div>
+                
                 <AceEditor
                     readOnly={!this.state.canEdit}
                     mode={this.props.editorStore.editorSettings.mode}

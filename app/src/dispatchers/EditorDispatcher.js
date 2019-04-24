@@ -72,12 +72,25 @@ class EditorDispatcher extends EventEmitter {
         this.emit("online-file");
     }
 
+    //signals the Undo command
     Undo(){
         this.emit("undo");
     }
 
+    // signals the redo command
     Redo(){
-        this.emit("redo")
+        this.emit("redo");
+    }
+
+    //signals the find command
+    find(search,iterator){
+        //console.log("Whats being searched: "+ search.search);
+        this.emit("find",{search},iterator);
+    }
+
+    // signals the replace command
+    replace(replace,choice){
+        this.emit("replace",{replace},choice);
     }
 }
 

@@ -26,6 +26,14 @@ body{
     height: 60px;
 }
 
+.search-container{
+    padding: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 5;
+    color:#ffffff;
+}
+
 .body-elems {
     margin-top: 85px;
 }
@@ -189,6 +197,10 @@ body{
 }
 
 .theme--light .room-name{
+    color: rgba(0,0,0,.7);
+}
+
+.theme--light .search-container{
     color: rgba(0,0,0,.7);
 }
 
