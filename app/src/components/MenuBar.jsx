@@ -55,7 +55,7 @@ export const MenuBar = inject("editorStore","windowStore")(observer (class MenuB
     }
 
     toggleTheme(){
-        this.setState({toggleTheme: !this.state.toggletheme})
+        this.setState({toggleTheme: !this.state.toggleTheme})
     }
 
     //Chnage the background color of window between light and dark
