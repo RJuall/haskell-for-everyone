@@ -83,14 +83,13 @@ class EditorDispatcher extends EventEmitter {
     }
 
     //signals the find command
-    find(search,iterator){
-        //console.log("Whats being searched: "+ search.search);
-        this.emit("find",{search},iterator);
+    find(search,choice){
+        this.emit("find",search,choice);
     }
 
     // signals the replace command
     replace(replace,choice){
-        this.emit("replace",{replace},choice);
+        this.emit("replace",replace,choice);
     }
 }
 
