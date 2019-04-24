@@ -12,7 +12,7 @@ import { observer, inject } from 'mobx-react';
 import { VERSION } from './App';
 
 
-export const MenuBar = inject("windowStore")(observer (class MenuBar extends React.Component {
+export const MenuBar = inject("editorStore","windowStore")(observer (class MenuBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +23,9 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
             background: false,
             hideGHCI: false, // state for whether the GHCI console is shown or not
             hideFile: false, // state for whether the file list is shown or not
-            showSearch: false
+            showSearch: false,
+            toggleTheme: false,
+            theme: this.props.editorStore.editorSettings.theme
         };
 
     }
@@ -52,13 +54,16 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
         this.setState({about: !this.state.about});
     }
 
+    toggleTheme(){
+        this.setState({toggleTheme: !this.state.toggletheme})
+    }
+
     //Chnage the background color of window between light and dark
     toggleBackgroundColor(){
         if(this.props.windowStore.windowSettings.theme === "dark"){
             this.props.windowStore.windowSettings.theme = "light";
         } else {
             this.props.windowStore.windowSettings.theme = "dark";
-
         }
     }
 
@@ -91,6 +96,19 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
         //If true then show the searchbar, else if false then hide the search bar
         console.log("Called search bar");
         Object.assign(this.props.windowStore.windowSettings,{showSearch: true});
+    }
+
+    selectTheme(theme){
+        console.log(theme.target.value);
+        this.props.editorStore.editorSettings.theme = theme.target.value;
+        if(this.props.editorStore.editorSettings.theme === "github" || this.props.editorStore.editorSettings.theme === "Tomorrow" || 
+            this.props.editorStore.editorSettings.theme === "kuroir" || this.props.editorStore.editorSettings.theme === "xcode" ||
+            this.props.editorStore.editorSettings.theme === "textmate" || this.props.editorStore.editorSettings.theme === "solarized_light" ||
+            this.props.editorStore.editorSettings.theme === "eclipse"){
+            Object.assign(this.props.windowStore.windowSettings,{theme : "light"});
+        }else{
+            Object.assign(this.props.windowStore.windowSettings,{theme : "dark"});
+        }
     }
 
     render() {
@@ -138,6 +156,26 @@ export const MenuBar = inject("windowStore")(observer (class MenuBar extends Rea
                         <DropdownItem onClick={this.toggleGhciConsole.bind(this)}>Toggle GHCI Console</DropdownItem>
                         <DropdownItem onClick={this.toggleFileList.bind(this)}>Toggle File List</DropdownItem>
                         <DropdownItem onClick={this.toggleBackgroundColor.bind(this)}>{toggleBgColor}</DropdownItem>
+                        <DropdownItem divider />
+                        <Dropdown nav isOpen={this.state.toggleTheme} toggle={this.toggleTheme.bind(this)}>
+                            <DropdownToggle nav className="menuItem"> 
+                                Editor Theme 
+                            </DropdownToggle>
+                                <DropdownMenu>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="dracula">Dracula</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="github">Github</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="tomorrow">Tomorrow</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="kuroir">Kuroir</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="twilight">Twilight</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="xcode">Xcode</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="textmate">TextMate</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="solarized_dark">Solarized Dark</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="solarized_light">Solarized Light</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="terminal">Terminal</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="monokai">Monokai</DropdownItem>
+                                    <DropdownItem onClick={this.selectTheme.bind(this)} value="eclipse">Eclipse</DropdownItem>
+                                </DropdownMenu>
+                        </Dropdown>
                     </DropdownMenu>
                 </Dropdown>
                 <Dropdown nav isOpen={this.state.about} toggle={this.toggleAbout.bind(this)}>

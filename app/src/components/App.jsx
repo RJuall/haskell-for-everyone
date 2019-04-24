@@ -137,7 +137,7 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
         let toggleFile = this.props.windowStore.windowSettings.hideFile;
         let toggleGHCI = this.props.windowStore.windowSettings.hideGHCI;
         let showSearch = this.props.windowStore.windowSettings.showSearch
-        console.log("File list render toggle: "+toggleFile);
+
         return (
             <>
                 <div className="iconbar-container">
