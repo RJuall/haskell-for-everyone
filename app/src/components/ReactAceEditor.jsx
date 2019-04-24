@@ -32,7 +32,7 @@ import 'brace/theme/twilight';
 // allows code completion
 import 'brace/ext/language_tools';
 
-export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class ReactAceEditor extends React.Component {
+export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(observer(class ReactAceEditor extends React.Component {
     constructor(props) {
         super(props);
         // ref for ace editor 
@@ -407,6 +407,11 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
         }
     })
 
+    toggleSearchBar = () => {
+        //If true then show the searchbar, else if false then hide the search bar
+        Object.assign(this.props.windowStore.windowSettings,{showSearch: true});
+    }
+
     componentDidMount() {
         // listen for events
         FileDispatcher.on(FILE_READ, this.handleFileRead);
@@ -518,6 +523,11 @@ export const ReactAceEditor = inject("editorStore", "fileStore")(observer(class 
                                 )
                             }
                         }
+                    },
+                    {
+                        name:'find',
+                        bindKey:{win: 'Ctrl-f',mac: 'Command-f'},
+                        exec:() =>{this.toggleSearchBar()}
                     }
                     ]}
                 ></AceEditor>
