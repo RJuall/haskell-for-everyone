@@ -78,7 +78,7 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
             );
         });
 
-        Mousetrap.bind('ctrl f',() => {
+        Mousetrap.bind('ctrl+f',() => {
             Object.assign(this.props.windowStore.windowSettings,{showSearch:true});
         });
 
@@ -111,7 +111,7 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
         fileStore.cleanUp();
         windowStore.cleanUp();
         Mousetrap.unbind('up up down down left right left right b a enter');
-
+        Mousetrap.unbind('ctrl+f');
     }
 
     toggleWidthEditor(toggleFile,toggleGHCI){
