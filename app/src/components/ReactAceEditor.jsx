@@ -293,6 +293,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
 
         var idx = 0;
         // Loop through array and push line numbers that contain the search paremeters
+        this.lineNum = [];
         this.textArr.forEach((val,i) => {
             if(val.includes(search)){
                 for(idx; (idx = val.indexOf(search,idx)) >= 0; idx++){
@@ -306,6 +307,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
         //let correctRow = indexArray.map(val => val+1);
         var index = -1;
         // Fill column array with the number in the line that the search parameter starts at
+        this.colNum = [];
         this.filteredTextArr.forEach((val,i) =>{
             do{
                 index = val.indexOf(search, index+1);
