@@ -13,6 +13,8 @@ import 'brace/mode/haskell';
 import 'brace/mode/markdown';
 import 'brace/mode/plain_text';
 
+// import 'brace/ext/searchbox';
+
 // import ce themes
 import 'brace/theme/dracula';
 import 'brace/theme/solarized_light';
