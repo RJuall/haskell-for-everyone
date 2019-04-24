@@ -95,7 +95,9 @@ export class ModalCreateRoom extends React.Component{
 
     onFileClick = () => {
         SelectFileFolder.selectFileDialog(filePaths => {
-            this.setState({filePath: filePaths[0]});
+            if(filePaths){
+                this.setState({filePath: filePaths[0]});
+            }
         });
     }
 
