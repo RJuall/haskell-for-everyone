@@ -315,6 +315,9 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
             }while(index >= 0);          
         })
 
+        console.log("Lines that contain "+ this.searchVal+": "+this.lineNum);
+        console.log("Columns in lines that contain "+ this.searchVal+": "+this.colNum);
+
         // Go to a line in the editor based on whether next/previous were clicked.
         if(choice === "Next"){
             if(++this.move >= this.lineNum.length){
@@ -334,12 +337,19 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
             if(this.move != -1){
                 this.textArr[this.lineNum[this.move]] = this.textArr[this.lineNum[this.move]].replace(this.searchVal,replace);
             }
+            this.lineNum.splice(this.move,1);
+            this.colNum.splice(this.move,1);
             let textStringOne = this.textArr.join('\n');
             this.setState({value: textStringOne});
         }else if(choice ==="all"){
             this.lineNum.forEach((line,row) =>{
                 this.textArr[line] = this.textArr[line].replace(this.searchVal,replace);
+
             });
+            this.lineNum = [];
+            this.colNum = [];
+            console.log(this.lineNum);
+            console.log(this.colNum);
             let textStringAll = this.textArr.join('\n');
             this.setState({value: textStringAll});
         }
