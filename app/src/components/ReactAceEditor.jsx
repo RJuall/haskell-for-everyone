@@ -349,12 +349,28 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
             let textStringOne = this.textArr.join('\n');
             this.setState({value: textStringOne});
         }else if(choice ==="all"){
+            if(!this.searchVal){
+                // replace all with empty this.searchVal causes insane results! 
+                return;
+            }
+
             // choice is all so replace every instance of the search parameter
             // ignoring what has been replaced by the one choice if any have been chnaged at all.
-            let textStringAll = this.textArr.join('\n');
-            var re = new RegExp(this.searchVal, 'g');
-            let replaceString = textStringAll.replace(re,replace);
-            this.setState({value: replaceString});
+            //let textStringAll = this.textArr.join('\n');
+            let re = new RegExp(`(${this.searchVal})(?=\\s|$)`, "g");
+
+            // replace
+            let replaceString = this.state.value.replace(re, replace);
+
+            // update editor
+            this.setState({value: replaceString}, () => {
+                // update text array 
+                this.textArr = this.state.value.split("\n");
+                // reset find/replace (might not be neccessary?)
+                this.move = -1;
+                this.lineNum = [];
+                this.colNum = [];
+            });
         }
     }
 
