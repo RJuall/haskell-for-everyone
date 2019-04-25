@@ -25,6 +25,7 @@ export const MenuBar = inject("editorStore","windowStore")(observer (class MenuB
             hideFile: false, // state for whether the file list is shown or not
             showSearch: false,
             toggleTheme: false,
+            toggleLayout : false,
             theme: this.props.editorStore.editorSettings.theme
         };
 
@@ -56,6 +57,10 @@ export const MenuBar = inject("editorStore","windowStore")(observer (class MenuB
 
     toggleTheme(){
         this.setState({toggleTheme: !this.state.toggleTheme})
+    }
+
+    toggleLayout(){
+        this.setState({toggleLayout: !this.state.toggleLayout})
     }
 
     //Chnage the background color of window between light and dark
@@ -109,6 +114,11 @@ export const MenuBar = inject("editorStore","windowStore")(observer (class MenuB
         }else{
             Object.assign(this.props.windowStore.windowSettings,{theme : "dark"});
         }
+    }
+
+    setLayout(layout){
+        Object.assign(this.props.editorStore.editorSettings,{layout: layout.target.value});
+        //console.log(this.props.editorStore.editorSettings.layout);
     }
 
     render() {
@@ -174,6 +184,16 @@ export const MenuBar = inject("editorStore","windowStore")(observer (class MenuB
                                     <DropdownItem onClick={this.selectTheme.bind(this)} value="terminal">Terminal</DropdownItem>
                                     <DropdownItem onClick={this.selectTheme.bind(this)} value="monokai">Monokai</DropdownItem>
                                     <DropdownItem onClick={this.selectTheme.bind(this)} value="eclipse">Eclipse</DropdownItem>
+                                </DropdownMenu>
+                        </Dropdown>
+                        <DropdownItem divider />
+                        <Dropdown nav isOpen={this.state.toggleLayout} toggle={this.toggleLayout.bind(this)}>
+                            <DropdownToggle nav className="menuItem"> 
+                                Editor Layout
+                            </DropdownToggle>
+                                <DropdownMenu>
+                                    <DropdownItem onClick={this.setLayout.bind(this)} value="vertical">Vertical GHCI</DropdownItem>
+                                    <DropdownItem onClick={this.setLayout.bind(this)} value="horizontal">Horizontal GHCI</DropdownItem>
                                 </DropdownMenu>
                         </Dropdown>
                     </DropdownMenu>

@@ -10,7 +10,6 @@ class WindowStore {
  
         this.windowSettings = {
             theme: "dark",
-            layout: "horizontal",
             hideFile: false,
             hideGHCI: false,
             showSearch: false

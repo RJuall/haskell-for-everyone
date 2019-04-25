@@ -21,6 +21,7 @@ class EditorStore {
             enableSnippets: editorDefaults.enableSnippets,
             blockScrolling: editorDefaults.blockScrolling,
             wrapEnabled: editorDefaults.wrapEnabled,
+            layout: "vertical"
         }
 
         IpcRequester.on("settings-get", ({settings}) => {
@@ -42,7 +43,8 @@ class EditorStore {
             enableLiveAutocompletion: this.editorSettings.enableLiveAutocompletion,
             enableSnippets: this.editorSettings.enableSnippets,
             blockScrolling: this.editorSettings.blockScrolling,
-            wrapEnabled: this.editorSettings.wrapEnabled            
+            wrapEnabled: this.editorSettings.wrapEnabled,
+            layout: this.editorSettings.layout            
         }
         settingsStore.updateSettings(editorSettings);
     }))

@@ -114,14 +114,18 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
         Mousetrap.unbind('ctrl+f');
     }
 
-    toggleWidthEditor(toggleFile,toggleGHCI){
-        if(toggleFile && toggleGHCI){
+    toggleWidthEditor(toggleFile,toggleGHCI,editorLayout){
+        if(toggleFile && toggleGHCI && editorLayout){
+            // if both are toggled
             return window.innerWidth;
-        }else if(!toggleFile && toggleGHCI){
+        }else if(!toggleFile && toggleGHCI && editorLayout){
+            // if filelist is not toggled and GHCI is
             return window.innerWidth*2;
-        }else if(toggleFile && !toggleGHCI){
+        }else if(toggleFile && !toggleGHCI && !editorLayout){
+             // if filelist is toggled and GHCI is not
             return window.innerWidth/2;
         }else{
+            // If neither are toggled
             return this.state.setEdColWidth;
         }
     }
@@ -133,10 +137,47 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
         );
     }
 
+    horizontalLayout(){
+        return(
+            <div>
+                <row>
+                    <div className="horizLayoutGHCI">
+                        <GhciConsole/>
+                    </div>
+                    <div className="horizLayoutRoom">
+                        <RoomContainer/>
+                    </div>
+                </row>
+            </div>
+        );
+    }
+
+    verticalLayout(){
+        return(
+            <div>
+            <Col className="ghci-panel">
+                <GhciConsole/>
+                <RoomContainer/>
+                {/* RoomContainer does not appear when outside this <Col>....? */}
+            </Col>
+            </div>
+        );
+    }
+
     render(){
         let toggleFile = this.props.windowStore.windowSettings.hideFile;
         let toggleGHCI = this.props.windowStore.windowSettings.hideGHCI;
-        let showSearch = this.props.windowStore.windowSettings.showSearch
+        let showSearch = this.props.windowStore.windowSettings.showSearch;
+
+        let editorLayout;
+
+        if(this.props.windowStore.windowSettings.layout === "vertical"){
+            // vertical layout
+            editorLayout = false;
+        }else{
+            // Horizontal layout
+            editorLayout = true;
+        }
 
         return (
             <>
@@ -160,7 +201,7 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
                                     <SplitPane 
                                         split="vertical" 
                                         minSize={375} 
-                                        size={this.toggleWidthEditor(toggleFile,toggleGHCI)}//toggleFile ? window.innerWidth/2 : this.state.setEdColWidth }
+                                        size={this.toggleWidthEditor(toggleFile,toggleGHCI,editorLayout)}//toggleFile ? window.innerWidth/2 : this.state.setEdColWidth }
                                         onDragFinished={size => {console.log(size); this.setState({currentEdColWidth: size})}}
                                     >
 
@@ -169,13 +210,14 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
                                             {showSearch ? this.showSearchBar() : null}
                                         </div>
                                             <Editor editorSettings={this.state.settings ? this.state.settings.editorSettings : null}/> 
+                                            {editorLayout ? this.horizontalLayout() : null}
                                         </Col>
-                                            <Col className="ghci-panel" hidden={toggleGHCI}>
+                                            {editorLayout ? null : this.verticalLayout()}
+                                            {/* <Col className="ghci-panel" hidden={toggleGHCI}>
                                                 <GhciConsole/>
-                                                <RoomContainer/>
+                                                <RoomContainer/> */}
                                                 {/* RoomContainer does not appear when outside this <Col>....? */}
-                                            </Col>
-                                            <div></div>
+                                            {/* </Col> */}
                                     </SplitPane>
                                 </div>
                             </SplitPane>

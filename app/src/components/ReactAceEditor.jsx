@@ -424,6 +424,22 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
         Object.assign(this.props.windowStore.windowSettings,{showSearch: true});
     }
 
+    changeHeight = () => {
+        let layout = this.props.editorStore.editorSettings.layout;
+        //when the layout is horizontal half the height
+        if(layout === "vertical"){
+            console.log("Vertical is layout");
+            console.log(this.props.editorStore.editorSettings.height);
+            return this.props.editorStore.editorSettings.height;
+            //Object.assign(this.props.editorStore.editorSettings,{height:"100vh"});
+        }else{
+            console.log("Horizontal is layout");
+            console.log(this.props.editorStore.editorSettings.height/2)
+            return "50vh";
+            //Object.assign(this.props.editorStore.editorSettings,{height:"50vh"});
+        }
+    }
+
     componentDidMount() {
         // listen for events
         FileDispatcher.on(FILE_READ, this.handleFileRead);
@@ -471,7 +487,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
                     theme={this.props.editorStore.editorSettings.theme}
                     name={this.props.editorStore.editorSettings.name}
                     width={this.props.editorStore.editorSettings.width}
-                    height={this.props.editorStore.editorSettings.height}
+                    height={this.changeHeight()}
                     fontSize={this.props.editorStore.editorSettings.fontSize}
                     editorProps={
                         {

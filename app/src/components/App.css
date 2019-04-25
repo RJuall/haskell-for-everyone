@@ -224,3 +224,13 @@ body{
 .show-false{
     display: none;
 }
+
+.horizLayoutGHCI{
+    width: 50%;
+    float: left;
+}
+
+.horizLayoutRoom{
+    width: 50%;
+    float: right;
+}
