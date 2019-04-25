@@ -118,7 +118,7 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
         if(toggleFile && toggleGHCI){
             return window.innerWidth;
         }else if(!toggleFile && toggleGHCI){
-            return window.innerWidth*2;
+            return window.innerWidth;
         }else if(toggleFile && !toggleGHCI){
             return window.innerWidth/2;
         }else{

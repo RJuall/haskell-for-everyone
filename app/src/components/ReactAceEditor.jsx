@@ -317,43 +317,44 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
             }while(index >= 0);          
         })
 
-        console.log("Lines that contain "+ this.searchVal+": "+this.lineNum);
-        console.log("Columns in lines that contain "+ this.searchVal+": "+this.colNum);
-
         // Go to a line in the editor based on whether next/previous were clicked.
         if(choice === "Next"){
+            // move forward in arrays
             if(++this.move >= this.lineNum.length){
                 this.move = 0
             }
         }else{
+            // move backwards in arrays
             if(--this.move < 0){
                 this.move = 0
             }
         }
+        // move to current element in array based on the value of this.move
         this.editorRef.current.editor.selection.moveTo(this.lineNum[this.move],this.colNum[this.move]); 
     }
  
     handleReplace = (replace, choice) => {
         // Handle Replace event triggered by the search bar
         if(choice === "one"){
+            // the choice is one so only replace at current element
             if(this.move != -1){
                 this.textArr[this.lineNum[this.move]] = this.textArr[this.lineNum[this.move]].replace(this.searchVal,replace);
             }
+            // remove the replaced elements line and column number from arrays
             this.lineNum.splice(this.move,1);
             this.colNum.splice(this.move,1);
+            // move to next element in array
+            this.editorRef.current.editor.selection.moveTo(this.lineNum[this.move],this.colNum[this.move]);
+            // change the the text in the editor 
             let textStringOne = this.textArr.join('\n');
             this.setState({value: textStringOne});
         }else if(choice ==="all"){
-            this.lineNum.forEach((line,row) =>{
-                this.textArr[line] = this.textArr[line].replace(this.searchVal,replace);
-
-            });
-            this.lineNum = [];
-            this.colNum = [];
-            console.log(this.lineNum);
-            console.log(this.colNum);
+            // choice is all so replace every instance of the search parameter
+            // ignoring what has been replaced by the one choice if any have been chnaged at all.
             let textStringAll = this.textArr.join('\n');
-            this.setState({value: textStringAll});
+            var re = new RegExp(this.searchVal, 'g');
+            let replaceString = textStringAll.replace(re,replace);
+            this.setState({value: replaceString});
         }
     }
 
