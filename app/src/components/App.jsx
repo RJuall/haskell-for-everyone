@@ -116,11 +116,11 @@ export const App = inject("editorStore", "windowStore")(observer(class App exten
 
     toggleWidthEditor(toggleFile,toggleGHCI){
         if(toggleFile && toggleGHCI){
-            return window.innerWidth;
+            return document.documentElement.clientWidth;
         }else if(!toggleFile && toggleGHCI){
             return document.documentElement.clientWidth - this.state.currentFileColWidth;
         }else if(toggleFile && !toggleGHCI){
-            return window.innerWidth/2;
+            return document.documentElement.clientWidth/2;
         }else{
             return this.state.setEdColWidth;
         }
