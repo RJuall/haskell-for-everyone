@@ -317,6 +317,25 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
             }while(index >= 0);          
         })
 
+        console.log("Length of "+this.searchVal+ ": "+this.searchVal.length);
+        for(var i = 0;i <this.lineNum.length;i++){
+            console.log("Line Number: "+this.lineNum[i]);
+            console.log("starts at: "+this.colNum[i]);
+            console.log("Search Parameter ends at: "+(this.colNum[i]+this.searchVal.length+1));
+            let check = this.textArr[this.lineNum[i]].substring(this.colNum[i],(this.colNum[i]+this.searchVal.length+1));
+            console.log(check);
+            let checkNumber = check.substring(check.length-1);
+            console.log(checkNumber);
+            var hasNum = checkNumber.match(/\d+/g);
+            if(hasNum){
+                this.lineNum.splice(i,1);
+                this.colNum.splice(i,1);
+            }
+        }
+
+        console.log(this.lineNum);
+        console.log(this.colNum);
+
         // Go to a line in the editor based on whether next/previous were clicked.
         if(choice === "Next"){
             // move forward in arrays
@@ -333,12 +352,17 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
         this.editorRef.current.editor.selection.moveTo(this.lineNum[this.move],this.colNum[this.move]); 
     }
  
+    replaceAt = (start,end,str,replace) => {
+        return str.substr(0, start) + replace + str.substr(end, str.length);
+    };
+
     handleReplace = (replace, choice) => {
         // Handle Replace event triggered by the search bar
         if(choice === "one"){
             // the choice is one so only replace at current element
             if(this.move != -1){
-                this.textArr[this.lineNum[this.move]] = this.textArr[this.lineNum[this.move]].replace(this.searchVal,replace);
+                this.textArr[this.lineNum[this.move]] = this.replaceAt(this.colNum[this.move],this.colNum[this.move]+this.searchVal.length,
+                    this.textArr[this.lineNum[this.move]],replace);
             }
             // remove the replaced elements line and column number from arrays
             this.lineNum.splice(this.move,1);
