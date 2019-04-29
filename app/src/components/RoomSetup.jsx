@@ -72,7 +72,7 @@ export class RoomSetup extends React.Component{
                     </Card>
                 </div>
                 <br/>
-                <div className="text-center">
+                <div className="room-connection text-center">
                     You are currently { this.props.isConnected ? "online" : "offline" }
                     &nbsp;
                     <span style={{cursor: "pointer"}} onClick={this.onReconnectClick} hidden={!showBtn} disabled={showBtn} title="Retry connection">

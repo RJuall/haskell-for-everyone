@@ -221,6 +221,10 @@ body{
     border-bottom: 1px solid #424446;
 }
 
+.theme--light .room-connection{
+    color: #32353D;
+}
+
 .show-false{
     display: none;
 }
