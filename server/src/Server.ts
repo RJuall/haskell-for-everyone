@@ -9,6 +9,7 @@ import { RoomCodeResetHandler } from "./handlers/RoomCodeResetHandler";
 import { VersionHandler } from "./handlers/VersionHandler";
 import { DatabaseManager } from "./database/DatabaseManager";
 import { RoomsManager } from "./rooms/RoomsManager";
+import { RoomCodeGetHandler } from "./handlers/RoomCodeGetHandler";
 
 export class Server{
     private _app:express.Application; 
@@ -41,6 +42,7 @@ export class Server{
 
         // handlers can access rooms
         RoomCodeResetHandler.roomsManager = this._rooms;
+        RoomCodeGetHandler.roomsManager = this._rooms
 
         // start server
         this.createRoutes();
@@ -69,6 +71,9 @@ export class Server{
 
         // api for room resets
         this._app.get("/api/room/reset", RoomCodeResetHandler.get);
+
+        // api for room code 
+        this._app.get("/api/room/code", RoomCodeGetHandler.get);
 
         // api for version
         this._app.options("/api/version*", VersionHandler.options);
