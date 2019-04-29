@@ -212,13 +212,30 @@ body{
     color: rgba(0,0,0,.7) !important;
 }
 
-.theme--dark .modal-content{
-    background-color: #32353D;
-    color: #fff;
+.modal-content{
+    background-color: #32353D !important;
+    color: #fff !important;
 }
 
-.theme--dark .modal-header{
-    border-bottom: 1px solid #424446;
+.modal-header{
+    border-bottom: 1px solid #424446 !important;
+}
+
+.close{
+    color: #fff !important;
+}
+
+.theme--light .modal-content{
+    background-color: #fff !important;
+    color: #5f5f5f !important;
+}
+
+.theme--light .modal-header{
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+.theme--light .close{
+    color: #5f5f5f !important;
 }
 
 .theme--light .room-connection{
