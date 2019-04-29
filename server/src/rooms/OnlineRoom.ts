@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import { OnlinePerson } from "./OnlinePerson";
-import { CodeState, ActionType, UpdatePosition, CodeLines } from "./CodeState";
+import { CodeState, ActionType, UpdatePosition, CodeLine } from "./CodeState";
 
 export type AccessType = "public" | "private";
 
@@ -18,7 +18,7 @@ export interface RoomSummary{
 }
 
 export interface RoomState extends RoomSummary{
-    codeLines:CodeLines;
+    codeLines:CodeLine;
 }
 
 // optional room configurations 

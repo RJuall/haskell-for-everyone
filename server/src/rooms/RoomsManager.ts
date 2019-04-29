@@ -2,6 +2,7 @@ import * as ws from "websocket";
 import { OnlineRoom, OnlineRoomOptions, RoomSummary, AccessType, EditType } from "./OnlineRoom";
 import { OnlinePerson, SendType } from "./OnlinePerson";
 import { VersionHandler } from "../handlers/VersionHandler";
+import { CodeLine } from "./CodeState";
 
 export type CreateRoomCallback = (err:Error, room:OnlineRoom)=>void;
 
@@ -53,6 +54,7 @@ export class RoomsManager{
     }
 
     // resets the room code state 
+    // @param roomName      name of room to find
     public resetRoomCode(roomName:string):boolean{
         let room:OnlineRoom = this._rooms.get(roomName);
         if(room){
@@ -60,6 +62,14 @@ export class RoomsManager{
             return true;
         }
         return false;
+    }
+
+    // gets the lines of code for the given room
+    // @param roomName      name of room to find
+    public getRoomCode(roomName:string):CodeLine{
+        let room:OnlineRoom = this._rooms.get(roomName);
+        
+        return room ? room.getState().codeLines : null;
     }
 
     // enters a person into the room system 

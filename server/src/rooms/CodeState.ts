@@ -7,7 +7,7 @@ export interface UpdatePosition{
 
 export type CodeLineChars = string[][];
 
-export type CodeLines = string[];
+export type CodeLine = string[];
 
 export class CodeState{
     private _lines:CodeLineChars;
@@ -22,28 +22,33 @@ export class CodeState{
     // @param end       character(s) end position in the code
     // @param action    insert or removing code? 
     public update(codeLines:string[], start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
-        codeLines.forEach((line, idx) => {
-            this.updateLine(line, start.row + idx, start, end, action)
-        });
-    }
-
-    // updates the individual line 
-    // @param line      line of text to change
-    // @param row       row (line number) to update at
-    // @param startCol  first characters starting column (index)
-    // @param endCol    last character + 1 index
-    // @param action    operation to perform 
-    private updateLine(line:string, row:number, start:UpdatePosition, end:UpdatePosition, action:ActionType):void{
-        // line must exist 
-        this.fillMissingRows(row);
-
         if(action === "insert"){
-            // insert the chars
-            this._lines[row].splice(start.column, 0, ...line);
+            this.fillMissingRows(end.row);
+
+            codeLines.forEach((line, idx) => {
+                this._lines[start.row + idx].splice(start.column, 0, ...line);
+            });
         }
         else if(action === "remove"){
-            // remove the chars
-            this._lines[row].splice(start.column, end.column - start.column);
+            if(codeLines.length === 1){
+                // removing characters in a single line
+                this._lines[start.row].splice(start.column, end.column - start.column);
+            }
+            else{
+                // fix the last line 
+                let fixedLastLine:CodeLine = this._lines[end.row].slice(end.column, this._lines[end.row].length);
+
+                // remove inner lines and last line
+                this._lines.splice(start.row + 1, end.row);
+
+                // fix first line (might start deleting from not first char)
+                this._lines[start.row] = this._lines[start.row].slice(0, start.column);
+
+                // merge the last line (case where you don't remove every char in last line)
+                if(fixedLastLine.length){
+                    this._lines[start.row].push(...fixedLastLine);
+                }
+            }
         }
     }
 
@@ -72,7 +77,7 @@ export class CodeState{
     }
 
     // code lines as a string array 
-    public get codeLines():CodeLines{
+    public get codeLines():CodeLine{
         return this._lines.map(line => line.join(""));
     }
 
