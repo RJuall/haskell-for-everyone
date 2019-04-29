@@ -391,6 +391,13 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
         }
     }
 
+    // When there is an error get line and column number and move cursor to error
+    handleError = (row, col) => {
+        console.log(row);
+        console.log(col);
+        this.editorRef.current.editor.selection.moveTo(row-1,col-1);
+    }
+
     // when the editor changes... (no longer sync with file)
     onChange = (val, evt) => {
         // mark file as same as the save
@@ -470,6 +477,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
         EditorDispatcher.on("redo", this.handleRedo);
         EditorDispatcher.on("find", this.handleFind);
         EditorDispatcher.on("replace",this.handleReplace);
+        EditorDispatcher.on("error",this.handleError);
 
         // listening for websocket updates
         this.wsCallbackId = WSClient.register(this.handleWsClientUpdate);
@@ -490,6 +498,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
         EditorDispatcher.removeListener("redo", this.handleRedo);
         EditorDispatcher.removeListener("find", this.handleFind);
         EditorDispatcher.removeListener("replace",this.handleReplace);
+        EditorDispatcher.removeListener("error",this.handleError);
 
         // stop listening for websocket updates
         WSClient.unregister(this.wsCallbackId);
