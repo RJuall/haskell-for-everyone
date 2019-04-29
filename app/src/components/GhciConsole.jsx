@@ -1,6 +1,7 @@
 import React from "react";
 import GhciDispatcher, { GHCI, GHCI_ERROR, GHCI_CLEAR } from "../dispatchers/GhciDispatcher";
 import ModalDispatcher from "../dispatchers/ModalDispatcher";
+import EditorDispatcher from '../dispatchers/EditorDispatcher';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./GhciConsole.css";
 import { faBroom, faPlus, faMinus } from "@fortawesome/pro-light-svg-icons";
@@ -30,6 +31,12 @@ export class GhciConsole extends React.Component{
         let elem = this.consoleRef.current;
         // text update 
         let text = evt.err || evt.str || "";
+
+        if(text.match(/(.hs)(?=\:+\d+\:+\d+\:+\s+(error))/i)){
+            let textNoPath = text.split(".hs:")[1] + ":";
+            let [row, col] = textNoPath.split(":")
+            EditorDispatcher.signalError(row,col);
+        }
 
         // append text to output 
         if(!elem.value.length){

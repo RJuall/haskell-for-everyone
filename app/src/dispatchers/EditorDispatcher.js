@@ -91,6 +91,11 @@ class EditorDispatcher extends EventEmitter {
     replace(replace,choice){
         this.emit("replace",replace,choice);
     }
+
+    // handle error from GHCI
+    signalError(row,col){
+        this.emit("error", row, col);
+    }
 }
 
 export default new EditorDispatcher();
