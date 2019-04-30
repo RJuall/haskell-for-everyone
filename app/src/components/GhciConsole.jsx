@@ -32,20 +32,22 @@ export class GhciConsole extends React.Component{
         // text update 
         let text = evt.err || evt.str || "";
 
+        // trigger error handlers (such as code editor)
         if(text.match(/(.hs)(?=\:+\d+\:+\d+\:+\s+(error))/i)){
             let textNoPath = text.split(".hs:")[1] + ":";
             let [row, col] = textNoPath.split(":")
-            EditorDispatcher.signalError(row,col);
+            EditorDispatcher.signalError(row, col);
         }
 
         // append text to output 
         if(!elem.value.length){
-            // set text if empty 
-            this.consoleRef.current.value = text;
+            // set text if empty
+            // remove line breaks (output can be chunked)
+            this.consoleRef.current.value = text.replace(/\\n/g, "");
         }
         else{
             // append text on bottom 
-            elem.value +=  text;
+            elem.value += text;
             // scroll to bottom
             elem.scrollTop = elem.scrollHeight;
         }
@@ -54,7 +56,7 @@ export class GhciConsole extends React.Component{
     // handles ghci error (most likely missing haskell platform)
     handleGhciError = evt => {
         // alert user of error 
-        let body = evt.err || "(Error occurred, but not error message provided";
+        let body = evt.err || "(Error occurred, but not error message provided)";
         ModalDispatcher.alertModal("GHCi Error", body);
     }
 

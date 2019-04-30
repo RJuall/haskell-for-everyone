@@ -1,5 +1,5 @@
 .ghci-console{
-    min-height: 250px;
+    height: 40vh;
 }
 
 .ghci-console, .ghci-input{
@@ -10,6 +10,8 @@
     opacity: 0.9;
     border-radius: 0;
     padding: 5px;
+    font-family: "inconsolata";
+    font-size: 1.15rem;
 }
 
 .ghci-console:focus, .ghci-input:focus{
