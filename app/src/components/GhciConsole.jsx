@@ -18,9 +18,9 @@ export class GhciConsole extends React.Component{
         // output <textarea> element ref
         this.consoleRef = React.createRef();
 
-        this.state ={
+        this.state = {
             termStyle:  {
-                fontSize: "16px",
+                fontSize: "1.2rem",
             },
         }
     }
@@ -30,7 +30,8 @@ export class GhciConsole extends React.Component{
         // output element
         let elem = this.consoleRef.current;
         // text update 
-        let text = evt.err || evt.str || "";
+        // remove line breaks (output can be chunked)
+        let text = (evt.err || evt.str || "").replace(/\\n/g, "");
 
         // trigger error handlers (such as code editor)
         if(text.match(/(.hs)(?=\:+\d+\:+\d+\:+\s+(error))/i)){
@@ -42,8 +43,7 @@ export class GhciConsole extends React.Component{
         // append text to output 
         if(!elem.value.length){
             // set text if empty
-            // remove line breaks (output can be chunked)
-            this.consoleRef.current.value = text.replace(/\\n/g, "");
+            this.consoleRef.current.value = text;
         }
         else{
             // append text on bottom 
@@ -142,6 +142,17 @@ export class GhciConsole extends React.Component{
         }
     }
 
+    // updates the ghci console font size
+    // @param increase  amount to increase in rem units (- for decrease)
+    updateFontSize(increase){
+        let updatedFontSize = parseFloat(this.state.termStyle.fontSize) + increase;
+        let fontSize = updatedFontSize + "rem";
+
+        if(updatedFontSize <= 2 && updatedFontSize >= 1){
+            this.setState({termStyle: {fontSize}});
+        }
+    }
+
     onKeyUp(evt){
         switch(evt.keyCode){
             case 13:
@@ -178,16 +189,10 @@ export class GhciConsole extends React.Component{
                     <button className="btn btn-link btn-clear" onClick={() => GhciDispatcher.clear()} title="Clear GHCi">
                         <FontAwesomeIcon icon={faBroom}/>
                     </button>
-                    <button className="btn btn-link btn-plus" onClick={() => {
-                        if (parseInt(this.state.termStyle.fontSize) < 60)
-                            this.setState({termStyle: {fontSize: (parseInt(this.state.termStyle.fontSize) + 2).toString() + 'px'}});
-                    }} title="Increase Font Size">
+                    <button className="btn btn-link btn-plus" onClick={() => this.updateFontSize(0.1)} title="Increase Font Size">
                         <FontAwesomeIcon icon={faPlus}/>
                     </button>
-                    <button className="btn btn-link btn-minus"onClick={() => {
-                        if(parseInt(this.state.termStyle.fontSize) > 8)
-                            this.setState({termStyle: {fontSize: (parseInt(this.state.termStyle.fontSize) - 2).toString() + 'px'}});
-                    }} title="Decrease Font Size">
+                    <button className="btn btn-link btn-minus" onClick={() => this.updateFontSize(-0.1)} title="Decrease Font Size">
                         <FontAwesomeIcon icon={faMinus}/>
                     </button>
                 </div>
