@@ -285,7 +285,7 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
         this.editorRef.current.editor.session.getUndoManager().redo();
     }
 
-    handleFind = (search,choice) =>{
+    handleFind = (search,choice,searchType) =>{
         // handle the find event triggered from the search menu
         let text = this.state.value;
         this.textArr = text.split('\n'); //split into array hold each line as an element
@@ -317,16 +317,23 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
             }while(index >= 0);          
         })
 
-        // Remove any unwanted pushes into either lineNum or colNum array,
-        // specifically any thing that matches search Parameter with number at the end of it
-        for(var i = 0;i <this.lineNum.length;i++){
-            let check = this.textArr[this.lineNum[i]].substring(this.colNum[i],(this.colNum[i]+this.searchVal.length+1));
-            let checkNumber = check.substring(check.length-1);
-            var hasNum = checkNumber.match(/\d+/g);
-            if(hasNum){
-                this.lineNum.splice(i,1);
-                this.colNum.splice(i,1);
+        console.log(searchType);
+        if(searchType === "case-sensitive" || searchType === ""){
+            // Search type is case sensistive
+            // Remove any unwanted pushes into either lineNum or colNum array,
+            // specifically any thing that matches search Parameter with number at the end of it
+            for(var i = 0;i <this.lineNum.length;i++){
+                let check = this.textArr[this.lineNum[i]].substring(this.colNum[i],(this.colNum[i]+this.searchVal.length+1));
+                let checkNumber = check.substring(check.length-1);
+                var hasNum = checkNumber.match(/\d+/g);
+                if(hasNum){
+                    this.lineNum.splice(i,1);
+                    this.colNum.splice(i,1);
+                }
             }
+        }else{
+            // Search type is case insensistive
+            // do not ignore anything that is not an exact match of the search parameter
         }
 
         // Go to a line in the editor based on whether next/previous were clicked.

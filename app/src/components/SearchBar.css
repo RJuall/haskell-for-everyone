@@ -2,6 +2,11 @@
     padding-left: 10px;
 }
 
+
+.search-barBackground{
+    background: gray;
+}
+
 .search-bar {
     padding-top: 10px;
     padding-bottom: 50px;
@@ -36,4 +41,8 @@
     right: 0;
     background: transparent;
     border: none;
+}
+
+.radioLabel{
+    color: #fff;
 }
