@@ -1,6 +1,8 @@
 import * as express from "express";
 import * as http from "http";
 import * as https from "https";
+import * as path from "path";
+import * as fs from "fs";
 import { MongoClient } from "mongodb";
 import * as websocket from "websocket";
 import { ContactUsGetHandler } from "./handlers/ContactUsGetHandler";
@@ -17,6 +19,7 @@ export class Server{
     private _wsServer:websocket.server;
     private _rooms:RoomsManager;
     private _dbManager:DatabaseManager;
+    private _indexHtml:string;
 
     constructor(){
         // express handles requests
@@ -29,16 +32,18 @@ export class Server{
         this._rooms = new RoomsManager();
         // database manager
         this._dbManager = null;
+        // index page has special templatea
+        this._indexHtml = "";
 
         // when a websocket tries to connect...
         this._wsServer.on("request", this.handleWebSocket.bind(this));
 
-        // app serves static files and accepts json
-        this._app.use(express.static(`${__dirname}/../../web`)).use(express.json());
-
         // templates 
         this._app.set("view engine", "pug");
-        this._app.set("views", `${__dirname}/../views`);
+        this._app.set("views", path.join(__dirname, "../views"));
+
+        // json body middleware 
+        this._app.use(express.json());
 
         // handlers can access rooms
         RoomCodeResetHandler.roomsManager = this._rooms;
@@ -61,7 +66,9 @@ export class Server{
     // http routing
     private createRoutes():void{
         // serve index page at root  
-        this._app.get("/", (req, res) => res.sendFile("index.html"));
+        this._app.get("/", (req, res) => {
+            res.status(200).end(this._indexHtml);
+        });
         
         // contact us form submission
         this._app.post("/contact/submit", ContactUsSubmitHandler.post);
@@ -78,6 +85,9 @@ export class Server{
         // api for version
         this._app.options("/api/version*", VersionHandler.options);
         this._app.get("/api/version/get", VersionHandler.get);
+
+         // app serves static files
+         this._app.use(express.static(path.join(__dirname, "../../web")));
 
         // 404 error page
         this._app.use((req, res) => {
@@ -105,13 +115,24 @@ export class Server{
                 console.log("MongoDB ERR: " + err.message);
                 console.log("(Allowing to server to run without database)\n");
                 console.log("Use MONGODB_URI env var to configure.");
-                console.log("Seriously, you don't have mongodb!? :(");
+                console.log("Seriously, you don't have mongodb!? :(\n");
             }
 
-             // listen on PORT environment variable or default 
-            let port:number = parseInt(process.env.PORT) || 8080;
-            this._httpServer.listen(port, () => {
-                console.log(`Server listening on port ${port}.`);
+            // load downloads page and replace verison 
+            console.log("Loading downloads page for templating...");
+            fs.readFile(path.join(__dirname, "../../web/index.html"), (err, buf) => {
+                if(!err){
+                    // setup version
+                    this._indexHtml = buf.toString().replace(/({{ version }})/g, VersionHandler.version);
+                    console.log("Downloads page using correct version label.\n");
+                }
+                else console.log("Error loading downloads page (THIS IS BAD)\n");
+
+                // listen on PORT environment variable or default 
+                let port:number = parseInt(process.env.PORT) || 8080;
+                this._httpServer.listen(port, () => {
+                    console.log(`Server listening on port ${port}.`);
+                });
             });
         });
     }
