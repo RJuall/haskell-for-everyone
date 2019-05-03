@@ -7,8 +7,10 @@
   "main": "public/electron.js",
   "scripts": {
     "dev": "electron . --dev",
-    "dev-ws": "WS_URI=ws://haskell-for-everyone.herokuapp.com/ electron . --dev",
+    "dev-ws": "WS_URI=ws://haskell-for-everyone.herokuapp.com/ -- npm run dev",
     "dist": "react-scripts build && build",
+    "dist-nix": "npm run dist",
+    "dist-win": "npm run dist",
     "react": "react-scripts start -- --no-browser",
     "start": "electron ."
   },

@@ -8,7 +8,7 @@ import { terminalStore } from './stores/TerminalStore';
 import { fileStore } from './stores/FileStore';
 import { windowStore } from './stores/WindowStore';
 import { ContextMenuUtils } from "./utils/ContextMenuUtils";
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 // setup context menu
 ContextMenuUtils.setupContextMenu();
