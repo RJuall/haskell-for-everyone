@@ -285,48 +285,83 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
         this.editorRef.current.editor.session.getUndoManager().redo();
     }
 
-    handleFind = (search,choice) =>{
-        // handle the find event triggered from the search menu
+    handleFind = (search,choice,searchType) =>{
         let text = this.state.value;
-        this.textArr = text.split('\n'); //split into array hold each line as an element
-        this.searchVal = search; // set global value for search 
+        this.searchVal = search; // set global value for search
 
-        var idx = 0;
-        // Loop through array and push line numbers that contain the search paremeters
-        this.lineNum = [];
-        this.textArr.forEach((val,i) => {
-            if(val.includes(search)){
-                for(idx; (idx = val.indexOf(search,idx)) >= 0; idx++){
-                    this.lineNum.push(i);
+        if(searchType === "case-sensitive" || searchType === ""){
+            // Search type is case sensistive
+            // handle the find event triggered from the search menu 
+            this.textArr = text.split('\n'); //split into array hold each line as an element 
+
+            var idx = 0;
+            // Loop through array and push line numbers that contain the search paremeters
+            this.lineNum = [];
+            this.textArr.forEach((val,i) => {
+                if(val.includes(search)){
+                    for(idx; (idx = val.indexOf(search,idx)) >= 0; idx++){
+                        this.lineNum.push(i);
+                    }
+                }
+            })
+
+            // filter out so only lines remaining are the lines with only the search paremeters
+            this.filteredTextArr = this.textArr.filter((str, i) => this.lineNum.indexOf(i) > -1);
+            //let correctRow = indexArray.map(val => val+1);
+            var index = -1;
+            // Fill column array with the number in the line that the search parameter starts at
+            this.colNum = [];
+            this.filteredTextArr.forEach((val,i) =>{
+                do{
+                    index = val.indexOf(search, index+1);
+                    if(index >= 0){
+                        this.colNum.push(index);
+                    }
+                }while(index >= 0);          
+            })
+            // Remove any unwanted pushes into either lineNum or colNum array,
+            // specifically any thing that matches search Parameter with number at the end of it
+            for(var i = 0;i <this.lineNum.length;i++){
+                let check = this.textArr[this.lineNum[i]].substring(this.colNum[i],(this.colNum[i]+this.searchVal.length+1));
+                let checkNumber = check.substring(check.length-1);
+                var hasNum = checkNumber.match(/\d+/g);
+                if(hasNum){
+                    this.lineNum.splice(i,1);
+                    this.colNum.splice(i,1);
                 }
             }
-        })
-
-        // filter out so only lines remaining are the lines with only the search paremeters
-        this.filteredTextArr = this.textArr.filter((str, i) => this.lineNum.indexOf(i) > -1);
-        //let correctRow = indexArray.map(val => val+1);
-        var index = -1;
-        // Fill column array with the number in the line that the search parameter starts at
-        this.colNum = [];
-        this.filteredTextArr.forEach((val,i) =>{
-            do{
-                index = val.indexOf(search, index+1);
-                if(index >= 0){
-                    this.colNum.push(index);
+        }else{
+            // Search type is case insensistive
+            // do not ignore anything that is not an exact match of the search parameter
+            // perform the initial setup again just in case someone switches search type in middle of search
+            // get the current text in the editor again but set every letter to lowercase for this search
+            let textInsensitive = text.toLowerCase();
+            this.textArr = textInsensitive.split('\n'); //split into array hold each line as an element
+            console.log(this.textArr);
+            // Loop through array and push line numbers that contain the search paremeters
+            this.lineNum = [];
+            this.textArr.forEach((val,i) => {
+                if(val.includes(search)){
+                    for(idx; (idx = val.indexOf(search,idx)) >= 0; idx++){
+                        this.lineNum.push(i);
+                    }
                 }
-            }while(index >= 0);          
-        })
+            })
+            // filter out so only lines remaining are the lines with only the search paremeters
+            this.filteredTextArr = this.textArr.filter((str, i) => this.lineNum.indexOf(i) > -1);
+            //let correctRow = indexArray.map(val => val+1);
+            var index = -1;
+            // Fill column array with the number in the line that the search parameter starts at
+            this.colNum = [];
+            this.filteredTextArr.forEach((val,i) =>{
+                do{
+                    index = val.indexOf(search, index+1);
+                    if(index >= 0){
+                        this.colNum.push(index);
+                    }
+                }while(index >= 0);          
+            })
 
-        // Remove any unwanted pushes into either lineNum or colNum array,
-        // specifically any thing that matches search Parameter with number at the end of it
-        for(var i = 0;i <this.lineNum.length;i++){
-            let check = this.textArr[this.lineNum[i]].substring(this.colNum[i],(this.colNum[i]+this.searchVal.length+1));
-            let checkNumber = check.substring(check.length-1);
-            var hasNum = checkNumber.match(/\d+/g);
-            if(hasNum){
-                this.lineNum.splice(i,1);
-                this.colNum.splice(i,1);
-            }
         }
 
         // Go to a line in the editor based on whether next/previous were clicked.
