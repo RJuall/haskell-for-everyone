@@ -47,8 +47,8 @@ export const SearchBar = inject("editorStore", "fileStore","windowStore")(observ
                     <Label for="find" className="sr-only">Find</Label>
                     <Input className="form-control-sm form-control" type="text" name="find" id="find" placeholder="Find" onChange={this.handleFindChange}/>
                 </FormGroup>
-                <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.find(this.state.findVal,"Next",this.searchType)}>Next</Button>
-                <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.find(this.state.findVal,"Previous",this.searchType)}>Previous</Button>
+                <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.find(this.state.findVal,"Next",this.searchType)} disabled={!this.state.findVal}>Next</Button>
+                <Button className="btn btn-sm ml-2" onClick={() => EditorDispatcher.find(this.state.findVal,"Previous",this.searchType)} disabled={!this.state.findVal}>Previous</Button>
             </Form>
             <button className="escButton" onClick={() => this.closeSearch()}>&#10005;</button>
             <Form inline className="mb-2">
