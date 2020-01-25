@@ -6,7 +6,6 @@ import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import "./SearchBar.css";
-import { timingSafeEqual } from 'crypto';
 
 export const SearchBar = inject("editorStore", "fileStore","windowStore")(observer(class SearchBar extends React.Component {
     constructor(props) {
