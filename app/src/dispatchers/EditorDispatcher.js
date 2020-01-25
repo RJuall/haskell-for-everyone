@@ -84,7 +84,6 @@ class EditorDispatcher extends EventEmitter {
 
     //signals the find command
     find(search,choice,searchType){
-        console.log(searchType);
         this.emit("find",search,choice,searchType);
     }
 

@@ -337,7 +337,6 @@ export const ReactAceEditor = inject("editorStore", "fileStore","windowStore")(o
             // get the current text in the editor again but set every letter to lowercase for this search
             let textInsensitive = text.toLowerCase();
             this.textArr = textInsensitive.split('\n'); //split into array hold each line as an element
-            console.log(this.textArr);
             // Loop through array and push line numbers that contain the search paremeters
             this.lineNum = [];
             this.textArr.forEach((val,i) => {
